@@ -1,4 +1,4 @@
-package gearfifth.com.example.instagram.dtos.users;
+package gearfifth.com.example.instagram.dtos.users.responses;
 
 import gearfifth.com.example.instagram.models.UserRole;
 import lombok.Data;

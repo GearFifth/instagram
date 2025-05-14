@@ -1,21 +1,15 @@
-package gearfifth.com.example.instagram.dtos.users;
+package gearfifth.com.example.instagram.dtos.users.requests;
 
-import gearfifth.com.example.instagram.models.UserRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
 
-@Data
-public class UserCreateRequest {
-    @NotBlank(message = "Email is required")
+public class UserUpdateRequest {
+
     @Email(message = "Invalid email format")
+    @NotBlank(message = "Email is required")
     private String email;
-
-    @NotBlank(message = "Password is required")
-    @Size(min = 6, max = 30, message = "Password must be between 6 and 30 characters")
-    private String password;
 
     @NotBlank(message = "First name is required")
     @Size(max = 50, message = "First name must not exceed 50 characters")
