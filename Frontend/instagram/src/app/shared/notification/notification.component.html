@@ -1,0 +1,9 @@
+<div class="notification" [ngClass]="type">
+  <div *ngIf="type === 'restricted'" class="icon">🔒</div>
+  <div *ngIf="type === 'info'" class="icon">ℹ️</div>
+  <div *ngIf="type === 'success'" class="icon">✅</div>
+  <div *ngIf="type === 'warning'" class="icon">⚠️</div>
+  <div *ngIf="type === 'error'" class="icon">❌</div>
+  <div class="message">{{ message }}</div>
+  <button *ngIf="closable" class="close-btn" (click)="onClose()"><mat-icon>close</mat-icon></button>
+</div>
