@@ -9,7 +9,6 @@ import java.util.UUID;
 public interface IUserService {
     Collection<User> getAll();
     User get(UUID userId);
-    User create(User user);
     User update(User user) ;
     User remove(UUID userId);
     User getByEmail(String email);

@@ -32,14 +32,6 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User create(User user) {
-        if (userRepository.existsByEmail(user.getEmail())) {
-            throw new EmailAlreadyExistsException(user.getEmail());
-        }
-        return userRepository.save(user);
-    }
-
-    @Override
     public User update(User user) {
         User oldUser = userRepository.findById(user.getId())
                 .orElseThrow(() -> new UserNotFoundException(user.getId()));

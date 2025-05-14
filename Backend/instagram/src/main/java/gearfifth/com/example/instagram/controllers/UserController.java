@@ -1,8 +1,8 @@
 package gearfifth.com.example.instagram.controllers;
 
-import gearfifth.com.example.instagram.dtos.users.UserCreateRequest;
-import gearfifth.com.example.instagram.dtos.users.UserProfileResponse;
-import gearfifth.com.example.instagram.dtos.users.UserUpdateRequest;
+import gearfifth.com.example.instagram.dtos.users.requests.UserCreateRequest;
+import gearfifth.com.example.instagram.dtos.users.responses.UserProfileResponse;
+import gearfifth.com.example.instagram.dtos.users.requests.UserUpdateRequest;
 import gearfifth.com.example.instagram.models.User;
 import gearfifth.com.example.instagram.services.IUserService;
 import jakarta.validation.Valid;
@@ -24,11 +24,6 @@ import java.util.stream.Collectors;
 public class UserController {
     private final IUserService service;
     private final ModelMapper mapper;
-
-    @PostMapping
-    public ResponseEntity<UserProfileResponse> create(@Valid @RequestBody UserCreateRequest user) {
-        return new ResponseEntity<>(mapper.map(service.create(mapper.map(user, User.class)), UserProfileResponse.class), HttpStatus.CREATED);
-    }
 
     @GetMapping
     public ResponseEntity<Collection<UserProfileResponse>> getUsers() {
