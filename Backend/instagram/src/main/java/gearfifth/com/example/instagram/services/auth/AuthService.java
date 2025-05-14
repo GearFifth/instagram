@@ -1,13 +1,17 @@
 package gearfifth.com.example.instagram.services.auth;
 
+import gearfifth.com.example.instagram.dtos.auth.ChangePasswordRequest;
 import gearfifth.com.example.instagram.dtos.auth.LoginRequest;
 import gearfifth.com.example.instagram.dtos.auth.TokenResponse;
 import gearfifth.com.example.instagram.exceptions.EmailAlreadyExistsException;
 import gearfifth.com.example.instagram.exceptions.InvalidCredentialsException;
 import gearfifth.com.example.instagram.exceptions.InvalidTokenException;
+import gearfifth.com.example.instagram.exceptions.UserNotFoundException;
 import gearfifth.com.example.instagram.models.User;
 import gearfifth.com.example.instagram.models.UserPrincipal;
 import gearfifth.com.example.instagram.repositories.IUserRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,7 +19,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -68,9 +74,32 @@ public class AuthService implements IAuthService {
         return generateTokens(userPrincipal);
     }
 
+    @Transactional
     @Override
-    public void logout() {
-        SecurityContextHolder.clearContext();
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated()) {
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        } else {
+            throw new InvalidTokenException("User is not authenticated");
+        }
+    }
+
+    @Override
+    public void changePassword(ChangePasswordRequest request, HttpServletRequest httpRequest) {
+        String token = jwtUtils.extractBearerToken(httpRequest);
+        String email = jwtUtils.extractUserName(token);
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User with email " + email + " not found"));
+
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+            throw new InvalidCredentialsException("Current password is incorrect");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
     }
 
     private TokenResponse generateTokens(UserPrincipal userPrincipal) {

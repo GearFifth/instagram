@@ -1,9 +1,11 @@
 package gearfifth.com.example.instagram.services.auth;
 
+import gearfifth.com.example.instagram.exceptions.InvalidTokenException;
 import gearfifth.com.example.instagram.models.UserPrincipal;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -84,5 +86,13 @@ public class JwtService {
 
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
+    }
+
+    public String extractBearerToken(HttpServletRequest request) {
+        String authorizationHeader = request.getHeader("Authorization");
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            throw new InvalidTokenException("Invalid or missing Authorization header");
+        }
+        return authorizationHeader.substring(7);
     }
 }

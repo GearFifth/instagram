@@ -1,6 +1,5 @@
 package gearfifth.com.example.instagram.controllers;
 
-import gearfifth.com.example.instagram.dtos.users.requests.UserCreateRequest;
 import gearfifth.com.example.instagram.dtos.users.responses.UserProfileResponse;
 import gearfifth.com.example.instagram.dtos.users.requests.UserUpdateRequest;
 import gearfifth.com.example.instagram.models.User;
