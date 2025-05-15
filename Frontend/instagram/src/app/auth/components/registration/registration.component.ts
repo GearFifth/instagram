@@ -12,7 +12,8 @@ import {UserService} from "../../../users/user.service";
   styleUrl: './registration.component.css'
 })
 export class RegistrationComponent implements OnInit{
-  hide: boolean = true;
+  hidePassword: boolean = true;
+  hideConfirmPassword: boolean = true;
   isEditable: boolean = true;
 
   registerPersonalForm!: FormGroup;
@@ -35,11 +36,11 @@ export class RegistrationComponent implements OnInit{
 
     this.registerPasswordForm = this.formBuilder.group(
       {
-        password: ['', Validators.required],
+        password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(30)]],
         passwordConfirmation: ['', Validators.required]
       },
       {
-        validator: confirmPasswordValidator
+        validators: confirmPasswordValidator
       }
     );
   }
