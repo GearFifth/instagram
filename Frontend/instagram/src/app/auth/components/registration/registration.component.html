@@ -1,0 +1,124 @@
+<div class="background-img">
+  <div class="wrapper">
+    <div class="form-wrapper">
+      <div>
+        <h1 class="title">Registration</h1>
+      </div>
+
+      <mat-stepper [linear]="true" orientation="horizontal" #stepper>
+        <mat-step [stepControl]="registerPersonalForm" errorMessage="Personal information is required." [editable]="isEditable">
+          <form [formGroup]="registerPersonalForm">
+            <ng-template matStepLabel>Name</ng-template>
+            <mat-form-field appearance="outline">
+              <mat-label>Email</mat-label>
+              <input matInput formControlName="email" required>
+              <mat-error *ngIf="registerPersonalForm.get('email')?.hasError('required') && registerPersonalForm.get('email')?.touched">
+                Email is required
+              </mat-error>
+              <mat-error *ngIf="registerPersonalForm.get('email')?.hasError('email') && registerPersonalForm.get('email')?.touched">
+                Please enter a valid email
+              </mat-error>
+              <mat-error *ngIf="registerPersonalForm.get('email')?.errors?.['nonUnique']">
+                Email already exists
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>First Name</mat-label>
+              <input matInput formControlName="firstName" type="text" required>
+              <mat-error *ngIf="registerPersonalForm.get('firstName')?.hasError('required') && registerPersonalForm.get('firstName')?.touched">
+                First name is required
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Last Name</mat-label>
+              <input matInput formControlName="lastName" type="text" required>
+              <mat-error *ngIf="registerPersonalForm.get('lastName')?.hasError('required') && registerPersonalForm.get('lastName')?.touched">
+                Last name is required
+              </mat-error>
+            </mat-form-field>
+            <div>
+              <button mat-raised-button color="primary" (click)="checkEmailUniqueness(stepper)" [disabled]="registerPersonalForm.invalid">Next</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="registerContactForm" errorMessage="Contact information is required." [editable]="isEditable">
+          <form [formGroup]="registerContactForm">
+            <ng-template matStepLabel>Contact</ng-template>
+            <mat-form-field appearance="outline">
+              <mat-label>Address</mat-label>
+              <input matInput placeholder="Street, City, Country" formControlName="address" type="text" required>
+              <mat-error *ngIf="registerContactForm.get('address')?.hasError('required') && registerContactForm.get('address')?.touched">
+                Address is required
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Phone number</mat-label>
+              <input matInput placeholder="+123456789" formControlName="phone" required>
+              <mat-error *ngIf="registerContactForm.get('phone')?.hasError('required') && registerContactForm.get('phone')?.touched">
+                Phone is required
+              </mat-error>
+              <mat-error *ngIf="registerContactForm.get('phone')?.hasError('pattern')">
+                Please enter a valid phone number (e.g., +123456789).
+              </mat-error>
+            </mat-form-field>
+            <div>
+              <button mat-raised-button color="primary" [disabled]="registerContactForm.invalid" (click)="checkEmailUniqueness(stepper)">Next</button>
+              <button mat-button (click)="stepBack(stepper, registerContactForm)">Back</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="registerPasswordForm" errorMessage="Passwords must match." [editable]="isEditable">
+          <form [formGroup]="registerPasswordForm">
+            <ng-template matStepLabel>Password</ng-template>
+            <mat-form-field appearance="outline">
+              <mat-label>Password</mat-label>
+              <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
+              <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+                <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+              <mat-error *ngIf="registerPasswordForm.get('password')?.hasError('required') && registerPasswordForm.get('password')?.touched">
+                Password is required
+              </mat-error>
+              <mat-error *ngIf="registerPasswordForm.get('password')?.hasError('minlength') && registerPasswordForm.get('password')?.touched">
+                Password must be at least 6 characters
+              </mat-error>
+              <mat-error *ngIf="registerPasswordForm.get('password')?.hasError('maxlength') && registerPasswordForm.get('password')?.touched">
+                Password cannot exceed 30 characters
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Confirm password</mat-label>
+              <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="passwordConfirmation">
+              <button mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideConfirmPassword">
+                <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+              <mat-error *ngIf="registerPasswordForm.get('passwordConfirmation')?.hasError('PasswordNoMatch')">
+                Passwords do not match
+              </mat-error>
+              <mat-error *ngIf="registerPasswordForm.get('passwordConfirmation')?.hasError('required') && registerPasswordForm.get('passwordConfirmation')?.touched">
+                Password confirmation is required
+              </mat-error>
+            </mat-form-field>
+            <div>
+              <button mat-raised-button matStepperNext color="primary" [disabled]="registerPasswordForm.invalid" (click)="register()" type="submit" id="register">Register</button>
+              <button mat-button matStepperPrevious>Back</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step>
+          <ng-template matStepLabel>Verification</ng-template>
+          <div class="success">
+            <mat-icon  [attr.aria-label]="'success'" class="check" fontIcon="check"></mat-icon>
+            <h3> A verification link has been sent to your email address</h3>
+          </div>
+          <mat-divider></mat-divider>
+          <p>Please click on the link that has just been sent to your email address to verify your email and finish the registration process.
+            Verification link will expire in 24h.</p>
+        </mat-step>
+      </mat-stepper>
+      <div>
+        <p>Already have an account? <a [routerLink]="['/login']">Login</a></p>
+      </div>
+    </div>
+  </div>
+</div>
