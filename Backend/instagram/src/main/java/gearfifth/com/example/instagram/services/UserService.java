@@ -1,58 +1,70 @@
 package gearfifth.com.example.instagram.services;
 
+import gearfifth.com.example.instagram.dtos.users.requests.UserUpdateRequest;
+import gearfifth.com.example.instagram.dtos.users.responses.UserProfileResponse;
 import gearfifth.com.example.instagram.exceptions.EmailAlreadyExistsException;
 import gearfifth.com.example.instagram.exceptions.UserNotFoundException;
 import gearfifth.com.example.instagram.models.User;
 import gearfifth.com.example.instagram.repositories.IUserRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 @Primary
 public class UserService implements IUserService {
     private final IUserRepository userRepository;
+    private final ModelMapper mapper;
 
     @Override
-    public Collection<User> getAll() {
-        return userRepository.findAll();
+    public Collection<UserProfileResponse> getAll() {
+        return userRepository.findAll().stream()
+                .map(user -> mapper.map(user, UserProfileResponse.class))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public User get(UUID userId) {
-        return userRepository.findById(userId)
+    public UserProfileResponse get(UUID userId) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
+        return mapper.map(user, UserProfileResponse.class);
     }
 
+    @Transactional
     @Override
-    public User update(User user) {
-        User oldUser = userRepository.findById(user.getId())
-                .orElseThrow(() -> new UserNotFoundException(user.getId()));
+    public UserProfileResponse update(UUID userId, UserUpdateRequest request) {
+        User existingUser = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
 
-        if (!oldUser.getEmail().equals(user.getEmail()) && userRepository.existsByEmail(user.getEmail())) {
-            throw new EmailAlreadyExistsException(user.getEmail());
+        if (!existingUser.getEmail().equals(request.getEmail()) && userRepository.existsByEmail(request.getEmail())) {
+            throw new EmailAlreadyExistsException(request.getEmail());
         }
-        return userRepository.save(user);
+
+        mapper.map(request, existingUser);
+        User updatedUser = userRepository.save(existingUser);
+        return mapper.map(updatedUser, UserProfileResponse.class);
     }
 
+    @Transactional
     @Override
-    public User remove(UUID userId) {
-        User user = get(userId);
+    public void remove(UUID userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
         userRepository.delete(user);
-        return user;
     }
 
-
     @Override
-    public User getByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException(email));
+    public boolean isEmailUnique(String email) {
+        return !userRepository.existsByEmail(email);
     }
 }

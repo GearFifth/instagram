@@ -33,13 +33,8 @@ public class GlobalExceptionHandler {
         return createErrorResponse("Validation failed", HttpStatus.BAD_REQUEST, errors);
     }
 
-    @ExceptionHandler(InvalidCredentialsException.class)
-    public ResponseEntity<Map<String, Object>> handleInvalidCredentials(InvalidCredentialsException ex) {
-        return createErrorResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED);
-    }
-
-    @ExceptionHandler(InvalidTokenException.class)
-    public ResponseEntity<Map<String, Object>> handleInvalidToken(InvalidTokenException ex) {
+    @ExceptionHandler({InvalidCredentialsException.class, InvalidTokenException.class})
+    public ResponseEntity<Map<String, Object>> handleUnauthorized(InvalidCredentialsException ex) {
         return createErrorResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 

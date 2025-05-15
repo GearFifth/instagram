@@ -3,6 +3,8 @@ package gearfifth.com.example.instagram.services.auth;
 import gearfifth.com.example.instagram.dtos.auth.ChangePasswordRequest;
 import gearfifth.com.example.instagram.dtos.auth.LoginRequest;
 import gearfifth.com.example.instagram.dtos.auth.TokenResponse;
+import gearfifth.com.example.instagram.dtos.auth.UserCreateRequest;
+import gearfifth.com.example.instagram.dtos.users.responses.UserProfileResponse;
 import gearfifth.com.example.instagram.exceptions.EmailAlreadyExistsException;
 import gearfifth.com.example.instagram.exceptions.InvalidCredentialsException;
 import gearfifth.com.example.instagram.exceptions.InvalidTokenException;
@@ -13,6 +15,7 @@ import gearfifth.com.example.instagram.repositories.IUserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,16 +39,21 @@ public class AuthService implements IAuthService {
     private final AuthenticationManager authManager;
     private final JwtService jwtUtils;
     private final CustomUserDetailsService customUserDetailsService;
-
+    private final ModelMapper mapper;
 
     @Override
-    public User register(User user) {
-        if (userRepository.existsByEmail(user.getEmail())) {
-            throw new EmailAlreadyExistsException(user.getEmail());
+    public UserProfileResponse register(UserCreateRequest request) {
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new EmailAlreadyExistsException(request.getEmail());
         }
+
+        User user = mapper.map(request, User.class);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+        user = userRepository.save(user);
+
+        return mapper.map(user, UserProfileResponse.class);
     }
+
 
     @Override
     public TokenResponse login(LoginRequest request) {
@@ -92,7 +100,7 @@ public class AuthService implements IAuthService {
         String email = jwtUtils.extractUserName(token);
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("User with email " + email + " not found"));
+                .orElseThrow(() -> new UserNotFoundException(email));
 
         if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
             throw new InvalidCredentialsException("Current password is incorrect");

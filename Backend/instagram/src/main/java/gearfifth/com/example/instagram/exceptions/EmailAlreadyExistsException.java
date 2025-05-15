@@ -5,11 +5,11 @@ public class EmailAlreadyExistsException extends RuntimeException {
     private static final String CUSTOM_MESSAGE = "Email %s already in use.";
 
     public EmailAlreadyExistsException() {
-        super("Email already in use.");
+        super(DEFAULT_MESSAGE);
     }
 
     public EmailAlreadyExistsException(String email) {
-        super("Email " + email + " already in use.");
+        super(String.format(CUSTOM_MESSAGE, email));
     }
 
     public EmailAlreadyExistsException(String message, boolean isCustom) {
