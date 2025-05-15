@@ -2,11 +2,9 @@ package gearfifth.com.example.instagram.controllers;
 
 import gearfifth.com.example.instagram.dtos.users.responses.UserProfileResponse;
 import gearfifth.com.example.instagram.dtos.users.requests.UserUpdateRequest;
-import gearfifth.com.example.instagram.models.User;
 import gearfifth.com.example.instagram.services.IUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -14,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController

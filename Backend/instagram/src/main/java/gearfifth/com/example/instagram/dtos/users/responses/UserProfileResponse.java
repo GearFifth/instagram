@@ -1,6 +1,6 @@
 package gearfifth.com.example.instagram.dtos.users.responses;
 
-import gearfifth.com.example.instagram.models.UserRole;
+import gearfifth.com.example.instagram.models.users.UserRole;
 import lombok.Data;
 
 import java.util.UUID;

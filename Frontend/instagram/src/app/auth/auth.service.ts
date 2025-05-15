@@ -42,6 +42,7 @@ export class AuthService {
       }),
       map(() => void 0),
       catchError((error) => {
+        console.log(error)
         throw error;
       })
     );

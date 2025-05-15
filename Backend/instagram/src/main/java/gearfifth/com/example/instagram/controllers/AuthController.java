@@ -2,13 +2,11 @@ package gearfifth.com.example.instagram.controllers;
 
 import gearfifth.com.example.instagram.dtos.auth.*;
 import gearfifth.com.example.instagram.dtos.users.responses.UserProfileResponse;
-import gearfifth.com.example.instagram.models.User;
 import gearfifth.com.example.instagram.services.auth.IAuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,5 +44,11 @@ public class AuthController {
     public ResponseEntity<TokenResponse> refresh(@RequestBody RefreshTokenRequest request) {
         return ResponseEntity.ok(service.refresh(request.getRefreshToken()));
     }
+
+    @GetMapping({"/verify-email"})
+    public ResponseEntity<UserProfileResponse> verify(@RequestParam("token") String verificationToken){
+        return new ResponseEntity<>(service.verifyEmail(verificationToken), HttpStatus.OK);
+    }
+
 
 }
