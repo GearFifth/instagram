@@ -4,5 +4,14 @@ export const confirmPasswordValidator: ValidatorFn = (control: AbstractControl):
   const password = control.get('password')?.value;
   const passwordConfirmation = control.get('passwordConfirmation')?.value;
 
-  return password === passwordConfirmation ? null : { PasswordNoMatch: true };
+  const isMatchingPassword = password === passwordConfirmation;
+
+  if(!isMatchingPassword){
+    control.get('passwordConfirmation')?.setErrors({PasswordNoMatch: true})
+  }
+  else {
+    control.get('passwordConfirmation')?.setErrors(null);
+  }
+
+  return isMatchingPassword ? null : { PasswordNoMatch: true };
 };
