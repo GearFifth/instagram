@@ -4,6 +4,7 @@ import {Router} from "@angular/router";
 import {AuthService} from "../../auth.service";
 import {LoginRequest} from "../../models/login-request.model";
 import {NotificationType} from "../../../shared/notification/notification.component";
+import {ROUTE_PATHS} from "../../../shared/constants/routes";
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,7 @@ export class LoginComponent {
   hide: boolean = true;
   errorMessage: string = "";
 
-  constructor(private fb: FormBuilder, private router: Router, private authService: AuthService) {
+  constructor(private router: Router, private authService: AuthService) {
     this.loginForm = new FormGroup({
       email: new FormControl('',[Validators.required]),
       password: new FormControl('',[Validators.required])
@@ -30,7 +31,7 @@ export class LoginComponent {
       }
       this.authService.login(loginRequest).subscribe({
         next: () => {
-          this.router.navigate(['tasks']);
+          this.router.navigate(["/" + ROUTE_PATHS.POSTS_ROOT]);
         },
         error: (err) => {
           // this.errorMessage = "Invalid username or password";

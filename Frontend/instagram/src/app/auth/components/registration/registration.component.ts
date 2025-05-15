@@ -4,6 +4,7 @@ import {MatStepper} from "@angular/material/stepper";
 import {confirmPasswordValidator} from "../../validators/confirm-password.validator";
 import {AuthService} from "../../auth.service";
 import {RegisterRequest} from "../../models/register-request.model";
+import {UserService} from "../../../users/user.service";
 
 @Component({
   selector: 'app-registration',
@@ -18,7 +19,7 @@ export class RegistrationComponent implements OnInit{
   registerContactForm!: FormGroup;
   registerPasswordForm!: FormGroup;
 
-  constructor(private authService: AuthService, private formBuilder: FormBuilder) {}
+  constructor(private authService: AuthService, private formBuilder: FormBuilder, private userService: UserService) {}
 
   ngOnInit() {
     this.registerPersonalForm = this.formBuilder.group({
@@ -73,28 +74,20 @@ export class RegistrationComponent implements OnInit{
   }
 
   checkEmailUniqueness(stepper: MatStepper) {
-    if (this.registerPersonalForm.valid) {
-      stepper.next();
-    } else {
-      this.registerPersonalForm.markAllAsTouched();
-      console.log("Form is invalid:", this.registerPersonalForm.errors);
+    const email = this.registerPersonalForm.get('email')?.value;
+    if (email) {
+      this.userService.checkEmailUniqueness(email).subscribe({
+        next: (isUnique) => {
+          if (!isUnique) {
+            this.registerContactForm.get('email')?.setErrors({ nonUnique: true });
+          }
+          stepper.next();
+        },
+        error: (err) => {
+          console.error('Error checking email uniqueness:', err);
+        },
+      });
     }
-
-    //TODO
-
-    // const email = this.registerPersonalForm.get('email')?.value;
-    // if (email) {
-    //   this.authService.checkEmailUniqueness(email).subscribe({
-    //     next: (isUnique) => {
-    //       if (!isUnique) {
-    //         this.registerContactForm.get('email')?.setErrors({ nonUnique: true });
-    //       }
-    //     },
-    //     error: (err) => {
-    //       console.error('Error checking email uniqueness:', err);
-    //     },
-    //   });
-    // }
   }
 
   stepBack(stepper: MatStepper, currentForm: FormGroup) {

@@ -6,9 +6,9 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {RegisterRequest} from "./models/register-request.model";
 import {LoginRequest} from "./models/login-request.model";
 import {AuthResponse} from "./models/auth-response.model";
-import {environment} from "../env/env";
 import {JwtHelperService} from "@auth0/angular-jwt";
 import {isPlatformBrowser} from "@angular/common";
+import {ROUTE_PATHS} from "../shared/constants/routes";
 
 @Injectable({
   providedIn: 'root'
@@ -47,19 +47,18 @@ export class AuthService {
     );
   }
 
-  logout(): Observable<string> {
-    return this.http.post(`auth/logout`,{}, {
-      responseType: 'text',
-    }).pipe(
+  logout(): Observable<void> {
+    return this.http.post<void>(`auth/logout`, {}).pipe(
       tap(() => {
         if (isPlatformBrowser(this.platformId)) {
           localStorage.removeItem('user');
           this.roleSubject.next(UserRole.UNAUTHORIZED);
-          this.router.navigate(['/auth/login']);
+          this.router.navigate([ROUTE_PATHS.AUTH_LOGIN]);
         }
       }),
       catchError((error) => {
-        throw error;
+        console.error("Logout Error:", error);
+        return new Observable<void>();
       })
     );
   }
@@ -95,28 +94,23 @@ export class AuthService {
     return undefined;
   }
 
-  getExpiration(): number | undefined {
-    if (isPlatformBrowser(this.platformId)) {
-      const token = localStorage.getItem('user');
-      if (token) {
-        const helper = new JwtHelperService();
-        const expiration = helper.decodeToken(token)["exp"];
-        return expiration ? +expiration : undefined;
-      }
+  getTokenExpiration(token: string): number | undefined {
+    const helper = new JwtHelperService();
+    return helper.decodeToken(token)?.exp;
+  }
+
+  isTokenExpired(token: string): boolean {
+    const expiration = this.getTokenExpiration(token);
+    if (!expiration) {
+      return true;
     }
-    return undefined;
+
+    const now = Math.floor(Date.now() / 1000);
+    return expiration < now;
   }
 
   isLoggedIn(): boolean {
-    if (isPlatformBrowser(this.platformId)) {
-      const token = localStorage.getItem('user');
-      const helper = new JwtHelperService();
-      return !!token && !helper.isTokenExpired(token);
-    }
-    return false;
-  }
-
-  checkEmailUniqueness(){
-    //TODO
+    const token = this.getToken();
+    return token ? !this.isTokenExpired(token) : false;
   }
 }

@@ -2,6 +2,7 @@ import {ActivatedRouteSnapshot, CanActivate, CanActivateFn, Router} from '@angul
 import {Injectable} from "@angular/core";
 import {AuthService} from "../auth.service";
 import {UserRole} from "../../users/models/user-role.enum";
+import {ROUTE_PATHS} from "../../shared/constants/routes";
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class RoleGuard implements CanActivate {
     const requiredRoles = route.data['roles'] as UserRole[];
 
     if (requiredRoles && !requiredRoles.includes(userRole)) {
-      this.router.navigate(['/posts']);
+      this.router.navigate([ROUTE_PATHS.POSTS_ROOT]);
       return false;
     }
 
