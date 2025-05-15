@@ -38,7 +38,7 @@ export class RegistrationComponent implements OnInit{
         passwordConfirmation: ['', Validators.required]
       },
       {
-        validators: confirmPasswordValidator
+        validator: confirmPasswordValidator
       }
     );
   }

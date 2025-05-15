@@ -86,7 +86,7 @@
               <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                 <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
               </button>
-              <mat-error *ngIf="registerPasswordForm.hasError('PasswordNoMatch') && registerPasswordForm.get('passwordConfirmation')?.touched">
+              <mat-error *ngIf="registerPasswordForm.get('passwordConfirmation')?.hasError('PasswordNoMatch')">
                 Passwords do not match
               </mat-error>
               <mat-error *ngIf="registerPasswordForm.get('passwordConfirmation')?.hasError('required') && registerPasswordForm.get('passwordConfirmation')?.touched">

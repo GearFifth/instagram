@@ -1,6 +1,6 @@
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {BehaviorSubject, catchError, map, Observable, tap} from "rxjs";
-import {UserRole} from "./models/user-role.enum";
+import {UserRole} from "../users/models/user-role.enum";
 import {Router} from "@angular/router";
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {RegisterRequest} from "./models/register-request.model";
@@ -22,15 +22,17 @@ export class AuthService {
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object) {}
 
+  header = new HttpHeaders({
+    'Content-Type': 'application/json',
+  })
+
   register(registerRequest: RegisterRequest): Observable<any> {
-    return this.http.post(`${environment.apiHost}auth/register`, registerRequest);
+    return this.http.post(`auth/register`, registerRequest);
   }
 
   login(loginRequest: LoginRequest): Observable<void> {
-    return this.http.post<AuthResponse>(`${environment.apiHost}auth/login`, loginRequest, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      }),
+    return this.http.post<AuthResponse>(`auth/login`, loginRequest, {
+      headers: this.header,
     }).pipe(
       tap((response: AuthResponse) => {
         if (isPlatformBrowser(this.platformId)) {
@@ -46,7 +48,7 @@ export class AuthService {
   }
 
   logout(): Observable<string> {
-    return this.http.post(`${environment.apiHost}auth/logout`,{}, {
+    return this.http.post(`auth/logout`,{}, {
       responseType: 'text',
     }).pipe(
       tap(() => {

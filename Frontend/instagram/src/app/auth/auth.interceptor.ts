@@ -13,14 +13,13 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = this.authService.getToken();
 
-    let request = req;
     if (token) {
-      request = req.clone({
+      req = req.clone({
         headers: req.headers.set('Authorization', `Bearer ${token}`)
       });
     }
 
-    return next.handle(request).pipe(
+    return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
           this.authService.logout();
