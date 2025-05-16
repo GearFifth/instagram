@@ -14,13 +14,21 @@ import {ROUTE_PATHS} from "../shared/constants/routes";
   providedIn: 'root'
 })
 export class AuthService {
-  private roleSubject = new BehaviorSubject<UserRole>(UserRole.UNAUTHORIZED);
-  role$ = this.roleSubject.asObservable();
+  roleSubject = new BehaviorSubject<UserRole>(UserRole.UNAUTHORIZED);
 
   constructor(
     private http: HttpClient,
     private router: Router,
-    @Inject(PLATFORM_ID) private platformId: Object) {}
+    @Inject(PLATFORM_ID) private platformId: Object) {
+    this.loadRoleFromLocalStorage();
+  }
+
+  private loadRoleFromLocalStorage(): void {
+    const token = this.getToken();
+    if (token) {
+      this.setRoleFromJwt(token);
+    }
+  }
 
   header = new HttpHeaders({
     'Content-Type': 'application/json',
