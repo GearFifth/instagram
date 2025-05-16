@@ -36,7 +36,7 @@ public class EmailService implements IEmailService {
     @Override
     public void sendActivationEmail(User user, String token) {
 
-        String confirmationUrl = "http://localhost:4200/users/activate?token=" + token;
+        String confirmationUrl = "http://localhost:4200/auth/verify-email?token=" + token;
         String body = """
             <p>Hello, <strong>%s</strong>!</p>
             <p>Please verify your email address by clicking the link below:</p>
@@ -73,7 +73,7 @@ public class EmailService implements IEmailService {
                         overflow: hidden;
                     }
                     .email-header {
-                        background: #42C202;
+                        background: #673AB7;
                         color: white;
                         text-align: center;
                         padding: 20px;
@@ -86,7 +86,7 @@ public class EmailService implements IEmailService {
                         line-height: 1.6;
                     }
                     .email-body a {
-                        color: #42C202;
+                        color: #673AB7;
                         text-decoration: none;
                         font-weight: bold;
                     }

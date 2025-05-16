@@ -27,40 +27,28 @@ public class VerificationTokenService implements IVerificationTokenService {
 
     @Override
     public VerificationToken getVerificationToken(String verificationToken) {
-        return repository.findByToken(verificationToken);
-    }
-
-    @Override
-    public void delete(User user) {
-        VerificationToken token = repository.findByUser(user);
-        if (token == null) return;
-        repository.delete(token);
+        return repository.findByToken(verificationToken)
+                .orElseThrow(() -> new VerificationTokenException("Invalid verification token"));
     }
 
     @Override
     public void delete(String token) {
-        repository.delete(repository.findByToken(token));
+        repository.delete(repository.findByToken(token)
+                .orElseThrow(() -> new VerificationTokenException("Invalid verification token")));
     }
 
     @Override
-    @Transactional
-    public User activateToken(String token) {
+    public void activateToken(String token) {
         VerificationToken verificationToken = getVerificationToken(token);
-        if (verificationToken == null) {
-            throw new VerificationTokenException("Invalid verification token");
-        }
 
         User user = verificationToken.getUser();
-        Calendar cal = Calendar.getInstance();
-        if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
+        if (verificationToken.getExpiryDate().before(Calendar.getInstance().getTime())) {
             throw new VerificationTokenException("Verification token has expired");
         }
 
         user.setEnabled(true);
         delete(token);
         userRepository.save(user);
-
-        return user;
     }
 
 }

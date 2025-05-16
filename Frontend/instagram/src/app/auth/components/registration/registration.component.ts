@@ -53,7 +53,7 @@ export class RegistrationComponent implements OnInit{
     console.log(this.registerContactForm)
     console.log(this.registerPasswordForm)
 
-    this.isEditable = false;
+    // this.isEditable = false;
 
     const request: RegisterRequest = {
       email: this.registerPersonalForm.value.email,

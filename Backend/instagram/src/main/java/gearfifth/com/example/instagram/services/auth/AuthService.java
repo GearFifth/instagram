@@ -11,7 +11,6 @@ import gearfifth.com.example.instagram.exceptions.InvalidTokenException;
 import gearfifth.com.example.instagram.exceptions.UserNotFoundException;
 import gearfifth.com.example.instagram.models.users.User;
 import gearfifth.com.example.instagram.models.users.UserPrincipal;
-import gearfifth.com.example.instagram.models.users.VerificationToken;
 import gearfifth.com.example.instagram.repositories.IUserRepository;
 import gearfifth.com.example.instagram.services.verification.IEmailService;
 import gearfifth.com.example.instagram.services.verification.IVerificationTokenService;
@@ -29,7 +28,6 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Calendar;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -124,9 +122,8 @@ public class AuthService implements IAuthService {
     }
 
     @Override
-    public UserProfileResponse verifyEmail(String verificationToken) {
-        User user = verificationTokenService.activateToken(verificationToken);
-        return mapper.map(user, UserProfileResponse.class);
+    public void verifyEmail(String verificationToken) {
+        verificationTokenService.activateToken(verificationToken);
     }
 
     private TokenResponse generateTokens(UserPrincipal userPrincipal) {

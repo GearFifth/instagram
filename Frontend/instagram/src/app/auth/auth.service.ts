@@ -1,5 +1,5 @@
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
-import {BehaviorSubject, catchError, map, Observable, tap} from "rxjs";
+import {BehaviorSubject, catchError, map, Observable, switchMap, tap} from "rxjs";
 import {UserRole} from "../users/models/user-role.enum";
 import {Router} from "@angular/router";
 import {HttpClient, HttpHeaders} from '@angular/common/http';
@@ -113,5 +113,9 @@ export class AuthService {
   isLoggedIn(): boolean {
     const token = this.getToken();
     return token ? !this.isTokenExpired(token) : false;
+  }
+
+  verifyEmail(token: string): Observable<void> {
+    return this.http.get<void>(`auth/verify-email?token=${token}`);
   }
 }

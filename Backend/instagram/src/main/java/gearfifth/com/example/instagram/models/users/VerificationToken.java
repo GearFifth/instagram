@@ -14,7 +14,7 @@ import java.util.UUID;
 @Data
 public class VerificationToken {
 
-    private static final long EXPIRATION = 60 * 24 * 1000;
+    private static final long EXPIRATION = 60 * 24 * 60 * 1000;
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -39,6 +39,6 @@ public class VerificationToken {
     public VerificationToken(String token, User user) {
         this.token = token;
         this.user = user;
-        this.expiryDate = new Date (Calendar.getInstance().getTime().getTime() + EXPIRATION);
+        this.expiryDate = calculateExpiryDate((int) (EXPIRATION / (60 * 1000)));
     }
 }

@@ -46,9 +46,9 @@ public class AuthController {
     }
 
     @GetMapping({"/verify-email"})
-    public ResponseEntity<UserProfileResponse> verify(@RequestParam("token") String verificationToken){
-        return new ResponseEntity<>(service.verifyEmail(verificationToken), HttpStatus.OK);
+    public ResponseEntity<Void> verify(@RequestParam("token") String verificationToken){
+        service.verifyEmail(verificationToken);
+        return ResponseEntity.noContent().build();
     }
-
 
 }

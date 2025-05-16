@@ -14,5 +14,5 @@ public interface IAuthService {
     TokenResponse refresh(String refreshToken);
     void logout(HttpServletRequest request, HttpServletResponse response);
     void changePassword(ChangePasswordRequest request, HttpServletRequest httpRequest);
-    UserProfileResponse verifyEmail(String verificationToken);
+    void verifyEmail(String verificationToken);
 }
