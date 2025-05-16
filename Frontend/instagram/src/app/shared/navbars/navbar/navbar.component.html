@@ -1,0 +1,4 @@
+@if(loggedUser){
+  <app-user-navbar *ngIf="roleName === 'USER'" [loggedUser]="loggedUser"></app-user-navbar>
+  <app-admin-navbar *ngIf="roleName === 'ADMIN'" [loggedUser]="loggedUser"></app-admin-navbar>
+}
