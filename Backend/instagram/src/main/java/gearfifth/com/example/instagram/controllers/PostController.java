@@ -61,12 +61,4 @@ public class PostController {
         service.removeReaction(postId, reaction);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-    @PostMapping("/{postId}/image")
-    public ResponseEntity<ImageDetailsResponse> uploadPostImage(
-            @PathVariable UUID postId,
-            @RequestParam("file") MultipartFile file) {
-
-        return new ResponseEntity<>(service.uploadPostImage(postId, file), HttpStatus.CREATED);
-    }
 }

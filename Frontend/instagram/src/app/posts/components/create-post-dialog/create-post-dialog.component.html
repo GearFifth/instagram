@@ -1,0 +1,20 @@
+<mat-dialog-content id="create-post-box">
+  <p class="title">Create post</p>
+
+  <!-- Image Preview and Upload -->
+  <div class="image-upload-container">
+    <img *ngIf="imagePreview" [src]="imagePreview" alt="Uploaded Image" class="image-preview">
+    <button mat-stroked-button color="primary" (click)="triggerFileInput()">Upload Image</button>
+    <input type="file" #fileInput hidden (change)="onImageSelected($event)">
+  </div>
+
+  <!-- Post Description -->
+  <mat-form-field appearance="outline" class="description-field">
+    <mat-label>Description</mat-label>
+    <textarea matInput [(ngModel)]="description"></textarea>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancelClick()">Cancel</button>
+  <button mat-flat-button id="yes-button" (click)="onCreateClick()">Create</button>
+</mat-dialog-actions>

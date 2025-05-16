@@ -47,3 +47,25 @@ app-navbar{
   width: 100%;
   z-index: 100;
 }
+
+.create-post-button {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 25px;
+  padding: 10px 20px;
+  background-color: #7C1CD9;
+  color: #fff;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s, box-shadow 0.3s;
+  z-index: 100;
+}
+
+.create-post-button:hover {
+  background-color: #7510b4;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}

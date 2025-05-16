@@ -22,6 +22,5 @@ public interface IPostService {
     void remove(UUID postId);
     void addReaction(UUID postId, Reaction reaction);
     void removeReaction(UUID postId, Reaction reaction);
-    ImageDetailsResponse uploadPostImage(UUID postId, MultipartFile file);
 //    Page<Post> getUserPosts(Long userId, Pageable pageable);
 }

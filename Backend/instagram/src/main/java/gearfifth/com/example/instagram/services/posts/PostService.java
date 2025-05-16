@@ -52,10 +52,13 @@ public class PostService implements IPostService{
     @Override
     public PostResponse create(CreatePostRequest request) {
         User author = getUserById(request.getAuthorId());
+        Image image = imageService.getImageDetails(request.getImageId());
+
         Post newPost = new Post();
         newPost.setDescription(request.getDescription());
         newPost.setAuthor(author);
         newPost.setCreationDate(new Date());
+        newPost.setImage(image);
 
         return mapper.map(postRepository.save(newPost), PostResponse.class);
     }
@@ -98,18 +101,6 @@ public class PostService implements IPostService{
                 .orElseThrow(() -> new UserNotFoundException(userId));
     }
 
-    @Override
-    @Transactional
-    public ImageDetailsResponse uploadPostImage(UUID postId, MultipartFile file) {
-        Post post = findPostOrThrow(postId);
-
-        ImageDetailsResponse imageDetailsResponse = imageService.uploadImage(file, "posts");
-
-        post.setImage(imageService.getImageDetails(imageDetailsResponse.getId()));
-        postRepository.save(post);
-
-        return imageDetailsResponse;
-    }
 
 //    @Override
 //    public Page<Post> getUserPosts(Long userId, Pageable pageable) {

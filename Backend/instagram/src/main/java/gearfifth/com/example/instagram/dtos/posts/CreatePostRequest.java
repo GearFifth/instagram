@@ -15,4 +15,5 @@ import java.util.UUID;
 public class CreatePostRequest {
     private String description;
     private UUID authorId;
+    private UUID imageId;
 }
