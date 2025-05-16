@@ -14,11 +14,10 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<Map<String, Object>> handleUserNotFound(UserNotFoundException ex) {
+    @ExceptionHandler({UserNotFoundException.class, PostNotFoundException.class})
+    public ResponseEntity<Map<String, Object>> handleNotFound(Exception ex) {
         return createErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
-
     @ExceptionHandler(EmailAlreadyExistsException.class)
     public ResponseEntity<Map<String, Object>> handleEmailAlreadyExists(EmailAlreadyExistsException ex) {
         return createErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);

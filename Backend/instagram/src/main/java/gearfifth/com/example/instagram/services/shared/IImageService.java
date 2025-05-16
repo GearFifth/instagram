@@ -12,5 +12,6 @@ public interface IImageService {
     ImageDetailsResponse uploadImage(MultipartFile file, String relativePath);
     Resource getImage(UUID imageId);
     public byte[] getImageBytes(UUID imageId);
+    Image getImageDetails(UUID imageId);
     void removeImage(UUID imageId);
 }
