@@ -5,13 +5,15 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {SharedModule} from "../shared/shared.module";
 import {AuthRoutingModule} from "./auth-routing.module";
 import { RegistrationComponent } from './components/registration/registration.component';
+import { VerifyEmailComponent } from './components/verify-email/verify-email.component';
 
 
 
 @NgModule({
   declarations: [
     LoginComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    VerifyEmailComponent
   ],
   imports: [
     CommonModule,

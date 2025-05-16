@@ -1,4 +1,4 @@
-package gearfifth.com.example.instagram.models;
+package gearfifth.com.example.instagram.models.users;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -28,6 +28,6 @@ public class User {
 
     private UserRole role = UserRole.USER;
 
-    @Transient
-    private String jwt;
+    @Column(name = "enabled")
+    private boolean enabled = false;
 }

@@ -1,8 +1,8 @@
 package gearfifth.com.example.instagram.services.auth;
 
 import gearfifth.com.example.instagram.exceptions.UserNotFoundException;
-import gearfifth.com.example.instagram.models.User;
-import gearfifth.com.example.instagram.models.UserPrincipal;
+import gearfifth.com.example.instagram.models.users.User;
+import gearfifth.com.example.instagram.models.users.UserPrincipal;
 import gearfifth.com.example.instagram.repositories.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;

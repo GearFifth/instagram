@@ -34,8 +34,9 @@ export class LoginComponent {
           this.router.navigate(["/" + ROUTE_PATHS.POSTS_ROOT]);
         },
         error: (err) => {
-          // this.errorMessage = "Invalid username or password";
-          this.errorMessage = err;
+          // console.log("Error: ", err);
+          this.errorMessage = "Invalid username or password";
+          // this.errorMessage = err;
         }
       });
     }

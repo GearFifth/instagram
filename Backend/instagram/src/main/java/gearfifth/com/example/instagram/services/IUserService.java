@@ -2,8 +2,6 @@ package gearfifth.com.example.instagram.services;
 
 import gearfifth.com.example.instagram.dtos.users.requests.UserUpdateRequest;
 import gearfifth.com.example.instagram.dtos.users.responses.UserProfileResponse;
-import gearfifth.com.example.instagram.models.User;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
 import java.util.UUID;

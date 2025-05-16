@@ -1,7 +1,5 @@
 package gearfifth.com.example.instagram.exceptions;
 
-import gearfifth.com.example.instagram.models.User;
-
 import java.util.UUID;
 
 public class UserNotFoundException extends RuntimeException {

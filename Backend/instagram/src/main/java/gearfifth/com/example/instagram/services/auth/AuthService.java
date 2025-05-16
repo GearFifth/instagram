@@ -9,9 +9,11 @@ import gearfifth.com.example.instagram.exceptions.EmailAlreadyExistsException;
 import gearfifth.com.example.instagram.exceptions.InvalidCredentialsException;
 import gearfifth.com.example.instagram.exceptions.InvalidTokenException;
 import gearfifth.com.example.instagram.exceptions.UserNotFoundException;
-import gearfifth.com.example.instagram.models.User;
-import gearfifth.com.example.instagram.models.UserPrincipal;
+import gearfifth.com.example.instagram.models.users.User;
+import gearfifth.com.example.instagram.models.users.UserPrincipal;
 import gearfifth.com.example.instagram.repositories.IUserRepository;
+import gearfifth.com.example.instagram.services.verification.IEmailService;
+import gearfifth.com.example.instagram.services.verification.IVerificationTokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +28,7 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -40,6 +41,8 @@ public class AuthService implements IAuthService {
     private final JwtService jwtUtils;
     private final CustomUserDetailsService customUserDetailsService;
     private final ModelMapper mapper;
+    private final IVerificationTokenService verificationTokenService;
+    private final IEmailService emailService;
 
     @Override
     public UserProfileResponse register(UserCreateRequest request) {
@@ -51,6 +54,10 @@ public class AuthService implements IAuthService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user = userRepository.save(user);
 
+        String token = UUID.randomUUID().toString();
+        verificationTokenService.createVerificationToken(user, token);
+        emailService.sendActivationEmail(user, token);
+
         return mapper.map(user, UserProfileResponse.class);
     }
 
@@ -61,8 +68,12 @@ public class AuthService implements IAuthService {
             Authentication authentication = authManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
             );
-
             UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+
+            if (!userPrincipal.isEnabled()) {
+                throw new InvalidCredentialsException("User account is not enabled. Please verify your email.");
+            }
+
             return generateTokens(userPrincipal);
 
         } catch (Exception e) {
@@ -110,10 +121,16 @@ public class AuthService implements IAuthService {
         userRepository.save(user);
     }
 
+    @Override
+    public void verifyEmail(String verificationToken) {
+        verificationTokenService.activateToken(verificationToken);
+    }
+
     private TokenResponse generateTokens(UserPrincipal userPrincipal) {
         TokenResponse tokenResponse = new TokenResponse();
         tokenResponse.setAccessToken(jwtUtils.generateAccessToken(userPrincipal));
         tokenResponse.setRefreshToken(jwtUtils.generateRefreshToken(userPrincipal));
         return tokenResponse;
     }
+
 }

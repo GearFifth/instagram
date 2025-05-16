@@ -1,7 +1,7 @@
 package gearfifth.com.example.instagram.services.auth;
 
 import gearfifth.com.example.instagram.exceptions.InvalidTokenException;
-import gearfifth.com.example.instagram.models.UserPrincipal;
+import gearfifth.com.example.instagram.models.users.UserPrincipal;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;

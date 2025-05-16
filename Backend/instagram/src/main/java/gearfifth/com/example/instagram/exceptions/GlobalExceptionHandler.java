@@ -44,6 +44,11 @@ public class GlobalExceptionHandler {
         return createErrorResponse(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(VerificationTokenException.class)
+    public ResponseEntity<Map<String, Object>> handleVerificationTokenException(VerificationTokenException ex) {
+        return createErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
     private ResponseEntity<Map<String, Object>> createErrorResponse(String message, HttpStatus status) {
         return new ResponseEntity<>(Map.of(
                 "timestamp", LocalDateTime.now(),
