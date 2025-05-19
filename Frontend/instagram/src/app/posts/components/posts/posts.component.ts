@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
 import { AuthService } from '../../../auth/auth.service';
 import {MatDialog} from "@angular/material/dialog";
 import {CreatePostDialogComponent} from "../create-post-dialog/create-post-dialog.component";
@@ -13,12 +13,19 @@ import {Post} from "../../models/post.model";
 export class PostsComponent implements OnInit {
   readonly dialog = inject(MatDialog);
   posts: Post[] = [];
+  @ViewChild('contentDiv') contentDiv!: ElementRef;
 
   constructor(private authService: AuthService, private postService: PostService) {
   }
 
   ngOnInit() {
     this.loadPosts();
+  }
+
+  scrollToTop() {
+    if (this.contentDiv) {
+      this.contentDiv.nativeElement.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   openCreatePostDialog() {
@@ -34,21 +41,63 @@ export class PostsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.posts.push(result);
-        // this.currentPage = 0;
-        // this.loadData();
-        // this.scrollToTop();
+        this.currentPage = 0;
+        this.loadPosts();
+        this.scrollToTop();
       }
     });
   }
 
-  loadPosts() {
-    this.postService.getAll().subscribe({
+  // loadPosts() {
+  //   this.postService.getAll().subscribe({
+  //     next: (posts: Post[]) => {
+  //       this.posts = posts;
+  //     },
+  //     error: (err) => {
+  //       console.error('Error loading post image:', err);
+  //     }
+  //   });
+  // }
+
+  // INFINITE SCROLL
+  isLoading = false;
+  currentPage = 0;
+  itemsPerPage = 2;
+
+  toggleLoading = () => this.isLoading = !this.isLoading;
+
+  loadPosts = () => {
+    const loggedUserId = this.authService.getId()
+    if(loggedUserId === undefined) return;
+    this.toggleLoading();
+    this.postService.getPaginatedPostsForUser(loggedUserId, this.currentPage, this.itemsPerPage).subscribe({
       next: (posts: Post[]) => {
         this.posts = posts;
+        console.log(this.posts)
       },
-      error: (err) => {
-        console.error('Error loading post image:', err);
-      }
+      error: err => console.log(err),
+      complete: () => this.toggleLoading()
     });
   }
+
+  appendPosts = () => {
+    const loggedUserId = this.authService.getId()
+    if(loggedUserId === undefined) return;
+    console.log("append called");
+    this.toggleLoading();
+    this.postService.getPaginatedPostsForUser(loggedUserId, this.currentPage, this.itemsPerPage).subscribe({
+      next: (posts: Post[]) => {
+        this.posts = [...this.posts, ...posts];
+      },
+      error: err => console.log(err),
+      complete: () => this.toggleLoading()
+    });
+  }
+
+  onScroll = () => {
+    console.log("scroll");
+    this.currentPage++;
+    this.appendPosts();
+  }
+
 }

@@ -12,6 +12,7 @@ import { CommentCardComponent } from './comments/components/comment-card/comment
 import { AddCommentComponent } from './comments/components/add-comment/add-comment.component';
 import { CommentsComponent } from './comments/components/comments/comments.component';
 import { CommentListComponent } from './comments/components/comment-list/comment-list.component';
+import {InfiniteScrollDirective} from "ngx-infinite-scroll";
 
 
 
@@ -30,7 +31,8 @@ import { CommentListComponent } from './comments/components/comment-list/comment
     CommonModule,
     PostsRoutingModule,
     SharedModule,
-    FormsModule
+    FormsModule,
+    InfiniteScrollDirective
   ]
 })
 export class PostsModule { }

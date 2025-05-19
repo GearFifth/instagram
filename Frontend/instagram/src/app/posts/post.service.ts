@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {CreatePostRequest} from "./models/create-post-request.model";
 import {Post} from "./models/post.model";
@@ -33,4 +33,12 @@ export class PostService {
     return this.http.delete<void>(`posts/${postId}/reactions`, { body: reaction });
   }
 
+
+  getPaginatedPostsForUser(userId: string, page: number = 1, itemsPerPage: number = 10): Observable<Post[]> {
+    const params = new HttpParams()
+      .set('pageNumber', page.toString())
+      .set('itemsPerPage', itemsPerPage.toString());
+
+    return this.http.get<Post[]>(`posts/user/${userId}`, { params });
+  }
 }

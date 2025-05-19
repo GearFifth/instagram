@@ -22,5 +22,5 @@ public interface IPostService {
     void remove(UUID postId);
     void addReaction(UUID postId, Reaction reaction);
     void removeReaction(UUID postId, Reaction reaction);
-//    Page<Post> getUserPosts(Long userId, Pageable pageable);
+    Collection<PostResponse> getPostsForUser(UUID userId, int pageNumber, int itemsPerPage);
 }

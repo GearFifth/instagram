@@ -61,4 +61,13 @@ public class PostController {
         service.removeReaction(postId, reaction);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<Collection<PostResponse>> getPostsForUser(
+            @PathVariable UUID userId,
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "10") int itemsPerPage) {
+
+        return new ResponseEntity<>(service.getPostsForUser(userId, pageNumber, itemsPerPage), HttpStatus.OK);
+    }
 }

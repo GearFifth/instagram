@@ -17,7 +17,9 @@ import gearfifth.com.example.instagram.services.shared.IImageService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -88,6 +90,18 @@ public class PostService implements IPostService{
         Post post = findPostOrThrow(postId);
         post.removeReaction(reaction);
         postRepository.save(post);
+    }
+
+    @Override
+    public Collection<PostResponse> getPostsForUser(UUID userId, int pageNumber, int itemsPerPage) {
+        Pageable pageable = PageRequest.of(pageNumber, itemsPerPage, Sort.by(Sort.Direction.DESC, "creationDate"));
+
+//        postRepository.findAllForUser(userId, pageable) //Add after implementing followers logic
+
+        return postRepository.findAll( pageable)
+                .stream()
+                .map(post -> mapper.map(post, PostResponse.class))
+                .collect(Collectors.toList());
     }
 
 
