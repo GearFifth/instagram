@@ -14,7 +14,7 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler({UserNotFoundException.class, PostNotFoundException.class})
+    @ExceptionHandler({UserNotFoundException.class, PostNotFoundException.class, CommentNotFoundException.class})
     public ResponseEntity<Map<String, Object>> handleNotFound(Exception ex) {
         return createErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({InvalidCredentialsException.class, InvalidTokenException.class})
-    public ResponseEntity<Map<String, Object>> handleUnauthorized(InvalidCredentialsException ex) {
+    public ResponseEntity<Map<String, Object>> handleUnauthorized(Exception ex) {
         return createErrorResponse(ex.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
@@ -43,8 +43,8 @@ public class GlobalExceptionHandler {
         return createErrorResponse(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(VerificationTokenException.class)
-    public ResponseEntity<Map<String, Object>> handleVerificationTokenException(VerificationTokenException ex) {
+    @ExceptionHandler({VerificationTokenException.class, InvalidArgumentsException.class})
+    public ResponseEntity<Map<String, Object>> handleBadRequest(Exception ex) {
         return createErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 

@@ -22,9 +22,9 @@ public class Comment {
 
     @ManyToOne()
     @JoinColumn(name = "parent_comment_id")
-    private Comment parent;
+    private Comment parentComment;
 
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Comment> replies = new ArrayList<>();
 
     @ManyToOne()
@@ -33,4 +33,13 @@ public class Comment {
 
     private Date creationDate;
 
+    public void addReply(Comment reply) {
+        reply.setParentComment(this);
+        replies.add(reply);
+    }
+
+    public void removeReply(Comment reply) {
+        replies.remove(reply);
+        reply.setParentComment(null);
+    }
 }

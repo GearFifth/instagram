@@ -50,7 +50,7 @@ public class PostService implements IPostService{
     }
 
     @Override
-    public PostResponse create(CreatePostRequest request) {
+        public PostResponse create(CreatePostRequest request) {
         User author = getUserById(request.getAuthorId());
         Image image = imageService.getImageDetails(request.getImageId());
 

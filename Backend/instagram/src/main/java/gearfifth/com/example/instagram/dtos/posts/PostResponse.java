@@ -1,5 +1,6 @@
 package gearfifth.com.example.instagram.dtos.posts;
 
+import gearfifth.com.example.instagram.dtos.IdReference;
 import gearfifth.com.example.instagram.dtos.comments.CommentResponse;
 import gearfifth.com.example.instagram.dtos.images.ImageDetailsResponse;
 import gearfifth.com.example.instagram.dtos.users.responses.UserProfileResponse;
@@ -20,7 +21,7 @@ public class PostResponse {
 
     private Date creationDate;
 
-    private List<CommentResponse> comments;
+    private List<IdReference> comments;
 
     private ImageDetailsResponse image;
 
