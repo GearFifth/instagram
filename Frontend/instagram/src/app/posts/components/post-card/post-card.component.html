@@ -1,7 +1,7 @@
 @if (post && post.author){
   <div class="post-card">
     <div class="top-section">
-      <img class="profile-picture" [src]="profileImageUrl"  alt="Profile Picture" (click)="goToProfilePage()">
+      <img class="profile-image" [src]="profileImageUrl"  alt="Profile image" (click)="goToProfilePage()">
       <div class="info-section">
         <span class="clickable" (click)="goToProfilePage()">{{post.author.firstName}} {{post.author.lastName}}</span>
         <span class="date-info">{{getPostCreation(post.creationDate)}}</span>
@@ -18,6 +18,13 @@
       }
     </div>
 
+    <div>
+      <img class="post-image" [src]="postImageUrl"  alt="Post image">
+    </div>
+
+    <p>{{loremIpsum}}</p>
+
+    <mat-divider></mat-divider>
     <div class="bottom-section">
       <app-reactions [post]="post"></app-reactions>
       <button class="bottom-box" (click)="toggleComments()">

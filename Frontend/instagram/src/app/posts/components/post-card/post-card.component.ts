@@ -16,11 +16,9 @@ import {AuthService} from "../../../auth/auth.service";
 export class PostCardComponent {
   @Input()
   post!: Post;
-  content!: string;
 
   defaultProfileImagePath: string = '/assets/default-profile-image.png';
   defaultPostImagePath: string = '/assets/default-post-image.png';
-
   profileImageUrl: SafeUrl | string = this.defaultProfileImagePath;
   postImageUrl: SafeUrl | string = this.defaultPostImagePath;
 
@@ -29,12 +27,13 @@ export class PostCardComponent {
 
   loggedUserId: string | undefined;
 
+  loremIpsum: string = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam consectetur eros non massa luctus, eget scelerisque tellus maximus. Cras tempus, dolor ut tempus pharetra, lectus nulla rutrum mauris, placerat venenatis quam velit non elit. Morbi efficitur justo odio, non interdum arcu pulvinar sed. Donec tincidunt egestas mollis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Praesent posuere hendrerit tristique. Praesent tempor nec nibh quis rutrum. Aliquam dui libero, sollicitudin id lectus vitae, convallis elementum nisi.";
+
   // @Output() postDeleted = new EventEmitter<Post>();
 
   constructor(
     private sanitizer: DomSanitizer,
     private imageService: ImageService,
-    private router: Router,
     private authService: AuthService) {
     this.loggedUserId = authService.getId();
   }

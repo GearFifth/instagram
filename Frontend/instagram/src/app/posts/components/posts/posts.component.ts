@@ -44,7 +44,6 @@ export class PostsComponent implements OnInit {
     this.postService.getAll().subscribe({
       next: (posts: Post[]) => {
         this.posts = posts;
-        console.log(this.posts);
       },
       error: (err) => {
         console.error('Error loading post image:', err);
