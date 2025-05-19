@@ -59,17 +59,13 @@ public class CommentService implements ICommentService {
         newComment.setCreationDate(new Date());
         newComment.setContent(request.getContent());
 
-        Post post = findPostOrThrow(request.getPostId());
-        newComment.setPost(post);
-
         if(request.getParentCommentId() != null){
             Comment parentComment = findCommentOrThrow(request.getParentCommentId());
-            if(!parentComment.getPost().getId().equals(post.getId())){
-                throw new InvalidArgumentsException("Parent comment's post and given post do not match");
-            }
             newComment.setParentComment(parentComment);
             parentComment.addReply(newComment);
         } else {
+            Post post = findPostOrThrow(request.getPostId());
+            newComment.setPost(post);
             post.addComment(newComment);
         }
 

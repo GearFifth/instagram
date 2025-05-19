@@ -8,6 +8,10 @@ import { CreatePostDialogComponent } from './components/create-post-dialog/creat
 import {FormsModule} from "@angular/forms";
 import { PostCardComponent } from './components/post-card/post-card.component';
 import { ReactionsComponent } from './components/reactions/reactions.component';
+import { CommentCardComponent } from './comments/components/comment-card/comment-card.component';
+import { AddCommentComponent } from './comments/components/add-comment/add-comment.component';
+import { CommentsComponent } from './comments/components/comments/comments.component';
+import { CommentListComponent } from './comments/components/comment-list/comment-list.component';
 
 
 
@@ -16,7 +20,11 @@ import { ReactionsComponent } from './components/reactions/reactions.component';
     PostsComponent,
     CreatePostDialogComponent,
     PostCardComponent,
-    ReactionsComponent
+    ReactionsComponent,
+    CommentCardComponent,
+    AddCommentComponent,
+    CommentsComponent,
+    CommentListComponent
   ],
   imports: [
     CommonModule,

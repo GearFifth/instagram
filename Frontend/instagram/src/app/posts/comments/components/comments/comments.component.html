@@ -1,0 +1,4 @@
+<div class="comment-section-box">
+  <app-comment-list [comments]="comments" [post]="post"></app-comment-list>
+  <app-add-comment (commentAdded)="onCommentAdded($event)" [post]="post" [parentId]="undefined" ></app-add-comment>
+</div>

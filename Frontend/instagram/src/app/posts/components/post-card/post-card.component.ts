@@ -7,6 +7,7 @@ import {Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
 import {ImageService} from "../../../shared/images/image.service";
 import {AuthService} from "../../../auth/auth.service";
+import {CommentData} from "../../comments/models/comment.model";
 
 @Component({
   selector: 'app-post-card',
@@ -23,7 +24,7 @@ export class PostCardComponent {
   postImageUrl: SafeUrl | string = this.defaultPostImagePath;
 
   areCommentsShowing: boolean = false;
-  comments: Comment[] = [];
+  comments: CommentData[] = [];
 
   loggedUserId: string | undefined;
 
@@ -106,7 +107,7 @@ export class PostCardComponent {
 
   }
 
-  onCommentAdded(comment: Comment) {
+  onCommentAdded(comment: CommentData) {
     this.comments.push(comment);
   }
 }

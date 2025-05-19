@@ -22,19 +22,19 @@
       <img class="post-image" [src]="postImageUrl"  alt="Post image">
     </div>
 
-    <p>{{loremIpsum}}</p>
+    <p>{{post.description}}</p>
 
     <mat-divider></mat-divider>
     <div class="bottom-section">
       <app-reactions [post]="post"></app-reactions>
       <button class="bottom-box" (click)="toggleComments()">
         <mat-icon class="account-icon">comment</mat-icon>
-        Comments({{post.comments.length}})
+        Comments({{post.comments.length}}){{areCommentsShowing ? " (hide)" : ""}}
       </button>
     </div>
 
-<!--    @if (comments.length > 0){-->
-<!--      <app-comments-section (commentAdded)="onCommentAdded($event)" [post]="post"></app-comments-section>-->
-<!--    }-->
+    @if (areCommentsShowing){
+      <app-comments (commentAdded)="onCommentAdded($event)" [post]="post"></app-comments>
+    }
   </div>
 }

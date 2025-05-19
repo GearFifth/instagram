@@ -41,13 +41,11 @@ public class Post {
     private User author;
 
     public void addComment(Comment comment) {
-        comment.setPost(this);
         comments.add(comment);
     }
 
     public void removeComment(Comment comment) {
         comments.remove(comment);
-        comment.setPost(null);
     }
 
     public void addReaction(Reaction reaction) {

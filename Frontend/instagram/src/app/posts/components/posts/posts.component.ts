@@ -33,6 +33,7 @@ export class PostsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        this.posts.push(result);
         // this.currentPage = 0;
         // this.loadData();
         // this.scrollToTop();

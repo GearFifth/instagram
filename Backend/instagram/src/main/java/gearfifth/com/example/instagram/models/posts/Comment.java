@@ -34,12 +34,10 @@ public class Comment {
     private Date creationDate;
 
     public void addReply(Comment reply) {
-        reply.setParentComment(this);
         replies.add(reply);
     }
 
     public void removeReply(Comment reply) {
         replies.remove(reply);
-        reply.setParentComment(null);
     }
 }
