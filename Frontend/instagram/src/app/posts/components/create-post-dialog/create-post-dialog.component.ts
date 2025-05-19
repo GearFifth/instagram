@@ -4,6 +4,7 @@ import {PostService} from "../../post.service";
 import {CreatePostRequest} from "../../models/create-post-request.model";
 import {ImageService} from "../../../shared/images/image.service";
 import {ImageDetails} from "../../../shared/images/image-details.model";
+import {Post} from "../../models/post.model";
 
 @Component({
   selector: 'app-create-post-dialog',
@@ -56,9 +57,9 @@ export class CreatePostDialogComponent {
             };
 
             this.postService.createPost(createRequest).subscribe({
-              next: (result) => {
-                console.log("successfully created: ", result);
-                this.dialogRef.close(result);
+              next: (post: Post) => {
+                console.log("successfully created: ", post);
+                this.dialogRef.close(post);
               }
             });
           }

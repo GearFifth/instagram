@@ -69,3 +69,13 @@ app-navbar{
   background-color: #7510b4;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
+
+/*posts*/
+.post-cards-list{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 1em;
+  align-items: center;
+  margin-top: 6.5em;
+}

@@ -2,6 +2,9 @@ import {Component, inject, OnInit} from '@angular/core';
 import { AuthService } from '../../../auth/auth.service';
 import {MatDialog} from "@angular/material/dialog";
 import {CreatePostDialogComponent} from "../create-post-dialog/create-post-dialog.component";
+import {PostService} from "../../post.service";
+import {Post} from "../../models/post.model";
+
 @Component({
   selector: 'app-posts',
   templateUrl: './posts.component.html',
@@ -9,12 +12,13 @@ import {CreatePostDialogComponent} from "../create-post-dialog/create-post-dialo
 })
 export class PostsComponent implements OnInit {
   readonly dialog = inject(MatDialog);
+  posts: Post[] = [];
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private postService: PostService) {
   }
 
   ngOnInit() {
-    // this.loadData();
+    this.loadPosts();
   }
 
   openCreatePostDialog() {
@@ -32,6 +36,18 @@ export class PostsComponent implements OnInit {
         // this.currentPage = 0;
         // this.loadData();
         // this.scrollToTop();
+      }
+    });
+  }
+
+  loadPosts() {
+    this.postService.getAll().subscribe({
+      next: (posts: Post[]) => {
+        this.posts = posts;
+        console.log(this.posts);
+      },
+      error: (err) => {
+        console.error('Error loading post image:', err);
       }
     });
   }

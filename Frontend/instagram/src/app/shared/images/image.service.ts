@@ -15,4 +15,10 @@ export class ImageService {
     if(relativePath) formData.append('relativePath', relativePath);
     return this.http.post<ImageDetails>("images/upload", formData);
   }
+
+  getImage(id: string): Observable<Blob> {
+    return this.http.get(`images/${id}`, {
+      responseType: 'blob'
+    });
+  }
 }

@@ -51,13 +51,13 @@ public class PostController {
     }
 
     @PostMapping("/{postId}/reactions")
-    public ResponseEntity<PostResponse> addReaction(@PathVariable UUID postId, @RequestBody Reaction reaction) {
+    public ResponseEntity<Void> addReaction(@PathVariable UUID postId, @RequestBody Reaction reaction) {
         service.addReaction(postId, reaction);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{postId}/reactions")
-    public ResponseEntity<PostResponse> removeReaction(@PathVariable UUID postId, @RequestBody Reaction reaction) {
+    public ResponseEntity<Void> removeReaction(@PathVariable UUID postId, @RequestBody Reaction reaction) {
         service.removeReaction(postId, reaction);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

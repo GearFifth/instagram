@@ -1,0 +1,33 @@
+@if (post && post.author){
+  <div class="post-card">
+    <div class="top-section">
+      <img class="profile-picture" [src]="profileImageUrl"  alt="Profile Picture" (click)="goToProfilePage()">
+      <div class="info-section">
+        <span class="clickable" (click)="goToProfilePage()">{{post.author.firstName}} {{post.author.lastName}}</span>
+        <span class="date-info">{{getPostCreation(post.creationDate)}}</span>
+      </div>
+      <div class="stretch"></div>
+      @if (loggedUserId === post.author.id){
+        <button mat-icon-button class="post-options-icon" [matMenuTriggerFor]="menu">
+          <mat-icon class="account-icon">more_vert</mat-icon>
+        </button>
+        <mat-menu class="post-options-menu" #menu="matMenu">
+          <span class="menu-option">Edit</span>
+          <span class="menu-option">Remove</span>
+        </mat-menu>
+      }
+    </div>
+
+    <div class="bottom-section">
+      <app-reactions [post]="post"></app-reactions>
+      <button class="bottom-box" (click)="toggleComments()">
+        <mat-icon class="account-icon">comment</mat-icon>
+        Comments({{post.comments.length}})
+      </button>
+    </div>
+
+<!--    @if (comments.length > 0){-->
+<!--      <app-comments-section (commentAdded)="onCommentAdded($event)" [post]="post"></app-comments-section>-->
+<!--    }-->
+  </div>
+}

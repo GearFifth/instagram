@@ -6,13 +6,17 @@ import {MatButton} from "@angular/material/button";
 import {SharedModule} from "../shared/shared.module";
 import { CreatePostDialogComponent } from './components/create-post-dialog/create-post-dialog.component';
 import {FormsModule} from "@angular/forms";
+import { PostCardComponent } from './components/post-card/post-card.component';
+import { ReactionsComponent } from './components/reactions/reactions.component';
 
 
 
 @NgModule({
   declarations: [
     PostsComponent,
-    CreatePostDialogComponent
+    CreatePostDialogComponent,
+    PostCardComponent,
+    ReactionsComponent
   ],
   imports: [
     CommonModule,
