@@ -3,27 +3,21 @@ package gearfifth.com.example.posts;
 import gearfifth.com.example.dtos.comments.CommentResponse;
 import gearfifth.com.example.dtos.comments.CreateCommentRequest;
 import gearfifth.com.example.dtos.comments.UpdateCommentRequest;
-import gearfifth.com.example.dtos.posts.PostResponse;
 import gearfifth.com.example.exceptions.CommentNotFoundException;
-import gearfifth.com.example.exceptions.InvalidArgumentsException;
-import gearfifth.com.example.exceptions.PostNotFoundException;
-import gearfifth.com.example.exceptions.UserNotFoundException;
 import gearfifth.com.example.models.posts.Comment;
 import gearfifth.com.example.models.posts.Post;
 import gearfifth.com.example.models.users.User;
 import gearfifth.com.example.repositories.IUserRepository;
 import gearfifth.com.example.repositories.posts.ICommentRepository;
 import gearfifth.com.example.repositories.posts.IPostRepository;
+import gearfifth.com.example.users.IUserService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
-import org.hibernate.service.UnknownServiceException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -32,8 +26,8 @@ import java.util.stream.Collectors;
 public class CommentService implements ICommentService {
     private final ModelMapper mapper;
     private final ICommentRepository commentRepository;
-    private final IPostRepository postRepository;
-    private final IUserRepository userRepository;
+    private final IPostService postService;
+    private final IUserService userService;
 
     @Override
     public Collection<CommentResponse> getAll() {
@@ -53,7 +47,7 @@ public class CommentService implements ICommentService {
     public CommentResponse create(CreateCommentRequest request) {
         Comment newComment = new Comment();
 
-        User author = findUserOrThrow(request.getAuthorId());
+        User author = userService.findUserOrThrow(request.getAuthorId());
         newComment.setAuthor(author);
         newComment.setCreationDate(new Date());
         newComment.setContent(request.getContent());
@@ -63,7 +57,7 @@ public class CommentService implements ICommentService {
             newComment.setParentComment(parentComment);
             parentComment.addReply(newComment);
         } else {
-            Post post = findPostOrThrow(request.getPostId());
+            Post post = postService.findPostOrThrow(request.getPostId());
             newComment.setPost(post);
             post.addComment(newComment);
         }
@@ -86,7 +80,7 @@ public class CommentService implements ICommentService {
 
     @Override
     public Collection<CommentResponse> getCommentsByPostId(UUID postId) {
-        Post post = findPostOrThrow(postId);
+        Post post = postService.findPostOrThrow(postId);
 
         return post.getComments().stream()
                 .map(comment -> mapper.map(comment, CommentResponse.class))
@@ -102,18 +96,9 @@ public class CommentService implements ICommentService {
                 .collect(Collectors.toList());
     }
 
-    private Comment findCommentOrThrow(UUID commentId) {
+    @Override
+    public Comment findCommentOrThrow(UUID commentId) {
         return commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentNotFoundException(commentId));
-    }
-
-    private Post findPostOrThrow(UUID postId) {
-        return postRepository.findById(postId)
-                .orElseThrow(() -> new PostNotFoundException(postId));
-    }
-
-    private User findUserOrThrow(UUID userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
     }
 }
