@@ -6,6 +6,8 @@ import {UserService} from "../../../../users/user.service";
 import {CommentData} from "../../models/comment.model";
 import {CommentService} from "../../comment.service";
 import {ImageService} from "../../../../shared/images/image.service";
+import {ROUTE_PATHS} from "../../../../shared/constants/routes";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-comment-card',
@@ -26,7 +28,12 @@ export class CommentCardComponent implements OnInit{
 
   replies: CommentData[] = [];
 
-  constructor(private userService: UserService, private sanitizer: DomSanitizer, private commentService: CommentService, private imageService: ImageService) {
+  constructor(
+      private userService: UserService,
+      private sanitizer: DomSanitizer,
+      private commentService: CommentService,
+      private imageService: ImageService,
+      private router: Router) {
   }
 
   ngOnInit() {
@@ -82,7 +89,7 @@ export class CommentCardComponent implements OnInit{
   }
 
   goToProfilePage() {
-    // this.router.navigate(['/profile', this.author.email]);
+    this.router.navigate([ROUTE_PATHS.USER_PROFILE, this.comment.author.id]);
   }
 
   onReplyClicked(){

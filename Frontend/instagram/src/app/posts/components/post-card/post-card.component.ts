@@ -8,6 +8,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {ImageService} from "../../../shared/images/image.service";
 import {AuthService} from "../../../auth/auth.service";
 import {CommentData} from "../../comments/models/comment.model";
+import {ROUTE_PATHS} from "../../../shared/constants/routes";
 
 @Component({
   selector: 'app-post-card',
@@ -33,7 +34,8 @@ export class PostCardComponent implements OnInit {
   constructor(
     private sanitizer: DomSanitizer,
     private imageService: ImageService,
-    private authService: AuthService) {
+    private authService: AuthService,
+    private router: Router) {
     this.loggedUserId = authService.getId();
   }
 
@@ -120,7 +122,7 @@ export class PostCardComponent implements OnInit {
 
 
   goToProfilePage() {
-
+    this.router.navigate([ROUTE_PATHS.USER_PROFILE, this.post.author.id]);
   }
 
   onCommentAdded(comment: CommentData) {
