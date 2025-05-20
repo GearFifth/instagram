@@ -27,7 +27,7 @@ export class UserNavbarComponent {
   }
 
   goToProfilePage() {
-    // this.router.navigate(['/profile', this.loggedUser.email]);
+    this.router.navigate([ROUTE_PATHS.USER_PROFILE, this.loggedUser.id]);
   }
 
   goToPostsPage() {

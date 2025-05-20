@@ -1,9 +1,10 @@
-import {Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, inject, Input, OnInit, ViewChild} from '@angular/core';
 import { AuthService } from '../../../auth/auth.service';
 import {MatDialog} from "@angular/material/dialog";
 import {CreatePostDialogComponent} from "../create-post-dialog/create-post-dialog.component";
 import {PostService} from "../../post.service";
 import {Post} from "../../models/post.model";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-posts',
@@ -14,6 +15,7 @@ export class PostsComponent implements OnInit {
   readonly dialog = inject(MatDialog);
   posts: Post[] = [];
   @ViewChild('contentDiv') contentDiv!: ElementRef;
+  @Input() userId: string | null = null;
 
   constructor(private authService: AuthService, private postService: PostService) {
   }
@@ -48,17 +50,6 @@ export class PostsComponent implements OnInit {
     });
   }
 
-  // loadPosts() {
-  //   this.postService.getAll().subscribe({
-  //     next: (posts: Post[]) => {
-  //       this.posts = posts;
-  //     },
-  //     error: (err) => {
-  //       console.error('Error loading post image:', err);
-  //     }
-  //   });
-  // }
-
   // INFINITE SCROLL
   isLoading = false;
   currentPage = 0;
@@ -66,14 +57,28 @@ export class PostsComponent implements OnInit {
 
   toggleLoading = () => this.isLoading = !this.isLoading;
 
+  getPostFetcher(): (page: number, size: number) => Observable<Post[]> {
+    if (this.userId) {
+      return (page: number, size: number) =>
+        this.postService.getPaginatedPostsForUserProfile(this.userId!, page, size);
+    } else {
+      return (page: number, size: number) => {
+        const loggedUserId = this.authService.getId();
+        if (!loggedUserId) {
+          throw new Error("User is not logged in.");
+        }
+        return this.postService.getPaginatedPostsForUserFeed(loggedUserId, page, size);
+      };
+    }
+  }
+
   loadPosts = () => {
-    const loggedUserId = this.authService.getId()
-    if(loggedUserId === undefined) return;
     this.toggleLoading();
-    this.postService.getPaginatedPostsForUser(loggedUserId, this.currentPage, this.itemsPerPage).subscribe({
+    const fetchPosts = this.getPostFetcher();
+    fetchPosts(this.currentPage, this.itemsPerPage).subscribe({
       next: (posts: Post[]) => {
         this.posts = posts;
-        console.log(this.posts)
+        console.log(this.posts);
       },
       error: err => console.log(err),
       complete: () => this.toggleLoading()
@@ -81,11 +86,9 @@ export class PostsComponent implements OnInit {
   }
 
   appendPosts = () => {
-    const loggedUserId = this.authService.getId()
-    if(loggedUserId === undefined) return;
-    console.log("append called");
     this.toggleLoading();
-    this.postService.getPaginatedPostsForUser(loggedUserId, this.currentPage, this.itemsPerPage).subscribe({
+    const fetchPosts = this.getPostFetcher();
+    fetchPosts(this.currentPage, this.itemsPerPage).subscribe({
       next: (posts: Post[]) => {
         this.posts = [...this.posts, ...posts];
       },

@@ -1,6 +1,7 @@
 package gearfifth.com.example.dtos.comments;
 
 import gearfifth.com.example.dtos.IdReference;
+import gearfifth.com.example.dtos.users.responses.UserProfileResponse;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -16,6 +17,6 @@ public class CommentResponse {
     private IdReference post;
     private IdReference parentCommentId;
     private List<IdReference> replies;
-    private IdReference author;
+    private UserProfileResponse author;
     private Date creationDate;
 }

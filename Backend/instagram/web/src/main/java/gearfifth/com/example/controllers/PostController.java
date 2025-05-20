@@ -63,11 +63,20 @@ public class PostController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<Collection<PostResponse>> getPostsForUser(
+    public ResponseEntity<Collection<PostResponse>> getPostsForUserProfile(
             @PathVariable UUID userId,
             @RequestParam(defaultValue = "0") int pageNumber,
             @RequestParam(defaultValue = "10") int itemsPerPage) {
 
-        return new ResponseEntity<>(service.getPostsForUser(userId, pageNumber, itemsPerPage), HttpStatus.OK);
+        return new ResponseEntity<>(service.getPostsByUserId(userId, pageNumber, itemsPerPage), HttpStatus.OK);
+    }
+
+    @GetMapping("feed/user/{userId}")
+    public ResponseEntity<Collection<PostResponse>> getPostsForUserFeed(
+            @PathVariable UUID userId,
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "10") int itemsPerPage) {
+
+        return new ResponseEntity<>(service.getPostsForUserFeed(userId, pageNumber, itemsPerPage), HttpStatus.OK);
     }
 }

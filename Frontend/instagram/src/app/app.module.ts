@@ -7,17 +7,19 @@ import {MaterialModule} from "./material/material.module";
 import {HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient, withFetch} from "@angular/common/http";
 import {AuthInterceptor} from "./auth/auth.interceptor";
 import {BaseUrlInterceptor} from "./shared/interceptors/base-url.interceptor";
+import {SharedModule} from "./shared/shared.module";
 
 @NgModule({
   declarations: [
     AppComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    MaterialModule,
-    HttpClientModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        MaterialModule,
+        HttpClientModule,
+        SharedModule
+    ],
   providers: [
     provideHttpClient(withFetch()),
     provideAnimationsAsync(),

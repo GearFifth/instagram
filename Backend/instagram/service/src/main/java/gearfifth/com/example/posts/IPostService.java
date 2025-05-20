@@ -22,5 +22,6 @@ public interface IPostService {
     void remove(UUID postId);
     void addReaction(UUID postId, Reaction reaction);
     void removeReaction(UUID postId, Reaction reaction);
-    Collection<PostResponse> getPostsForUser(UUID userId, int pageNumber, int itemsPerPage);
+    Collection<PostResponse> getPostsForUserFeed(UUID userId, int pageNumber, int itemsPerPage);
+    Collection<PostResponse> getPostsByUserId(UUID userId, int pageNumber, int itemsPerPage);
 }

@@ -93,12 +93,20 @@ public class PostService implements IPostService{
     }
 
     @Override
-    public Collection<PostResponse> getPostsForUser(UUID userId, int pageNumber, int itemsPerPage) {
+    public Collection<PostResponse> getPostsForUserFeed(UUID userId, int pageNumber, int itemsPerPage) {
         Pageable pageable = PageRequest.of(pageNumber, itemsPerPage, Sort.by(Sort.Direction.DESC, "creationDate"));
 
-//        postRepository.findAllForUser(userId, pageable) //Add after implementing followers logic
+        return postRepository.findAll(pageable)
+                .stream()
+                .map(post -> mapper.map(post, PostResponse.class))
+                .collect(Collectors.toList());
+    }
 
-        return postRepository.findAll( pageable)
+    @Override
+    public Collection<PostResponse> getPostsByUserId(UUID userId, int pageNumber, int itemsPerPage) {
+        Pageable pageable = PageRequest.of(pageNumber, itemsPerPage, Sort.by(Sort.Direction.DESC, "creationDate"));
+
+        return postRepository.findAllByAuthorId(userId, pageable)
                 .stream()
                 .map(post -> mapper.map(post, PostResponse.class))
                 .collect(Collectors.toList());

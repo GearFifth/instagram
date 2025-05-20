@@ -13,5 +13,5 @@ import java.util.UUID;
 
 @Repository
 public interface IPostRepository extends JpaRepository<Post, UUID> {
-
+    Page<Post> findAllByAuthorId(UUID authorId, Pageable pageable);
 }

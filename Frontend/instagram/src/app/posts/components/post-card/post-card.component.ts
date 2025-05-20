@@ -1,4 +1,4 @@
-import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {Post} from "../../models/post.model";
 import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
 import {UserService} from "../../../users/user.service";
@@ -8,13 +8,14 @@ import {MatDialog} from "@angular/material/dialog";
 import {ImageService} from "../../../shared/images/image.service";
 import {AuthService} from "../../../auth/auth.service";
 import {CommentData} from "../../comments/models/comment.model";
+import {ROUTE_PATHS} from "../../../shared/constants/routes";
 
 @Component({
   selector: 'app-post-card',
   templateUrl: './post-card.component.html',
   styleUrl: './post-card.component.css'
 })
-export class PostCardComponent {
+export class PostCardComponent implements OnInit {
   @Input()
   post!: Post;
 
@@ -28,19 +29,19 @@ export class PostCardComponent {
 
   loggedUserId: string | undefined;
 
-  loremIpsum: string = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam consectetur eros non massa luctus, eget scelerisque tellus maximus. Cras tempus, dolor ut tempus pharetra, lectus nulla rutrum mauris, placerat venenatis quam velit non elit. Morbi efficitur justo odio, non interdum arcu pulvinar sed. Donec tincidunt egestas mollis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Praesent posuere hendrerit tristique. Praesent tempor nec nibh quis rutrum. Aliquam dui libero, sollicitudin id lectus vitae, convallis elementum nisi.";
-
   // @Output() postDeleted = new EventEmitter<Post>();
 
   constructor(
     private sanitizer: DomSanitizer,
     private imageService: ImageService,
-    private authService: AuthService) {
+    private authService: AuthService,
+    private router: Router) {
     this.loggedUserId = authService.getId();
   }
 
   ngOnInit() {
     this.loadPostImage();
+    this.loadProfileImage();
   }
 
   toggleComments(){
@@ -70,6 +71,23 @@ export class PostCardComponent {
 
   loadComments() {
 
+  }
+
+  loadProfileImage() {
+    if (this.post.author.profileImage) {
+      this.imageService.getImage(this.post.author.profileImage.id).subscribe({
+        next: (blob: Blob) => {
+          const objectURL = URL.createObjectURL(blob);
+          this.profileImageUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+        },
+        error: (err) => {
+          console.error('Error loading profile image:', err);
+          this.profileImageUrl = '/default-profile-image.png';
+        }
+      });
+    } else {
+      this.profileImageUrl = '/default-profile-image.png';
+    }
   }
 
   getPostCreation(dateString: string): string {
@@ -104,7 +122,7 @@ export class PostCardComponent {
 
 
   goToProfilePage() {
-
+    this.router.navigate([ROUTE_PATHS.USER_PROFILE, this.post.author.id]);
   }
 
   onCommentAdded(comment: CommentData) {

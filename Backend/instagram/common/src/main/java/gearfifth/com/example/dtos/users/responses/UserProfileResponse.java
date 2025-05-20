@@ -1,5 +1,6 @@
 package gearfifth.com.example.dtos.users.responses;
 
+import gearfifth.com.example.dtos.images.ImageDetailsResponse;
 import gearfifth.com.example.enums.UserRole;
 import lombok.Data;
 
@@ -14,4 +15,5 @@ public class UserProfileResponse {
     private String address;
     private String phoneNumber;
     private UserRole role = UserRole.USER;
+    private ImageDetailsResponse profileImage;
 }

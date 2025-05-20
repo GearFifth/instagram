@@ -5,6 +5,8 @@ import {confirmPasswordValidator} from "../../validators/confirm-password.valida
 import {AuthService} from "../../auth.service";
 import {RegisterRequest} from "../../models/register-request.model";
 import {UserService} from "../../../users/user.service";
+import {ImageService} from "../../../shared/images/image.service";
+import {ImageDetails} from "../../../shared/images/image-details.model";
 
 @Component({
   selector: 'app-registration',
@@ -20,7 +22,14 @@ export class RegistrationComponent implements OnInit{
   registerContactForm!: FormGroup;
   registerPasswordForm!: FormGroup;
 
-  constructor(private authService: AuthService, private formBuilder: FormBuilder, private userService: UserService) {}
+  profilePictureUrl: string | ArrayBuffer | null = null;
+  profilePictureFile: File | null = null;
+
+  constructor(
+    private authService: AuthService,
+    private formBuilder: FormBuilder,
+    private userService: UserService,
+    private imageService: ImageService) {}
 
   ngOnInit() {
     this.registerPersonalForm = this.formBuilder.group({
@@ -55,23 +64,34 @@ export class RegistrationComponent implements OnInit{
 
     // this.isEditable = false;
 
-    const request: RegisterRequest = {
-      email: this.registerPersonalForm.value.email,
-      password: this.registerPasswordForm.value.password,
-      firstName: this.registerPersonalForm.value.firstName,
-      lastName: this.registerPersonalForm.value.lastName,
-      address: this.registerContactForm.value.address,
-      phoneNumber: this.registerContactForm.value.phone,
-    };
+    if (this.profilePictureFile) {
+      this.imageService.uploadImage(this.profilePictureFile, "users").subscribe({
+        next: (image: ImageDetails) => {
 
-    this.authService.register(request).subscribe({
-      next: () => {
-        console.log("Registration successful");
-      },
-      error: (err) => {
-        console.error('Registration failed:', err);
-      },
-    });
+          const request: RegisterRequest = {
+            email: this.registerPersonalForm.value.email,
+            password: this.registerPasswordForm.value.password,
+            firstName: this.registerPersonalForm.value.firstName,
+            lastName: this.registerPersonalForm.value.lastName,
+            address: this.registerContactForm.value.address,
+            phoneNumber: this.registerContactForm.value.phone,
+            profileImageId: image.id
+          };
+
+          this.authService.register(request).subscribe({
+            next: () => {
+              console.log("Registration successful");
+            },
+            error: (err) => {
+              console.error('Registration failed:', err);
+            },
+          });
+        },
+        error: (err) => {
+          console.error('Error uploading image', err);
+        },
+      });
+    }
   }
 
   checkEmailUniqueness(stepper: MatStepper) {
@@ -95,4 +115,21 @@ export class RegistrationComponent implements OnInit{
     currentForm.markAllAsTouched();
     stepper.previous();
   }
+
+  onImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      this.profilePictureFile = input.files[0];
+      console.log(this.profilePictureFile);
+      const reader = new FileReader();
+      reader.onload = e => this.profilePictureUrl = reader.result;
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  removeImage(): void {
+    this.profilePictureUrl = null;
+    this.profilePictureFile = null;
+  }
+
 }
