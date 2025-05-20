@@ -6,12 +6,13 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.4.5</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 	<groupId>gearfifth.com.example</groupId>
 	<artifactId>instagram</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>instagram</name>
+    <packaging>pom</packaging>
+    <name>instagram</name>
 	<description>A social media application inspired by Instagram</description>
 	<url/>
 	<licenses>
@@ -20,7 +21,14 @@
 	<developers>
 		<developer/>
 	</developers>
-	<scm>
+    <modules>
+        <module>web</module>
+		<module>service</module>
+		<module>repository</module>
+		<module>common</module>
+		<module>app</module>
+	</modules>
+    <scm>
 		<connection/>
 		<developerConnection/>
 		<tag/>
@@ -93,6 +101,41 @@
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
 	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>gearfifth.com.example</groupId>
+				<artifactId>web</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+				<type>jar</type>
+			</dependency>
+			<dependency>
+				<groupId>gearfifth.com.example</groupId>
+				<artifactId>service</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+				<type>jar</type>
+			</dependency>
+			<dependency>
+				<groupId>gearfifth.com.example</groupId>
+				<artifactId>repository</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+				<type>jar</type>
+			</dependency>
+			<dependency>
+				<groupId>gearfifth.com.example</groupId>
+				<artifactId>common</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+				<type>jar</type>
+			</dependency>
+			<dependency>
+				<groupId>gearfifth.com.example</groupId>
+				<artifactId>app</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+				<type>jar</type>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<build>
 		<plugins>
