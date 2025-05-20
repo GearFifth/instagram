@@ -1,6 +1,26 @@
 <div class="window-box">
   <app-navbar></app-navbar>
   <div class="wrapper">
+      <div *ngIf="isLoading">Loading...</div>
+      <button mat-flat-button class="create-post-button" (click)="openCreatePostDialog()">
+        Create post
+      </button>
 
+      <div
+        class="post-cards-list"
+        id="content" #contentDiv
+        infiniteScroll
+        [infiniteScrollDistance]="2"
+        [infiniteScrollThrottle]="500"
+        (scrolled)="onScroll()"
+        [scrollWindow]="false">
+
+        @if (posts){
+          @for (post of posts; track post){
+            <app-post-card [post]="post"></app-post-card>
+          }
+        }
+
+      </div>
   </div>
 </div>

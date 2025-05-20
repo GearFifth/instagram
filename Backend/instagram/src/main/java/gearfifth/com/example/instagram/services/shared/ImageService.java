@@ -63,7 +63,8 @@ public class ImageService implements IImageService {
         return fileService.getFile(image.getPath());
     }
 
-    private Image getImageDetails(UUID imageId) {
+    @Override
+    public Image getImageDetails(UUID imageId) {
         return imageRepository.findById(imageId)
                 .orElseThrow(() ->new ResponseStatusException(HttpStatus.NOT_FOUND, "Image not found"));
     }

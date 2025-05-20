@@ -3,14 +3,17 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  overflow: hidden;
 }
 
 .wrapper{
   background-color: #fafafa;
   /*padding: 1em 0 1em 0;*/
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex:1;
+  height: 100%;
+  align-items: center;
 }
 
 #posts-panel{
@@ -47,3 +50,39 @@ app-navbar{
   width: 100%;
   z-index: 100;
 }
+
+.create-post-button {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 25px;
+  padding: 10px 20px;
+  background-color: #7C1CD9;
+  color: #fff;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s, box-shadow 0.3s;
+  z-index: 100;
+}
+
+.create-post-button:hover {
+  background-color: #7510b4;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/*posts*/
+.post-cards-list{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 1em;
+  align-items: center;
+  margin-top: 5.5em;
+  overflow-y: auto;
+  padding: 1em 0 5.5em 0;
+  height: calc(100vh - 0.05em);
+}
+

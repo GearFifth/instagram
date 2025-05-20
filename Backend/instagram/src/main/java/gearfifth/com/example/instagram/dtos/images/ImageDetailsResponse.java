@@ -10,6 +10,8 @@ public class ImageDetailsResponse {
     private String path;
     private String originalName;
 
+    public ImageDetailsResponse() {}
+
     public ImageDetailsResponse(UUID id, String path, String originalName) {
         this.id = id;
         this.path = path;
