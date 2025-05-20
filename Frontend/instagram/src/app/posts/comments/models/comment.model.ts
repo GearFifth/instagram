@@ -7,6 +7,6 @@ export interface CommentData {
   post: IdReference;
   parentCommentId: IdReference | null;
   replies: IdReference[];
-  author: IdReference;
+  author: User;
   creationDate: string;
 }

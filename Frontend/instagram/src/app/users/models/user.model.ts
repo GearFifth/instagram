@@ -1,4 +1,5 @@
 import {UserRole} from "./user-role.enum";
+import {ImageDetails} from "../../shared/images/image-details.model";
 
 export interface User {
   id: string;
@@ -8,4 +9,5 @@ export interface User {
   address: string;
   phoneNumber: string;
   role?: UserRole;
+  profileImage: ImageDetails;
 }

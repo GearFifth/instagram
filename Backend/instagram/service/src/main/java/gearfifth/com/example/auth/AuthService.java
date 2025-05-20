@@ -9,9 +9,11 @@ import gearfifth.com.example.exceptions.EmailAlreadyExistsException;
 import gearfifth.com.example.exceptions.InvalidCredentialsException;
 import gearfifth.com.example.exceptions.InvalidTokenException;
 import gearfifth.com.example.exceptions.UserNotFoundException;
+import gearfifth.com.example.models.shared.Image;
 import gearfifth.com.example.models.users.User;
 import gearfifth.com.example.models.users.UserPrincipal;
 import gearfifth.com.example.repositories.IUserRepository;
+import gearfifth.com.example.shared.IImageService;
 import gearfifth.com.example.verification.IEmailService;
 import gearfifth.com.example.verification.IVerificationTokenService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -43,15 +45,25 @@ public class AuthService implements IAuthService {
     private final ModelMapper mapper;
     private final IVerificationTokenService verificationTokenService;
     private final IEmailService emailService;
+    private final IImageService imageService;
 
     @Override
+    @Transactional
     public UserProfileResponse register(UserCreateRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new EmailAlreadyExistsException(request.getEmail());
         }
 
-        User user = mapper.map(request, User.class);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        Image image = imageService.getImageDetails(request.getProfileImageId());
+
+        User user = new User();
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setAddress(request.getAddress());
+        user.setPhoneNumber(request.getPhoneNumber());
+        user.setProfileImage(image);
         user = userRepository.save(user);
 
         String token = UUID.randomUUID().toString();

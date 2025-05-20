@@ -1,10 +1,9 @@
 package gearfifth.com.example.dtos.auth;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
+
+import java.util.UUID;
 
 @Data
 public class UserCreateRequest {
@@ -32,4 +31,7 @@ public class UserCreateRequest {
             message = "Invalid phone number format. It must be 7 to 15 digits long and can optionally start with a '+' sign."
     )
     private String phoneNumber;
+
+    @NotNull
+    private UUID profileImageId;
 }

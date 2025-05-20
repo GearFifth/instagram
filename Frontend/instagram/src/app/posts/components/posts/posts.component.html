@@ -1,9 +1,12 @@
+<app-navbar *ngIf="!userId"></app-navbar>
 <div class="window-box">
   <div class="wrapper">
       <div *ngIf="isLoading">Loading...</div>
       <button *ngIf="!userId" mat-flat-button class="create-post-button" (click)="openCreatePostDialog()">
         Create post
       </button>
+
+      <h2 *ngIf="posts.length === 0">No posts</h2>
 
       <div
         class="post-cards-list"

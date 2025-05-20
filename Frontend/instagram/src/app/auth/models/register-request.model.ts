@@ -5,4 +5,5 @@ export interface RegisterRequest {
   lastName: string;
   address: string;
   phoneNumber: string;
+  profileImageId: string;
 }

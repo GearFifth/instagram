@@ -5,6 +5,7 @@ import {DomSanitizer, SafeHtml, SafeUrl} from "@angular/platform-browser";
 import {UserService} from "../../../../users/user.service";
 import {CommentData} from "../../models/comment.model";
 import {CommentService} from "../../comment.service";
+import {ImageService} from "../../../../shared/images/image.service";
 
 @Component({
   selector: 'app-comment-card',
@@ -15,7 +16,6 @@ export class CommentCardComponent implements OnInit{
   @Input() comment!: CommentData;
   @Input() post!: Post;
   @Input() level!: number;
-  author: User = {} as User;
 
   defaultProfileImagePath: string = '/assets/default-profile-image.png';
   profileImageUrl: SafeUrl | string = this.defaultProfileImagePath;
@@ -26,27 +26,29 @@ export class CommentCardComponent implements OnInit{
 
   replies: CommentData[] = [];
 
-  constructor(private userService: UserService, private sanitizer: DomSanitizer, private commentService: CommentService) {
+  constructor(private userService: UserService, private sanitizer: DomSanitizer, private commentService: CommentService, private imageService: ImageService) {
   }
 
   ngOnInit() {
-    this.loadAuthor();
     this.commentContent = this.sanitizer.bypassSecurityTrustHtml(this.comment.content);
-  }
-
-  private loadAuthor() {
-    this.userService.getById(this.comment.author.id).subscribe({
-      next: (response: User) => {
-        this.author = response;
-      },
-      error: (err) => {
-        console.error("Error loading author:", err);
-      }
-    })
+    this.loadProfileImage();
   }
 
   loadProfileImage() {
-
+    if (this.comment.author.profileImage) {
+      this.imageService.getImage(this.comment.author.profileImage.id).subscribe({
+        next: (blob: Blob) => {
+          const objectURL = URL.createObjectURL(blob);
+          this.profileImageUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+        },
+        error: (err) => {
+          console.error('Error loading profile image:', err);
+          this.profileImageUrl = '/default-profile-image.png';
+        }
+      });
+    } else {
+      this.profileImageUrl = '/default-profile-image.png';
+    }
   }
 
   getCommentCreation(dateString: string): string {

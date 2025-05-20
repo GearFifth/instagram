@@ -7,6 +7,7 @@ import {CreateCommentRequestModel} from "../../models/create-comment-request.mod
 import {User} from "../../../../users/models/user.model";
 import {Post} from "../../../models/post.model";
 import {CommentData} from "../../models/comment.model";
+import {ImageService} from "../../../../shared/images/image.service";
 
 @Component({
   selector: 'app-add-comment',
@@ -28,7 +29,8 @@ export class AddCommentComponent implements OnInit, AfterViewInit {
   constructor(private commentService: CommentService,
               private sanitizer: DomSanitizer,
               private userService: UserService,
-              private authService: AuthService) {
+              private authService: AuthService,
+              private imageService: ImageService) {
   }
 
   ngOnInit() {
@@ -66,6 +68,7 @@ export class AddCommentComponent implements OnInit, AfterViewInit {
     this.userService.getById(userId).subscribe({
       next: (response: User) => {
         this.loggedUser = response;
+        this.loadProfileImage();
       },
       error: (err) => {
         console.error("Error loading loggedUser:", err);
@@ -74,7 +77,20 @@ export class AddCommentComponent implements OnInit, AfterViewInit {
   }
 
   loadProfileImage() {
-
+    if (this.loggedUser.profileImage) {
+      this.imageService.getImage(this.loggedUser.profileImage.id).subscribe({
+        next: (blob: Blob) => {
+          const objectURL = URL.createObjectURL(blob);
+          this.profileImageUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+        },
+        error: (err) => {
+          console.error('Error loading profile image:', err);
+          this.profileImageUrl = '/default-profile-image.png';
+        }
+      });
+    } else {
+      this.profileImageUrl = '/default-profile-image.png';
+    }
   }
 
 

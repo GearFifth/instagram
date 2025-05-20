@@ -5,6 +5,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {UserService} from "../user.service";
 import {AuthService} from "../../auth/auth.service";
 import {ActivatedRoute} from "@angular/router";
+import {ImageService} from "../../shared/images/image.service";
 
 @Component({
   selector: 'app-user-profile',
@@ -25,7 +26,8 @@ export class UserProfileComponent implements OnInit {
     private userService: UserService,
     private authService: AuthService,
     private sanitizer: DomSanitizer,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private imageService: ImageService) {
   }
 
   ngOnInit() {
@@ -56,20 +58,20 @@ export class UserProfileComponent implements OnInit {
   }
 
   loadProfileImage() {
-    // if (this.user.profileImage.id) {
-    //   this.userService.getProfileImage(this.user.profileImage.id).subscribe({
-    //     next: (blob: Blob) => {
-    //       const objectURL = URL.createObjectURL(blob);
-    //       this.profileImageUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL);
-    //     },
-    //     error: (err) => {
-    //       console.error('Error loading profile image:', err);
-    //       this.profileImageUrl = '/default-profile-image.png';
-    //     }
-    //   });
-    // } else {
-    //   this.profileImageUrl = '/default-profile-image.png';
-    // }
+    if (this.user.profileImage) {
+      this.imageService.getImage(this.user.profileImage.id).subscribe({
+        next: (blob: Blob) => {
+          const objectURL = URL.createObjectURL(blob);
+          this.profileImageUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+        },
+        error: (err) => {
+          console.error('Error loading profile image:', err);
+          this.profileImageUrl = '/default-profile-image.png';
+        }
+      });
+    } else {
+      this.profileImageUrl = '/default-profile-image.png';
+    }
   }
 
   openEditUserDialog() {
