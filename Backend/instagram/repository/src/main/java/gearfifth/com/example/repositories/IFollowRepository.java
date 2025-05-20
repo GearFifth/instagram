@@ -13,6 +13,7 @@ import java.util.UUID;
 public interface IFollowRepository extends JpaRepository<Follow, UUID> {
     boolean existsByFromAndTo(User from, User to);
     Optional<Follow> findByFromAndTo(User from, User to);
+    boolean existsByFromIdAndToId(UUID fromId, UUID toId);
 
     @Query("SELECT f.to FROM Follow f WHERE f.from.id = :userId")
     List<User> findUsersFollowedBy(@Param("userId") UUID userId);

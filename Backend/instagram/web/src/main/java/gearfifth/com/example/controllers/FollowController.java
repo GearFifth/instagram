@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/v1/follow")
 @RequiredArgsConstructor
@@ -24,5 +26,11 @@ public class FollowController {
     public ResponseEntity<Void> unfollowUser(@RequestBody FollowRequest request) {
         followService.unfollowUser(request);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/is-following")
+    public ResponseEntity<Boolean> isFollowing(@RequestBody FollowRequest request) {
+        boolean isFollowing = followService.isFollowing(request);
+        return ResponseEntity.ok(isFollowing);
     }
 }

@@ -55,4 +55,9 @@ public class FollowService implements IFollowService {
     public Collection<User> findUsersFollowedBy(UUID userId){
         return followRepository.findUsersFollowedBy(userId);
     }
+
+    @Override
+    public boolean isFollowing(FollowRequest request) {
+        return followRepository.existsByFromIdAndToId(request.getFromUserId(), request.getToUserId());
+    }
 }

@@ -11,4 +11,6 @@ public interface IFollowService {
     void followUser(FollowRequest request);
     void unfollowUser(FollowRequest request);
     Collection<User> findUsersFollowedBy(UUID userId);
+
+    boolean isFollowing(FollowRequest request);
 }

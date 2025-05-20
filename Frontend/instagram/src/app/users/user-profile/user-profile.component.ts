@@ -6,6 +6,8 @@ import {UserService} from "../user.service";
 import {AuthService} from "../../auth/auth.service";
 import {ActivatedRoute} from "@angular/router";
 import {ImageService} from "../../shared/images/image.service";
+import {FollowService} from "../follow.service";
+import {FollowRequest} from "../models/follow-request.model";
 
 @Component({
   selector: 'app-user-profile',
@@ -18,7 +20,9 @@ export class UserProfileComponent implements OnInit {
   userId!: string | null;
   defaultProfileImagePath: string = '/assets/default-profile-image.png';
   profileImageUrl: SafeUrl | string = this.defaultProfileImagePath;
-  profileBackgroundImageUrl: string = "/assets/profile-background.jpg";
+  profileBackgroundImageUrl: string = "/assets/profile-background-v3.jpg";
+
+  isFollowing: boolean = false;
 
   readonly dialog = inject(MatDialog);
 
@@ -27,18 +31,20 @@ export class UserProfileComponent implements OnInit {
     private authService: AuthService,
     private sanitizer: DomSanitizer,
     private route: ActivatedRoute,
-    private imageService: ImageService) {
+    private imageService: ImageService,
+    private followService: FollowService) {
   }
 
   ngOnInit() {
     this.userId = this.route.snapshot.paramMap.get('id');
-    if(this.userId)
-      this.loadUser(this.userId);
+    this.loadUser();
     this.getLoggedUser();
   }
 
-  loadUser(id: string){
-    this.userService.getById(id).subscribe({
+
+  loadUser(){
+    if(this.userId)
+    this.userService.getById(this.userId).subscribe({
       next: (user: User) => {
         this.user = user;
         this.loadProfileImage();
@@ -50,11 +56,24 @@ export class UserProfileComponent implements OnInit {
     this.userService.getLoggedUser().subscribe({
       next: (user: User) => {
         this.loggedUser = user;
+        this.loadIsFollowing(this.loggedUser.id, user.id);
       },
       error: (error) => {
         console.log(error);
       }
     });
+  }
+
+  loadIsFollowing(fromUserId: string, toUserId: string ){
+    const followRequest: FollowRequest = {
+      fromUserId: fromUserId,
+      toUserId: toUserId,
+    }
+    this.followService.isFollowing(followRequest).subscribe({
+      next: (isFollowing: boolean) => {
+        this.isFollowing = isFollowing;
+      }
+    })
   }
 
   loadProfileImage() {
@@ -73,6 +92,35 @@ export class UserProfileComponent implements OnInit {
       this.profileImageUrl = '/default-profile-image.png';
     }
   }
+
+  onFollowClicked() {
+    const followRequest: FollowRequest = {
+      fromUserId: this.loggedUser.id,
+      toUserId: this.user.id,
+    }
+
+    this.followService.followUser(followRequest).subscribe({
+      next: () => {
+        this.loadUser();
+        console.log("Successfully followed user");
+      }
+    })
+  }
+
+  onUnfollowClicked() {
+    const followRequest: FollowRequest = {
+      fromUserId: this.loggedUser.id,
+      toUserId: this.user.id,
+    }
+
+    this.followService.unfollowUser(followRequest).subscribe({
+      next: () => {
+        this.loadUser();
+        console.log("Successfully unfollowed user");
+      }
+    })
+  }
+
 
   openEditUserDialog() {
     // const dialogRef = this.dialog.open(EditUserDialogComponent, {
