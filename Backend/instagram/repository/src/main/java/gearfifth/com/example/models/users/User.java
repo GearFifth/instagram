@@ -1,13 +1,10 @@
 package gearfifth.com.example.models.users;
 
 import gearfifth.com.example.enums.UserRole;
-import gearfifth.com.example.models.posts.Comment;
-import gearfifth.com.example.models.posts.Post;
 import gearfifth.com.example.models.shared.Image;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,4 +36,10 @@ public class User {
 
     @OneToOne
     private Image profileImage;
+
+    @OneToMany(mappedBy="to")
+    private List<Follow> followers;
+
+    @OneToMany(mappedBy="from")
+    private List<Follow> following;
 }

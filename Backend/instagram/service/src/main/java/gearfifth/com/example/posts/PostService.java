@@ -5,6 +5,8 @@ import gearfifth.com.example.dtos.posts.PostResponse;
 import gearfifth.com.example.dtos.posts.UpdatePostRequest;
 import gearfifth.com.example.exceptions.PostNotFoundException;
 import gearfifth.com.example.exceptions.UserNotFoundException;
+import gearfifth.com.example.follow.FollowService;
+import gearfifth.com.example.follow.IFollowService;
 import gearfifth.com.example.models.posts.Post;
 import gearfifth.com.example.models.posts.Reaction;
 import gearfifth.com.example.models.shared.Image;
@@ -20,9 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,6 +32,7 @@ public class PostService implements IPostService{
     private final IUserService userService;
     private final IImageService imageService;
     private final ModelMapper mapper;
+    private final IFollowService followService;
 
     @Override
     public Collection<PostResponse> getAll() {
@@ -91,7 +92,13 @@ public class PostService implements IPostService{
     public Collection<PostResponse> getPostsForUserFeed(UUID userId, int pageNumber, int itemsPerPage) {
         Pageable pageable = PageRequest.of(pageNumber, itemsPerPage, Sort.by(Sort.Direction.DESC, "creationDate"));
 
-        return postRepository.findAll(pageable)
+        Collection<User> followedUsers = followService.findUsersFollowedBy(userId);
+
+        if (followedUsers.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return postRepository.findByAuthorIn(followedUsers, pageable)
                 .stream()
                 .map(post -> mapper.map(post, PostResponse.class))
                 .collect(Collectors.toList());

@@ -1,5 +1,6 @@
 package gearfifth.com.example.users;
 
+import gearfifth.com.example.dtos.followers.FollowRequest;
 import gearfifth.com.example.dtos.users.requests.UserUpdateRequest;
 import gearfifth.com.example.dtos.users.responses.UserProfileResponse;
 import gearfifth.com.example.exceptions.EmailAlreadyExistsException;
@@ -70,4 +71,5 @@ public class UserService implements IUserService {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
     }
+
 }
