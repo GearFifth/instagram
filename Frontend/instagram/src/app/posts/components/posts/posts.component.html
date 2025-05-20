@@ -1,8 +1,7 @@
 <div class="window-box">
-  <app-navbar></app-navbar>
   <div class="wrapper">
       <div *ngIf="isLoading">Loading...</div>
-      <button mat-flat-button class="create-post-button" (click)="openCreatePostDialog()">
+      <button *ngIf="!userId" mat-flat-button class="create-post-button" (click)="openCreatePostDialog()">
         Create post
       </button>
 

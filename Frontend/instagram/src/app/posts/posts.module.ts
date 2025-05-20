@@ -27,6 +27,9 @@ import {InfiniteScrollDirective} from "ngx-infinite-scroll";
     CommentsComponent,
     CommentListComponent
   ],
+  exports: [
+    PostsComponent
+  ],
   imports: [
     CommonModule,
     PostsRoutingModule,

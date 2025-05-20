@@ -34,7 +34,15 @@ export class PostService {
   }
 
 
-  getPaginatedPostsForUser(userId: string, page: number = 1, itemsPerPage: number = 10): Observable<Post[]> {
+  getPaginatedPostsForUserFeed(userId: string, page: number = 1, itemsPerPage: number = 10): Observable<Post[]> {
+    const params = new HttpParams()
+      .set('pageNumber', page.toString())
+      .set('itemsPerPage', itemsPerPage.toString());
+
+    return this.http.get<Post[]>(`posts/feed/user/${userId}`, { params });
+  }
+
+  getPaginatedPostsForUserProfile(userId: string, page: number = 1, itemsPerPage: number = 10): Observable<Post[]> {
     const params = new HttpParams()
       .set('pageNumber', page.toString())
       .set('itemsPerPage', itemsPerPage.toString());
