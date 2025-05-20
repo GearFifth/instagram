@@ -1,9 +1,13 @@
 package gearfifth.com.example.models.users;
 
 import gearfifth.com.example.enums.UserRole;
+import gearfifth.com.example.models.posts.Comment;
+import gearfifth.com.example.models.posts.Post;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
