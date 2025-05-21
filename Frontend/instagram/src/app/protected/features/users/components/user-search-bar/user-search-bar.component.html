@@ -6,6 +6,7 @@
       matInput type="text"
       [(ngModel)]="searchTerm"
       (ngModelChange)="onSearchChange($event)"
+      (blur)="onBlur()"
       placeholder="Type name or email...">
     <button mat-icon-button *ngIf="searchTerm" matSuffix (click)="clearSearch()">
       <mat-icon>close</mat-icon>
@@ -14,7 +15,7 @@
 
   <div *ngIf="isLoading" class="loading">Loading...</div>
 
-  <div class="results" *ngIf="searchTerm.length > 0">
+  <div id="results" *ngIf="searchTerm.length > 0" (mousedown)="isClickingResult = true">
     <app-user-card *ngFor="let user of filteredUsers" [user]="user" (onUserCardClicked)="clearSearch()"></app-user-card>
     <div *ngIf="!filteredUsers?.length && !isLoading" class="no-results">No users found</div>
   </div>

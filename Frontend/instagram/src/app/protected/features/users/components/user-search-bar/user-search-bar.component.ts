@@ -11,7 +11,8 @@ import {UserService} from "../../user.service";
 export class UserSearchBarComponent implements OnInit {
   searchTerm = '';
   filteredUsers: User[] = [];
-  isLoading = false;
+  isLoading : boolean = false;
+  isClickingResult : boolean = false;
 
   private searchSubject = new Subject<string>();
 
@@ -49,6 +50,15 @@ export class UserSearchBarComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  onBlur() {
+    setTimeout(() => {
+      if (!this.isClickingResult) {
+        this.clearSearch();
+      }
+      this.isClickingResult = false;
+    }, 100);
   }
 
 }

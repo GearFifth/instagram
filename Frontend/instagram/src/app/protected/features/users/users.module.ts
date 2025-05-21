@@ -16,6 +16,7 @@ import { UserCardComponent } from './components/user-card/user-card.component';
     UserSearchBarComponent
   ],
   exports: [
+    UserSearchBarComponent
   ],
   imports: [
     CommonModule,
