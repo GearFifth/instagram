@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -70,6 +71,14 @@ public class UserService implements IUserService {
     public User findUserOrThrow(UUID userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
+    }
+
+    @Override
+    public Collection<UserProfileResponse> searchUsers(String query) {
+        List<User> matchedUsers = userRepository.searchByFirstNameLastNameOrEmail(query);
+        return matchedUsers.stream()
+                .map(user -> mapper.map(user, UserProfileResponse.class))
+                .collect(Collectors.toList());
     }
 
 }

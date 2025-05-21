@@ -15,4 +15,5 @@ public interface IUserService {
     boolean isEmailUnique(String email);
 
     User findUserOrThrow(UUID userId);
+    Collection<UserProfileResponse> searchUsers(String query);
 }

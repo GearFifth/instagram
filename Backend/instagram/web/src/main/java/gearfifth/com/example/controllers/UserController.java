@@ -45,4 +45,9 @@ public class UserController {
     public ResponseEntity<Boolean> checkEmailUniqueness(@RequestParam String email) {
         return ResponseEntity.ok(service.isEmailUnique(email));
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<Collection<UserProfileResponse>> searchUsers(@RequestParam String query) {
+        return ResponseEntity.ok(service.searchUsers(query));
+    }
 }

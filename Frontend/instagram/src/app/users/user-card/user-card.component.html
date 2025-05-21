@@ -1,0 +1,7 @@
+<div class="user-card" (click)="goToProfilePage()">
+  <img class="profile-picture" [src]="profileImageUrl"  alt="Profile Picture" (click)="goToProfilePage()">
+  <div class="right-section">
+    <span >{{user.firstName}} {{user.lastName}}</span>
+    <span class="email-info">{{user.email}}</span>
+  </div>
+</div>

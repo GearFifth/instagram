@@ -14,4 +14,9 @@ import java.util.UUID;
 public interface IUserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByEmail(String email);
     boolean existsByEmail(String email);
+
+    @Query("SELECT u FROM User u WHERE LOWER(u.firstName) LIKE LOWER(CONCAT('%', :query, '%')) " +
+            "OR LOWER(u.lastName) LIKE LOWER(CONCAT('%', :query, '%')) " +
+            "OR LOWER(u.email) LIKE LOWER(CONCAT('%', :query, '%'))")
+    List<User> searchByFirstNameLastNameOrEmail(@Param("query") String query);
 }
