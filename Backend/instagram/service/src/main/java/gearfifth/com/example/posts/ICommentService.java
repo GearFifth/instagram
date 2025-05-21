@@ -16,4 +16,6 @@ public interface ICommentService {
     void remove(UUID commentId);
     Collection<CommentResponse> getCommentsByPostId(UUID postId);
     Collection<CommentResponse> getCommentsByParentCommentId(UUID parentCommentId);
+
+    Comment findCommentOrThrow(UUID commentId);
 }

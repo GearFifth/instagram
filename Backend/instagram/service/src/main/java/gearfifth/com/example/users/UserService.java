@@ -1,11 +1,11 @@
 package gearfifth.com.example.users;
 
+import gearfifth.com.example.dtos.followers.FollowRequest;
 import gearfifth.com.example.dtos.users.requests.UserUpdateRequest;
 import gearfifth.com.example.dtos.users.responses.UserProfileResponse;
 import gearfifth.com.example.exceptions.EmailAlreadyExistsException;
 import gearfifth.com.example.exceptions.UserNotFoundException;
 import gearfifth.com.example.models.users.User;
-import gearfifth.com.example.models.users.VerificationToken;
 import gearfifth.com.example.repositories.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -64,6 +64,12 @@ public class UserService implements IUserService {
     @Override
     public boolean isEmailUnique(String email) {
         return !userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public User findUserOrThrow(UUID userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
     }
 
 }

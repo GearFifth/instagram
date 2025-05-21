@@ -1,28 +1,21 @@
-<app-navbar *ngIf="!userId"></app-navbar>
-<div class="window-box">
+<app-navbar></app-navbar>
+<div class="window-box"
+     infiniteScroll
+     [infiniteScrollDistance]="2"
+     [infiniteScrollThrottle]="500"
+     (scrolled)="onScroll()"
+     [scrollWindow]="false">
   <div class="wrapper">
       <div *ngIf="isLoading">Loading...</div>
-      <button *ngIf="!userId" mat-flat-button class="create-post-button" (click)="openCreatePostDialog()">
-        Create post
+      <button mat-icon-button class="create-post-button" (click)="openCreatePostDialog()">
+        <mat-icon>add</mat-icon>
       </button>
-
-      <h2 *ngIf="posts.length === 0">No posts</h2>
 
       <div
         class="post-cards-list"
-        id="content" #contentDiv
-        infiniteScroll
-        [infiniteScrollDistance]="2"
-        [infiniteScrollThrottle]="500"
-        (scrolled)="onScroll()"
-        [scrollWindow]="false">
+        id="content" #contentDiv>
 
-        @if (posts){
-          @for (post of posts; track post){
-            <app-post-card [post]="post"></app-post-card>
-          }
-        }
-
+        <app-post-cards [posts]="posts"></app-post-cards>
       </div>
   </div>
 </div>

@@ -1,12 +1,12 @@
 package gearfifth.com.example.posts;
 
-import gearfifth.com.example.dtos.images.ImageDetailsResponse;
 import gearfifth.com.example.dtos.posts.CreatePostRequest;
 import gearfifth.com.example.dtos.posts.PostResponse;
 import gearfifth.com.example.dtos.posts.UpdatePostRequest;
-import gearfifth.com.example.dtos.users.responses.UserProfileResponse;
 import gearfifth.com.example.exceptions.PostNotFoundException;
 import gearfifth.com.example.exceptions.UserNotFoundException;
+import gearfifth.com.example.follow.FollowService;
+import gearfifth.com.example.follow.IFollowService;
 import gearfifth.com.example.models.posts.Post;
 import gearfifth.com.example.models.posts.Reaction;
 import gearfifth.com.example.models.shared.Image;
@@ -14,29 +14,25 @@ import gearfifth.com.example.models.users.User;
 import gearfifth.com.example.repositories.IUserRepository;
 import gearfifth.com.example.repositories.posts.IPostRepository;
 import gearfifth.com.example.shared.IImageService;
+import gearfifth.com.example.users.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class PostService implements IPostService{
     private final IPostRepository postRepository;
-    private final IUserRepository userRepository;
+    private final IUserService userService;
     private final IImageService imageService;
     private final ModelMapper mapper;
+    private final IFollowService followService;
 
     @Override
     public Collection<PostResponse> getAll() {
@@ -53,7 +49,7 @@ public class PostService implements IPostService{
 
     @Override
         public PostResponse create(CreatePostRequest request) {
-        User author = getUserById(request.getAuthorId());
+        User author = userService.findUserOrThrow(request.getAuthorId());
         Image image = imageService.getImageDetails(request.getImageId());
 
         Post newPost = new Post();
@@ -96,7 +92,13 @@ public class PostService implements IPostService{
     public Collection<PostResponse> getPostsForUserFeed(UUID userId, int pageNumber, int itemsPerPage) {
         Pageable pageable = PageRequest.of(pageNumber, itemsPerPage, Sort.by(Sort.Direction.DESC, "creationDate"));
 
-        return postRepository.findAll(pageable)
+        Collection<User> followedUsers = followService.findUsersFollowedBy(userId);
+
+        if (followedUsers.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return postRepository.findByAuthorIn(followedUsers, pageable)
                 .stream()
                 .map(post -> mapper.map(post, PostResponse.class))
                 .collect(Collectors.toList());
@@ -113,19 +115,10 @@ public class PostService implements IPostService{
     }
 
 
-    private Post findPostOrThrow(UUID postId) {
+    @Override
+    public Post findPostOrThrow(UUID postId) {
         return postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException(postId));
     }
 
-    private User getUserById(UUID userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
-    }
-
-
-//    @Override
-//    public Page<Post> getUserPosts(Long userId, Pageable pageable) {
-//        return null;
-//    }
 }

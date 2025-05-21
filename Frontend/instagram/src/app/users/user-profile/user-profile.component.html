@@ -1,6 +1,12 @@
 @if (user && loggedUser){
-  <app-navbar></app-navbar>
-  <div class="window-box">
+    <app-navbar></app-navbar>
+  <div class="window-box"
+       infiniteScroll
+       [infiniteScrollDistance]="2"
+       [infiniteScrollThrottle]="500"
+       (scrolled)="onScroll()"
+       [scrollWindow]="false"
+  >
     <div class="profile-container">
       <div class="top-section">
         <img class="profile-background" [src]="profileBackgroundImageUrl" alt=" ">
@@ -9,8 +15,19 @@
         </div>
         <div class="main-info-box">
           <div class="user-info">
-            <span class="user-name">{{user.firstName}} {{user.lastName}}</span>
-<!--            <span class="user-expertise">{{user.jobTitle}}</span>-->
+            <div class="user-name-section">
+              <span class="user-name">{{user.firstName}} {{user.lastName}}</span>
+
+              @if(user.id !== loggedUser.id){
+                <button *ngIf="isFollowing" class="unfollow-button" (click)="onUnfollowClicked()">Unfollow</button>
+                <button *ngIf="!isFollowing" class="follow-button" (click)="onFollowClicked()">Follow</button>
+              }
+
+            </div>
+            <div class="user-follow-section">
+              <span><b>{{user.followers.length}}</b> followers</span>
+              <span><b>{{user.following.length}}</b> following</span>
+            </div>
           </div>
           <div class="stretch"></div>
 <!--          @if(user.id == loggedUser.id){-->
@@ -35,7 +52,13 @@
             <span>{{user.address}}</span>
           </div>
         </div>
-        <app-posts [userId]="user.id"></app-posts>
+
+          <div
+          class="post-cards-list"
+          id="content" #contentDiv>
+              <app-post-cards [posts]="posts"></app-post-cards>
+          </div>
+
       </div>
     </div>
   </div>

@@ -10,4 +10,6 @@ export interface User {
   phoneNumber: string;
   role?: UserRole;
   profileImage: ImageDetails;
+  followers: string[];
+  following: string[];
 }

@@ -1,27 +1,53 @@
-import {Component, ElementRef, inject, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, inject, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { AuthService } from '../../../auth/auth.service';
 import {MatDialog} from "@angular/material/dialog";
 import {CreatePostDialogComponent} from "../create-post-dialog/create-post-dialog.component";
 import {PostService} from "../../post.service";
 import {Post} from "../../models/post.model";
-import {Observable} from "rxjs";
+import {Observable, Subscription} from "rxjs";
+import {InfiniteScrollService} from "../../../shared/utils/infinite-scroll.service";
 
 @Component({
   selector: 'app-posts',
   templateUrl: './posts.component.html',
-  styleUrl: './posts.component.css'
+  styleUrl: './posts.component.css',
+  providers: [InfiniteScrollService<Post>]
 })
-export class PostsComponent implements OnInit {
+export class PostsComponent implements OnInit, OnDestroy {
   readonly dialog = inject(MatDialog);
   posts: Post[] = [];
   @ViewChild('contentDiv') contentDiv!: ElementRef;
-  @Input() userId: string | null = null;
+  isLoading: boolean = false;
+  loggedUserId: string = '';
+  private loadingSubscription?: Subscription;
+  private postsSubscription?: Subscription;
+  itemsPerPage = 2;
 
-  constructor(private authService: AuthService, private postService: PostService) {
+  constructor(
+    private authService: AuthService,
+    private postService: PostService,
+    public infiniteScroll: InfiniteScrollService<Post>) {
   }
 
   ngOnInit() {
-    this.loadPosts();
+    const loggedUserId = this.authService.getId();
+    if (!loggedUserId) {
+      console.error("User not logged in");
+      return;
+    }
+    this.loggedUserId = loggedUserId;
+    this.infiniteScroll.loadInitial((page, size) => this.postService.getPaginatedPostsForUserFeed(this.loggedUserId, page, size), this.itemsPerPage);
+    this.postsSubscription = this.infiniteScroll.items$.subscribe(posts => this.posts = posts);
+    this.loadingSubscription = this.infiniteScroll.isLoading$.subscribe(isLoading => this.isLoading = isLoading);
+  }
+
+  ngOnDestroy() {
+    this.loadingSubscription?.unsubscribe();
+    this.postsSubscription?.unsubscribe();
+  }
+
+  onScroll = () => {
+    this.infiniteScroll.loadMore((page, size) => this.postService.getPaginatedPostsForUserFeed(this.loggedUserId, page, size));
   }
 
   scrollToTop() {
@@ -42,65 +68,10 @@ export class PostsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.posts.push(result);
-        this.currentPage = 0;
-        this.loadPosts();
+        this.infiniteScroll.reset();
+        this.infiniteScroll.loadInitial((page, size) => this.postService.getPaginatedPostsForUserFeed(this.loggedUserId, page, size), this.itemsPerPage);
         this.scrollToTop();
       }
     });
   }
-
-  // INFINITE SCROLL
-  isLoading = false;
-  currentPage = 0;
-  itemsPerPage = 2;
-
-  toggleLoading = () => this.isLoading = !this.isLoading;
-
-  getPostFetcher(): (page: number, size: number) => Observable<Post[]> {
-    if (this.userId) {
-      return (page: number, size: number) =>
-        this.postService.getPaginatedPostsForUserProfile(this.userId!, page, size);
-    } else {
-      return (page: number, size: number) => {
-        const loggedUserId = this.authService.getId();
-        if (!loggedUserId) {
-          throw new Error("User is not logged in.");
-        }
-        return this.postService.getPaginatedPostsForUserFeed(loggedUserId, page, size);
-      };
-    }
-  }
-
-  loadPosts = () => {
-    this.toggleLoading();
-    const fetchPosts = this.getPostFetcher();
-    fetchPosts(this.currentPage, this.itemsPerPage).subscribe({
-      next: (posts: Post[]) => {
-        this.posts = posts;
-        console.log(this.posts);
-      },
-      error: err => console.log(err),
-      complete: () => this.toggleLoading()
-    });
-  }
-
-  appendPosts = () => {
-    this.toggleLoading();
-    const fetchPosts = this.getPostFetcher();
-    fetchPosts(this.currentPage, this.itemsPerPage).subscribe({
-      next: (posts: Post[]) => {
-        this.posts = [...this.posts, ...posts];
-      },
-      error: err => console.log(err),
-      complete: () => this.toggleLoading()
-    });
-  }
-
-  onScroll = () => {
-    console.log("scroll");
-    this.currentPage++;
-    this.appendPosts();
-  }
-
 }
