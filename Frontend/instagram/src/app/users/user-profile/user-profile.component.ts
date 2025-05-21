@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {User} from "../models/user.model";
 import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
 import {MatDialog} from "@angular/material/dialog";
@@ -8,31 +8,44 @@ import {ActivatedRoute} from "@angular/router";
 import {ImageService} from "../../shared/images/image.service";
 import {FollowService} from "../follow.service";
 import {FollowRequest} from "../models/follow-request.model";
+import {Post} from "../../posts/models/post.model";
+import {Subscription} from "rxjs";
+import {InfiniteScrollService} from "../../shared/utils/infinite-scroll.service";
+import {PostService} from "../../posts/post.service";
 
 @Component({
   selector: 'app-user-profile',
   templateUrl: './user-profile.component.html',
-  styleUrl: './user-profile.component.css'
+  styleUrl: './user-profile.component.css',
+  providers: [InfiniteScrollService<Post>]
 })
-export class UserProfileComponent implements OnInit {
+export class UserProfileComponent implements OnInit, OnDestroy {
   user!: User;
   loggedUser!: User;
-  userId!: string | null;
+  userId!: string;
   defaultProfileImagePath: string = '/assets/default-profile-image.png';
   profileImageUrl: SafeUrl | string = this.defaultProfileImagePath;
   profileBackgroundImageUrl: string = "/assets/profile-background-v3.jpg";
-
   isFollowing: boolean = false;
 
   readonly dialog = inject(MatDialog);
 
+  // posts
+  posts: Post[] = [];
+  @ViewChild('contentDiv') contentDiv!: ElementRef;
+  isLoading: boolean = false;
+  private loadingSubscription?: Subscription;
+  private postsSubscription?: Subscription;
+  itemsPerPage = 2;
+
   constructor(
     private userService: UserService,
-    private authService: AuthService,
     private sanitizer: DomSanitizer,
     private route: ActivatedRoute,
     private imageService: ImageService,
-    private followService: FollowService) {
+    private followService: FollowService,
+    public infiniteScroll: InfiniteScrollService<Post>,
+    public postService: PostService) {
   }
 
   ngOnInit(): void {
@@ -42,8 +55,17 @@ export class UserProfileComponent implements OnInit {
         this.userId = id;
         this.loadUser();
         this.getLoggedUser();
+
+        this.infiniteScroll.loadInitial((page, size) => this.postService.getPaginatedPostsForUserProfile(this.userId, page, size), this.itemsPerPage);
+        this.postsSubscription = this.infiniteScroll.items$.subscribe(posts => this.posts = posts);
+        this.loadingSubscription = this.infiniteScroll.isLoading$.subscribe(isLoading => this.isLoading = isLoading);
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.loadingSubscription?.unsubscribe();
+    this.postsSubscription?.unsubscribe();
   }
 
 
@@ -129,6 +151,11 @@ export class UserProfileComponent implements OnInit {
         console.log("Successfully unfollowed user");
       }
     })
+  }
+
+  //Posts
+  onScroll = () => {
+    this.infiniteScroll.loadMore((page, size) => this.postService.getPaginatedPostsForUserProfile(this.userId, page, size));
   }
 
 
