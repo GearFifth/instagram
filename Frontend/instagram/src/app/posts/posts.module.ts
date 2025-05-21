@@ -21,16 +21,15 @@ import { PostCardsComponent } from './components/post-cards/post-cards.component
   declarations: [
     PostsComponent,
     CreatePostDialogComponent,
-    PostCardComponent,
-    ReactionsComponent,
     CommentCardComponent,
     AddCommentComponent,
     CommentsComponent,
     CommentListComponent,
+    ReactionsComponent,
+    PostCardComponent,
     PostCardsComponent
   ],
   exports: [
-    PostsComponent,
     PostCardsComponent
   ],
   imports: [

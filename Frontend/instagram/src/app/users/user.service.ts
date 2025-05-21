@@ -26,4 +26,8 @@ export class UserService {
     const id = this.authService.getId();
     return id ? this.getById(id) : throwError(() => new Error('No logged in user'));
   }
+
+  searchUsers(query: string): Observable<User[]> {
+    return this.http.get<User[]>(`users/search?query=${encodeURIComponent(query)}`);
+  }
 }

@@ -1,0 +1,31 @@
+.user-card{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5em;
+  padding: 0.5em;
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid lightgray;
+  cursor: pointer;
+}
+
+.right-section{
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.email-info{
+  color: #b8b8b8;
+  font-size: 14px;
+}
+
+.profile-picture {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  align-self: start;
+  cursor: pointer;
+}

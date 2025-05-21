@@ -4,7 +4,7 @@ import gearfifth.com.example.dtos.followers.FollowRequest;
 import gearfifth.com.example.exceptions.InvalidArgumentsException;
 import gearfifth.com.example.models.users.Follow;
 import gearfifth.com.example.models.users.User;
-import gearfifth.com.example.repositories.IFollowRepository;
+import gearfifth.com.example.repositories.users.IFollowRepository;
 import gearfifth.com.example.users.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

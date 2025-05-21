@@ -1,19 +1,14 @@
 package gearfifth.com.example.controllers;
 
-import gearfifth.com.example.dtos.images.ImageDetailsResponse;
 import gearfifth.com.example.dtos.posts.CreatePostRequest;
 import gearfifth.com.example.dtos.posts.PostResponse;
 import gearfifth.com.example.dtos.posts.UpdatePostRequest;
-import gearfifth.com.example.models.posts.Post;
 import gearfifth.com.example.models.posts.Reaction;
-import gearfifth.com.example.models.shared.Image;
 import gearfifth.com.example.posts.IPostService;
-import gearfifth.com.example.shared.IImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collection;
 import java.util.UUID;
