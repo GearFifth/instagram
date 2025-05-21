@@ -7,6 +7,7 @@ import { NavbarComponent } from './navbars/navbar/navbar.component';
 import { UserNavbarComponent } from './navbars/user-navbar/user-navbar.component';
 import { AdminNavbarComponent } from './navbars/admin-navbar/admin-navbar.component';
 import {RouterLink, RouterLinkActive} from "@angular/router";
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import {RouterLink, RouterLinkActive} from "@angular/router";
     CommonModule,
     MaterialModule,
     RouterLink,
-    RouterLinkActive
+    RouterLinkActive,
+    FormsModule
   ],
   exports: [
     LoadingSpinnerComponent,
@@ -28,7 +30,7 @@ import {RouterLink, RouterLinkActive} from "@angular/router";
     NotificationComponent,
     NavbarComponent,
     UserNavbarComponent,
-    AdminNavbarComponent
+    AdminNavbarComponent,
   ]
 })
 export class SharedModule { }

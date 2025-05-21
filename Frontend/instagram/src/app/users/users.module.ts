@@ -12,16 +12,18 @@ import { UserCardComponent } from './user-card/user-card.component';
 @NgModule({
   declarations: [
     UserProfileComponent,
-    UserSearchBarComponent,
-    UserCardComponent
+    UserCardComponent,
+    UserSearchBarComponent
+  ],
+  exports: [
   ],
   imports: [
     CommonModule,
     SharedModule,
     UsersRoutingModule,
-    PostsModule,
     InfiniteScrollDirective,
-    FormsModule
+    FormsModule,
+    PostsModule
   ]
 
 })

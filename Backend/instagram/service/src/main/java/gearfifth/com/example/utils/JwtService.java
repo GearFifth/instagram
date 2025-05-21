@@ -1,4 +1,4 @@
-package gearfifth.com.example.auth;
+package gearfifth.com.example.utils;
 
 import gearfifth.com.example.exceptions.InvalidTokenException;
 import gearfifth.com.example.models.users.UserPrincipal;

@@ -1,4 +1,4 @@
-package gearfifth.com.example.verification;
+package gearfifth.com.example.utils;
 
 import gearfifth.com.example.models.users.User;
 

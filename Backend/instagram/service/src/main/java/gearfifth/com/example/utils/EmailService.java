@@ -1,14 +1,14 @@
-package gearfifth.com.example.verification;
+package gearfifth.com.example.utils;
 
 import gearfifth.com.example.models.users.User;
+import gearfifth.com.example.verification.IVerificationTokenService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +16,9 @@ public class EmailService implements IEmailService {
 
     private final JavaMailSender javaMailSender;
     private final IVerificationTokenService tokenService;
+
+    @Value("${app.frontend.origin}")
+    private String frontendOrigin;
 
     @Override
     public void sendEmail(String to, String subject, String body) {
@@ -36,7 +39,7 @@ public class EmailService implements IEmailService {
     @Override
     public void sendActivationEmail(User user, String token) {
 
-        String confirmationUrl = "http://localhost:4200/auth/verify-email?token=" + token;
+        String confirmationUrl = frontendOrigin + "/auth/verify-email?token=" + token;
         String body = """
             <p>Hello, <strong>%s</strong>!</p>
             <p>Please verify your email address by clicking the link below:</p>

@@ -1,7 +1,7 @@
 package gearfifth.com.example.config;
 
 import gearfifth.com.example.auth.CustomUserDetailsService;
-import gearfifth.com.example.auth.JwtService;
+import gearfifth.com.example.utils.JwtService;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

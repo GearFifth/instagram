@@ -1,8 +1,6 @@
-package gearfifth.com.example.shared;
+package gearfifth.com.example.utils;
 
 import gearfifth.com.example.exceptions.FileStorageException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package gearfifth.com.example.repositories;
+package gearfifth.com.example.repositories.users;
 
 import gearfifth.com.example.models.users.User;
 import org.springframework.data.jpa.repository.JpaRepository;

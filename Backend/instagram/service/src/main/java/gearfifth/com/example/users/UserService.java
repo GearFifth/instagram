@@ -1,12 +1,11 @@
 package gearfifth.com.example.users;
 
-import gearfifth.com.example.dtos.followers.FollowRequest;
 import gearfifth.com.example.dtos.users.requests.UserUpdateRequest;
 import gearfifth.com.example.dtos.users.responses.UserProfileResponse;
 import gearfifth.com.example.exceptions.EmailAlreadyExistsException;
 import gearfifth.com.example.exceptions.UserNotFoundException;
 import gearfifth.com.example.models.users.User;
-import gearfifth.com.example.repositories.IUserRepository;
+import gearfifth.com.example.repositories.users.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Primary;

@@ -1,11 +1,10 @@
-package gearfifth.com.example.shared;
+package gearfifth.com.example.images;
 
 import gearfifth.com.example.dtos.images.ImageDetailsResponse;
 import gearfifth.com.example.models.shared.Image;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.core.io.Resource;
 
-import java.io.IOException;
 import java.util.UUID;
 
 public interface IImageService {

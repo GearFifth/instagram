@@ -1,12 +1,12 @@
-package gearfifth.com.example.shared;
+package gearfifth.com.example.images;
 
 import gearfifth.com.example.dtos.images.ImageDetailsResponse;
 import gearfifth.com.example.exceptions.FileStorageException;
 import gearfifth.com.example.models.shared.Image;
 import gearfifth.com.example.repositories.shared.IImageRepository;
+import gearfifth.com.example.utils.IFileService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

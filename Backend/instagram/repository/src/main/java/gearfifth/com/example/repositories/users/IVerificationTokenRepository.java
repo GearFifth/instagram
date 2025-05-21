@@ -1,4 +1,4 @@
-package gearfifth.com.example.repositories;
+package gearfifth.com.example.repositories.users;
 
 import gearfifth.com.example.models.users.User;
 import gearfifth.com.example.models.users.VerificationToken;

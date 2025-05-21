@@ -3,11 +3,10 @@ package gearfifth.com.example.verification;
 import gearfifth.com.example.exceptions.VerificationTokenException;
 import gearfifth.com.example.models.users.User;
 import gearfifth.com.example.models.users.VerificationToken;
-import gearfifth.com.example.repositories.IUserRepository;
-import gearfifth.com.example.repositories.IVerificationTokenRepository;
+import gearfifth.com.example.repositories.users.IUserRepository;
+import gearfifth.com.example.repositories.users.IVerificationTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Calendar;
 
