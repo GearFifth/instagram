@@ -1,6 +1,7 @@
 package gearfifth.com.example.follow;
 
 import gearfifth.com.example.dtos.followers.FollowRequest;
+import gearfifth.com.example.exceptions.InvalidArgumentsException;
 import gearfifth.com.example.models.users.Follow;
 import gearfifth.com.example.models.users.User;
 import gearfifth.com.example.repositories.IFollowRepository;
@@ -25,15 +26,15 @@ public class FollowService implements IFollowService {
         User toUser = userService.findUserOrThrow(request.getToUserId());
 
         if (fromUser.getId().equals(toUser.getId())) {
-            throw new IllegalArgumentException("User cannot follow themselves.");
+            throw new InvalidArgumentsException("User cannot follow themselves.");
         }
 
         if (followRepository.existsByFromAndTo(fromUser, toUser)) {
-            throw new IllegalStateException("User is already following this user.");
+            throw new InvalidArgumentsException("User is already following this user.");
         }
 
         if (!toUser.isEnabled()) {
-            throw new IllegalStateException("Cannot follow an inactive user.");
+            throw new InvalidArgumentsException("Cannot follow an inactive user.");
         }
 
         followRepository.save(new Follow(fromUser, toUser));
@@ -46,7 +47,7 @@ public class FollowService implements IFollowService {
         User toUser = userService.findUserOrThrow(request.getToUserId());
 
         Follow follow = followRepository.findByFromAndTo(fromUser, toUser)
-                .orElseThrow(() -> new IllegalStateException("Follow relationship does not exist."));
+                .orElseThrow(() -> new InvalidArgumentsException("Follow relationship does not exist."));
 
         followRepository.delete(follow);
     }

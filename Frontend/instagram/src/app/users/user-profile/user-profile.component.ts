@@ -35,10 +35,15 @@ export class UserProfileComponent implements OnInit {
     private followService: FollowService) {
   }
 
-  ngOnInit() {
-    this.userId = this.route.snapshot.paramMap.get('id');
-    this.loadUser();
-    this.getLoggedUser();
+  ngOnInit(): void {
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+      if (id && id !== this.userId) {
+        this.userId = id;
+        this.loadUser();
+        this.getLoggedUser();
+      }
+    });
   }
 
 
@@ -56,7 +61,7 @@ export class UserProfileComponent implements OnInit {
     this.userService.getLoggedUser().subscribe({
       next: (user: User) => {
         this.loggedUser = user;
-        this.loadIsFollowing(this.loggedUser.id, user.id);
+        this.loadIsFollowing(this.loggedUser.id, this.userId!);
       },
       error: (error) => {
         console.log(error);
@@ -102,7 +107,11 @@ export class UserProfileComponent implements OnInit {
     this.followService.followUser(followRequest).subscribe({
       next: () => {
         this.loadUser();
+        this.loadIsFollowing(this.loggedUser.id, this.user.id);
         console.log("Successfully followed user");
+      },
+      error: (err) => {
+        console.log("Error following a user: ", err.message);
       }
     })
   }
@@ -116,6 +125,7 @@ export class UserProfileComponent implements OnInit {
     this.followService.unfollowUser(followRequest).subscribe({
       next: () => {
         this.loadUser();
+        this.loadIsFollowing(this.loggedUser.id, this.user.id);
         console.log("Successfully unfollowed user");
       }
     })
