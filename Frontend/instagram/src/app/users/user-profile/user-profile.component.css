@@ -163,12 +163,7 @@ app-posts{
 
 /*posts*/
 .post-cards-list{
-  display: flex;
-  flex-direction: column;
   width: 100%;
-  gap: 1em;
-  align-items: center;
-  /*overflow-y: auto;*/
   padding: 1em 0;
   height: 100%;
 }

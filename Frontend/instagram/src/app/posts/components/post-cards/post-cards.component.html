@@ -1,7 +1,9 @@
 @if (posts && posts.length > 0){
-  @for (post of posts; track post){
-    <app-post-card [post]="post"></app-post-card>
-  }
+    <div class="post-cards-list">
+        @for (post of posts; track post){
+            <app-post-card [post]="post"></app-post-card>
+        }
+    </div>
 } @else {
-    <h2>No available posts.</h2>
+    <h2 class="middle-center">No available posts.</h2>
 }
