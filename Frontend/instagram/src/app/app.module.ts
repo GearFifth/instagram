@@ -3,11 +3,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import {MaterialModule} from "./material/material.module";
+import {MaterialModule} from "./shared/material/material.module";
 import {HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient, withFetch} from "@angular/common/http";
-import {AuthInterceptor} from "./auth/auth.interceptor";
-import {BaseUrlInterceptor} from "./shared/interceptors/base-url.interceptor";
+import {AuthInterceptor} from "./core/interceptors/auth.interceptor";
+import {BaseUrlInterceptor} from "./core/interceptors/base-url.interceptor";
 import {SharedModule} from "./shared/shared.module";
+import {CoreModule} from "./core/core.module";
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import {SharedModule} from "./shared/shared.module";
         AppRoutingModule,
         MaterialModule,
         HttpClientModule,
+        CoreModule,
         SharedModule
     ],
   providers: [

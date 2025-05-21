@@ -1,21 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {MaterialModule} from "../material/material.module";
-import {NotificationComponent} from "./notification/notification.component";
-import {LoadingSpinnerComponent} from "./loading-spinner/loading-spinner.component";
-import { NavbarComponent } from './navbars/navbar/navbar.component';
-import { UserNavbarComponent } from './navbars/user-navbar/user-navbar.component';
-import { AdminNavbarComponent } from './navbars/admin-navbar/admin-navbar.component';
+import {MaterialModule} from "./material/material.module";
+import {NotificationComponent} from "./components/notification/notification.component";
+import { NavbarComponent } from '../protected/navbar/components/navbar/navbar.component';
+import { UserNavbarComponent } from '../protected/navbar/components/user-navbar/user-navbar.component';
+import { AdminNavbarComponent } from '../protected/navbar/components/admin-navbar/admin-navbar.component';
 import {RouterLink, RouterLinkActive} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
-    LoadingSpinnerComponent,
     NotificationComponent,
-    NavbarComponent,
-    UserNavbarComponent,
-    AdminNavbarComponent,
   ],
   imports: [
     CommonModule,
@@ -25,12 +20,8 @@ import {FormsModule} from "@angular/forms";
     FormsModule
   ],
   exports: [
-    LoadingSpinnerComponent,
     MaterialModule,
-    NotificationComponent,
-    NavbarComponent,
-    UserNavbarComponent,
-    AdminNavbarComponent,
+    NotificationComponent
   ]
 })
 export class SharedModule { }
