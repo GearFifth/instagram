@@ -10,7 +10,7 @@ import java.util.UUID;
 public interface IUserService {
     Collection<UserProfileResponse> getAll();
     UserProfileResponse get(UUID userId);
-    UserProfileResponse update(UUID userId, UserUpdateRequest user);
+    UserProfileResponse update(UserUpdateRequest user);
     void remove(UUID userId);
     boolean isEmailUnique(String email);
 

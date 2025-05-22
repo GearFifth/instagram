@@ -4,6 +4,7 @@ import {Observable, of, throwError} from "rxjs";
 import {environment} from "../../../../env/env";
 import {User} from "./models/user.model";
 import {AuthService} from "../../../core/services/auth.service";
+import {UpdateUserRequest} from "./models/update-user-request.model";
 
 @Injectable({
   providedIn: 'root'
@@ -29,5 +30,9 @@ export class UserService {
 
   searchUsers(query: string): Observable<User[]> {
     return this.http.get<User[]>(`users/search?query=${encodeURIComponent(query)}`);
+  }
+
+  update(request: UpdateUserRequest) : Observable<User> {
+    return this.http.put<User>('users', request);
   }
 }

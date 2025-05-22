@@ -12,6 +12,7 @@ import {Post} from "../../../posts/models/post.model";
 import {Subscription} from "rxjs";
 import {InfiniteScrollService} from "../../../../../core/services/infinite-scroll.service";
 import {PostService} from "../../../posts/post.service";
+import {EditUserDialogComponent} from "../edit-user-dialog/edit-user-dialog.component";
 
 @Component({
   selector: 'app-user-profile',
@@ -160,20 +161,19 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
 
   openEditUserDialog() {
-    // const dialogRef = this.dialog.open(EditUserDialogComponent, {
-    //   data: {
-    //     user: this.user,
-    //   },
-    //   // width: '90vw',
-    //   maxWidth: '90vw',
-    //   maxHeight: '90vh'
-    // });
-    //
-    // dialogRef.afterClosed().subscribe(result => {
-    //   if (result) {
-    //     if(this.userEmail)
-    //       this.getUser(this.userEmail);
-    //   }
-    // });
+    const dialogRef = this.dialog.open(EditUserDialogComponent, {
+      data: {
+        user: this.user,
+      },
+      // width: '90vw',
+      maxWidth: '90vw',
+      maxHeight: '90vh'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        this.user = result;
+      }
+    });
   }
 }

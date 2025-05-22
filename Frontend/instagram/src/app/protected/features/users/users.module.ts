@@ -6,11 +6,12 @@ import {UsersRoutingModule} from "./users-routing.module";
 import {PostsModule} from "../posts/posts.module";
 import {InfiniteScrollDirective} from "ngx-infinite-scroll";
 import {UserSearchBarComponent} from "./components/user-search-bar/user-search-bar.component";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { UserCardComponent } from './components/user-card/user-card.component';
 import { DiscoverUsersComponent } from './components/discover-users/discover-users.component';
 import { UserRecommendationCardComponent } from './components/discover-users/user-recommendation-card/user-recommendation-card.component';
 import { UserRecommendationCardsComponent } from './components/discover-users/user-recommendation-cards/user-recommendation-cards.component';
+import { EditUserDialogComponent } from './components/edit-user-dialog/edit-user-dialog.component';
 
 @NgModule({
   declarations: [
@@ -19,19 +20,21 @@ import { UserRecommendationCardsComponent } from './components/discover-users/us
     UserSearchBarComponent,
     DiscoverUsersComponent,
     UserRecommendationCardComponent,
-    UserRecommendationCardsComponent
+    UserRecommendationCardsComponent,
+    EditUserDialogComponent
   ],
   exports: [
     UserSearchBarComponent
   ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    UsersRoutingModule,
-    InfiniteScrollDirective,
-    FormsModule,
-    PostsModule
-  ]
+    imports: [
+        CommonModule,
+        SharedModule,
+        UsersRoutingModule,
+        InfiniteScrollDirective,
+        FormsModule,
+        PostsModule,
+        ReactiveFormsModule
+    ]
 
 })
 export class UsersModule { }
