@@ -21,4 +21,5 @@ public class UserProfileResponse {
     private ImageDetailsResponse profileImage;
     private List<IdReference> followers;
     private List<IdReference> following;
+    private List<IdReference> posts;
 }

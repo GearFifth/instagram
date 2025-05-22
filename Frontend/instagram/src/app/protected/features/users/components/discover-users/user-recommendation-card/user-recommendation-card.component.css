@@ -1,0 +1,61 @@
+.user-recommendation-card {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5em;
+  padding: 1em;
+  background-color: white;
+  border: 1px solid lightgray;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(204, 204, 204, 0.9);
+  max-width: 80em;
+  width: 500px;
+}
+
+.user-recommendation-card:hover {
+  border-color: #5a0fad;
+  box-shadow: 2px 8px 16px rgba(74, 144, 226, 0.2);
+}
+
+.right-section {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.email-info {
+  color: #b8b8b8;
+  font-size: 14px;
+}
+
+.profile-picture {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  align-self: start;
+  cursor: pointer;
+}
+
+.user-title{
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.user-title:hover {
+  color: #5a0fad;
+}
+
+.stretch{
+  flex: 1;
+}
+
+.user-follow-section{
+  font-size: 14px;
+  color: #555555;
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+}
+

@@ -7,7 +7,6 @@
 
 .wrapper{
   background-color: #fafafa;
-  /*padding: 1em 0 1em 0;*/
   display: flex;
   flex-direction: column;
   flex:1;
@@ -15,34 +14,6 @@
   align-items: center;
 }
 
-#posts-panel{
-  flex: 1;
-  margin-left: 20%;
-  margin-right: 20%;
-  overflow-y: auto;
-  margin-top: 5.2em;
-}
-
-app-side-nav {
-  max-width: 20em;
-  width: 20%;
-  flex-shrink: 0;
-  position: fixed;
-  top: 5.2em;
-  bottom: 0;
-  overflow-y: auto;
-}
-
-app-members-panel {
-  max-width: 20em;
-  width: 20%;
-  flex-shrink: 0;
-  position: fixed;
-  top: 5.2em;
-  bottom: 0;
-  right: 0;
-  overflow-y: auto;
-}
 
 .create-post-button {
   position: fixed;

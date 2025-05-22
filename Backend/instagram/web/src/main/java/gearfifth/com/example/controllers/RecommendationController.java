@@ -21,10 +21,10 @@ public class RecommendationController {
 
     @GetMapping("/users")
     public ResponseEntity<Collection<UserProfileResponse>> recommendUsers(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
-    ) {
-        return ResponseEntity.ok(service.recommendUsers(page, size));
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "10") int itemsPerPage)
+    {
+        return ResponseEntity.ok(service.recommendUsers(pageNumber, itemsPerPage));
     }
 
 }

@@ -1,0 +1,14 @@
+.user-recommendation-cards-list{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 1em;
+  align-items: center;
+  padding: 1em 0;
+  height: 100%;
+}
+
+.middle-center{
+  width: 100%;
+  text-align: center;
+}

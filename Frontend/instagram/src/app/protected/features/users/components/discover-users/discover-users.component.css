@@ -1,0 +1,16 @@
+.window-box{
+  background-color: #fafafa;
+  width: 100%;
+  height: calc(100vh - 5.5em);
+  overflow-y: auto;
+}
+
+.wrapper{
+  background-color: #fafafa;
+  display: flex;
+  flex-direction: column;
+  flex:1;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}

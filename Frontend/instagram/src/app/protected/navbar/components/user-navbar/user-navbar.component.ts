@@ -33,4 +33,8 @@ export class UserNavbarComponent {
   goToPostsPage() {
     this.router.navigate([ROUTE_PATHS.POSTS_ROOT]);
   }
+
+  goToDiscoverPeoplePage() {
+    this.router.navigate([ROUTE_PATHS.DISCOVER_PEOPLE]);
+  }
 }
