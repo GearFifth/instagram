@@ -8,12 +8,18 @@ import {InfiniteScrollDirective} from "ngx-infinite-scroll";
 import {UserSearchBarComponent} from "./components/user-search-bar/user-search-bar.component";
 import {FormsModule} from "@angular/forms";
 import { UserCardComponent } from './components/user-card/user-card.component';
+import { DiscoverUsersComponent } from './components/discover-users/discover-users.component';
+import { UserRecommendationCardComponent } from './components/discover-users/user-recommendation-card/user-recommendation-card.component';
+import { UserRecommendationCardsComponent } from './components/discover-users/user-recommendation-cards/user-recommendation-cards.component';
 
 @NgModule({
   declarations: [
     UserProfileComponent,
     UserCardComponent,
-    UserSearchBarComponent
+    UserSearchBarComponent,
+    DiscoverUsersComponent,
+    UserRecommendationCardComponent,
+    UserRecommendationCardsComponent
   ],
   exports: [
     UserSearchBarComponent

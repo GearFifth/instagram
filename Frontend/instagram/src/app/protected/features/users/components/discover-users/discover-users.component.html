@@ -1,0 +1,16 @@
+<div class="window-box"
+     infiniteScroll
+     [infiniteScrollDistance]="2"
+     [infiniteScrollThrottle]="500"
+     (scrolled)="onScroll()"
+     [scrollWindow]="false">
+  <div class="wrapper">
+    <div *ngIf="isLoading">Loading...</div>
+
+    <div
+      class="user-recommendation-cards-list"
+      id="content" #contentDiv>
+      <app-user-recommendation-cards [users]="users"></app-user-recommendation-cards>
+    </div>
+  </div>
+</div>

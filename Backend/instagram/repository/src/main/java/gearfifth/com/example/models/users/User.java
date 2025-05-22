@@ -1,6 +1,7 @@
 package gearfifth.com.example.models.users;
 
 import gearfifth.com.example.enums.UserRole;
+import gearfifth.com.example.models.posts.Post;
 import gearfifth.com.example.models.shared.Image;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -42,4 +43,7 @@ public class User {
 
     @OneToMany(mappedBy="from")
     private List<Follow> following;
+
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Post> posts;
 }

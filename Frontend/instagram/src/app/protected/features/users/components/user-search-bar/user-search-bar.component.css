@@ -13,9 +13,9 @@
 }
 
 #results {
+  min-width: 22em;
   display: flex;
   flex-direction: column;
-  gap: 0.5em;
   position: absolute;
   top: 99%;
   left: 0;

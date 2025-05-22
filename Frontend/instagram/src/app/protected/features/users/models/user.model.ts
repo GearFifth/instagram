@@ -12,4 +12,5 @@ export interface User {
   profileImage: ImageDetails;
   followers: string[];
   following: string[];
+  posts: string[];
 }

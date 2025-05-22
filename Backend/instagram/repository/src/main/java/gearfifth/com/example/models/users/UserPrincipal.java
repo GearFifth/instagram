@@ -20,6 +20,10 @@ public class UserPrincipal implements UserDetails {
         return user.getId();
     }
 
+    public User getUser() {
+        return user;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singleton(new SimpleGrantedAuthority(user.getRole().toString().toUpperCase()));
