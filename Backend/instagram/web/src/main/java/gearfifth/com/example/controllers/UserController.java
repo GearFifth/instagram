@@ -30,9 +30,9 @@ public class UserController {
         return new ResponseEntity<>(service.get(userId), HttpStatus.OK);
     }
 
-    @PutMapping("/{userId}")
-    public ResponseEntity<UserProfileResponse> update(@PathVariable UUID userId, @Valid @RequestBody UserUpdateRequest user) {
-        return new ResponseEntity<>(service.update(userId, user), HttpStatus.OK);
+    @PutMapping
+    public ResponseEntity<UserProfileResponse> update(@Valid @RequestBody UserUpdateRequest user) {
+        return new ResponseEntity<>(service.update(user), HttpStatus.OK);
     }
 
     @DeleteMapping("/{userId}")

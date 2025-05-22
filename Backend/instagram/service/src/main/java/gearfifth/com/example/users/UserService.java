@@ -4,9 +4,12 @@ import gearfifth.com.example.dtos.users.requests.UserUpdateRequest;
 import gearfifth.com.example.dtos.users.responses.UserProfileResponse;
 import gearfifth.com.example.exceptions.EmailAlreadyExistsException;
 import gearfifth.com.example.exceptions.UserNotFoundException;
+import gearfifth.com.example.images.IImageService;
+import gearfifth.com.example.models.shared.Image;
 import gearfifth.com.example.models.users.User;
 import gearfifth.com.example.repositories.users.IUserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -17,11 +20,13 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 @Primary
 public class UserService implements IUserService {
     private final IUserRepository userRepository;
+    private final IImageService imageService;
     private final ModelMapper mapper;
 
     @Override
@@ -40,15 +45,18 @@ public class UserService implements IUserService {
 
     @Transactional
     @Override
-    public UserProfileResponse update(UUID userId, UserUpdateRequest request) {
-        User existingUser = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
+    public UserProfileResponse update(UserUpdateRequest request) {
+        User existingUser = findUserOrThrow(request.getId());
+        Image image = imageService.getImageDetails(request.getProfileImageId());
 
-        if (!existingUser.getEmail().equals(request.getEmail()) && userRepository.existsByEmail(request.getEmail())) {
-            throw new EmailAlreadyExistsException(request.getEmail());
-        }
+        imageService.removeImage(existingUser.getProfileImage().getId());
 
-        mapper.map(request, existingUser);
+        existingUser.setFirstName(request.getFirstName());
+        existingUser.setLastName(request.getLastName());
+        existingUser.setAddress(request.getAddress());
+        existingUser.setPhoneNumber(request.getPhoneNumber());
+        existingUser.setProfileImage(image);
+
         User updatedUser = userRepository.save(existingUser);
         return mapper.map(updatedUser, UserProfileResponse.class);
     }

@@ -1,17 +1,15 @@
 package gearfifth.com.example.dtos.users.requests;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
+
+import java.util.UUID;
 
 @Data
 public class UserUpdateRequest {
 
-    @Email(message = "Invalid email format")
-    @NotBlank(message = "Email is required")
-    private String email;
+    @NotNull(message = "Id must not be null")
+    private UUID id;
 
     @NotBlank(message = "First name is required")
     @Size(max = 50, message = "First name must not exceed 50 characters")
@@ -29,4 +27,7 @@ public class UserUpdateRequest {
             message = "Invalid phone number format. It must be 7 to 15 digits long and can optionally start with a '+' sign."
     )
     private String phoneNumber;
+
+    @NotNull(message = "Profile image id must not be null")
+    private UUID profileImageId;
 }
