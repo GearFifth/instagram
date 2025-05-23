@@ -3,12 +3,13 @@ import {BehaviorSubject, catchError, map, Observable, switchMap, tap} from "rxjs
 import {UserRole} from "../../protected/features/users/models/user-role.enum";
 import {Router} from "@angular/router";
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {RegisterRequest} from "../../public/auth/models/register-request.model";
-import {LoginRequest} from "../../public/auth/models/login-request.model";
-import {AuthResponse} from "../../public/auth/models/auth-response.model";
+import {RegisterRequest} from "../models/register-request.model";
+import {LoginRequest} from "../models/login-request.model";
+import {AuthResponse} from "../models/auth-response.model";
 import {JwtHelperService} from "@auth0/angular-jwt";
 import {isPlatformBrowser} from "@angular/common";
 import {ROUTE_PATHS} from "../constants/routes";
+import {ChangePasswordRequest} from "../models/change-password-request.model";
 
 @Injectable({
   providedIn: 'root'
@@ -78,6 +79,10 @@ export class AuthService {
         return new Observable<void>();
       })
     );
+  }
+
+  changePassword(request: ChangePasswordRequest) : Observable<void> {
+    return this.http.put<void>(`auth/change-password`, request)
   }
 
 

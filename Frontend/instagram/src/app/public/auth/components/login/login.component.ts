@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {AuthService} from "../../../../core/services/auth.service";
-import {LoginRequest} from "../../models/login-request.model";
+import {LoginRequest} from "../../../../core/models/login-request.model";
 import {NotificationType} from "../../../../shared/components/notification/notification.component";
 import {ROUTE_PATHS} from "../../../../core/constants/routes";
 

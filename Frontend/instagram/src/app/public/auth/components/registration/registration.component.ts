@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MatStepper} from "@angular/material/stepper";
 import {confirmPasswordValidator} from "../../../../shared/validators/confirm-password.validator";
 import {AuthService} from "../../../../core/services/auth.service";
-import {RegisterRequest} from "../../models/register-request.model";
+import {RegisterRequest} from "../../../../core/models/register-request.model";
 import {UserService} from "../../../../protected/features/users/user.service";
 import {ImageService} from "../../../../core/services/image.service";
 import {ImageDetails} from "../../../../shared/models/image-details.model";

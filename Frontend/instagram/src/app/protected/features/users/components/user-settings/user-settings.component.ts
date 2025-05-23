@@ -5,6 +5,8 @@ import {UserService} from "../../user.service";
 import {MatDialog} from "@angular/material/dialog";
 import {ConfirmDialogComponent} from "../../../../../shared/components/confirm-dialog/confirm-dialog.component";
 import {AuthService} from "../../../../../core/services/auth.service";
+import {ChangePasswordDialogComponent} from "../change-password-dialog/change-password-dialog.component";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-user-settings',
@@ -14,6 +16,7 @@ import {AuthService} from "../../../../../core/services/auth.service";
 export class UserSettingsComponent implements OnInit{
   user: User = {} as User;
   readonly dialog = inject(MatDialog);
+  private _snackBar = inject(MatSnackBar);
 
   constructor(private route: ActivatedRoute, private userService: UserService, private authService: AuthService) {
   }
@@ -42,7 +45,6 @@ export class UserSettingsComponent implements OnInit{
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        console.log("Successfully removed user");
         this.removeUser();
       }
     });
@@ -52,6 +54,7 @@ export class UserSettingsComponent implements OnInit{
     this.userService.remove(this.user.id).subscribe({
       next: () => {
         this.authService.cleanLocalStorage();
+        this._snackBar.open("Succesfully removed user", "OK");
       },
       error: () => {
         console.log("Error occured");
@@ -60,6 +63,12 @@ export class UserSettingsComponent implements OnInit{
   }
 
   onChangePasswordClicked(){
+    const dialogRef = this.dialog.open(ChangePasswordDialogComponent, {});
 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this._snackBar.open("Succesfully changed password", "OK");
+      }
+    });
   }
 }
