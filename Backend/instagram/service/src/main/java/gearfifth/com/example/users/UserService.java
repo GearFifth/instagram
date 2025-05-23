@@ -2,7 +2,6 @@ package gearfifth.com.example.users;
 
 import gearfifth.com.example.dtos.users.requests.UserUpdateRequest;
 import gearfifth.com.example.dtos.users.responses.UserProfileResponse;
-import gearfifth.com.example.exceptions.EmailAlreadyExistsException;
 import gearfifth.com.example.exceptions.UserNotFoundException;
 import gearfifth.com.example.images.IImageService;
 import gearfifth.com.example.models.shared.Image;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -38,8 +38,7 @@ public class UserService implements IUserService {
 
     @Override
     public UserProfileResponse get(UUID userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
+        User user = findUserOrThrow(userId);
         return mapper.map(user, UserProfileResponse.class);
     }
 
@@ -64,9 +63,12 @@ public class UserService implements IUserService {
     @Transactional
     @Override
     public void remove(UUID userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
-        userRepository.delete(user);
+        User user = findUserOrThrow(userId);
+
+        user.setDeleted(true);
+        user.setDeletedAt(new Date());
+
+        userRepository.save(user);
     }
 
     @Override

@@ -23,7 +23,7 @@ export class UserNavbarComponent {
   }
 
   openSettingsPage() {
-    // this.router.navigate(['/settings', this.loggedUser.email]);
+    this.router.navigate([ROUTE_PATHS.USER_SETTINGS]);
   }
 
   goToProfilePage() {

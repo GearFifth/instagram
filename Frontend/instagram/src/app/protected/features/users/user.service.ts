@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Observable, of, throwError} from "rxjs";
+import {Observable, of, tap, throwError} from "rxjs";
 import {environment} from "../../../../env/env";
 import {User} from "./models/user.model";
 import {AuthService} from "../../../core/services/auth.service";
@@ -34,5 +34,9 @@ export class UserService {
 
   update(request: UpdateUserRequest) : Observable<User> {
     return this.http.put<User>('users', request);
+  }
+
+  remove(userId: string) : Observable<void> {
+    return this.http.delete<void>('users/' + userId);
   }
 }

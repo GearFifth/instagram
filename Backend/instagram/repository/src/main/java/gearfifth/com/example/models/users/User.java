@@ -5,14 +5,19 @@ import gearfifth.com.example.models.posts.Post;
 import gearfifth.com.example.models.shared.Image;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Data
 @Table(name ="users")
-public class User {
+@SQLDelete(sql = "UPDATE users SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
+public class User{
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -46,4 +51,9 @@ public class User {
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts;
+
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted = false;
+
+    private Date deletedAt;
 }

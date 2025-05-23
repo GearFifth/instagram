@@ -3,13 +3,17 @@ package gearfifth.com.example.models.posts;
 import gearfifth.com.example.models.users.User;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.util.*;
 
 @Entity
 @Data
 @Table(name = "comments")
-public class Comment {
+@SQLDelete(sql = "UPDATE comments SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
+public class Comment{
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -32,6 +36,11 @@ public class Comment {
     private User author;
 
     private Date creationDate;
+
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted = false;
+
+    private Date deletedAt;
 
     public void addReply(Comment reply) {
         replies.add(reply);

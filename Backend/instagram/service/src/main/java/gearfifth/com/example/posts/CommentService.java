@@ -70,10 +70,14 @@ public class CommentService implements ICommentService {
         return mapper.map(commentRepository.save(comment), CommentResponse.class);
     }
 
-    @Override
+    @Transactional
     public void remove(UUID commentId) {
         Comment comment = findCommentOrThrow(commentId);
-        commentRepository.delete(comment);
+
+        comment.setDeleted(true);
+        comment.setDeletedAt(new Date());
+
+        commentRepository.save(comment);
     }
 
     @Override

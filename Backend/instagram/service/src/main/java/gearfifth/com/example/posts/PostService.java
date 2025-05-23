@@ -5,6 +5,7 @@ import gearfifth.com.example.dtos.posts.PostResponse;
 import gearfifth.com.example.dtos.posts.UpdatePostRequest;
 import gearfifth.com.example.exceptions.PostNotFoundException;
 import gearfifth.com.example.follow.IFollowService;
+import gearfifth.com.example.models.posts.Comment;
 import gearfifth.com.example.models.posts.Post;
 import gearfifth.com.example.models.posts.Reaction;
 import gearfifth.com.example.models.shared.Image;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -65,10 +67,14 @@ public class PostService implements IPostService{
         return mapper.map(postRepository.save(post), PostResponse.class);
     }
 
-    @Override
+    @Transactional
     public void remove(UUID postId) {
         Post post = findPostOrThrow(postId);
-        postRepository.delete(post);
+
+        post.setDeleted(true);
+        post.setDeletedAt(new Date());
+
+        postRepository.save(post);
     }
 
     @Override
