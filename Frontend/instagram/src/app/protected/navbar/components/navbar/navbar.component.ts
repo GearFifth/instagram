@@ -12,7 +12,7 @@ import {Subscription} from "rxjs";
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   subscription: Subscription;
-  roleName: string = 'USER';
+  roleName: string = 'USER'; // todo: try to find better solution instead of predefined USER roleName
   loggedUser!: User | undefined;
 
   constructor(

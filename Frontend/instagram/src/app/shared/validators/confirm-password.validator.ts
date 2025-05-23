@@ -6,6 +6,7 @@ export const confirmPasswordValidator: ValidatorFn = (control: AbstractControl):
 
   const isMatchingPassword = password === passwordConfirmation;
 
+  // todo: refactor me this part of code
   if(!isMatchingPassword){
     control.get('passwordConfirmation')?.setErrors({PasswordNoMatch: true})
   }

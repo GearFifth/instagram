@@ -1,3 +1,5 @@
+// todo: use existing npm packages instead of inventing notification again
+
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 
 export enum NotificationType {

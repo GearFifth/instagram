@@ -8,7 +8,7 @@ import org.springframework.core.io.Resource;
 import java.util.UUID;
 
 public interface IImageService {
-    ImageDetailsResponse uploadImage(MultipartFile file, String relativePath);
+    Image uploadImage(MultipartFile file, String relativePath);
     Resource getImage(UUID imageId);
     public byte[] getImageBytes(UUID imageId);
     Image getImageDetails(UUID imageId);

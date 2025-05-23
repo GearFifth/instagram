@@ -44,6 +44,7 @@ export class UserSettingsComponent implements OnInit{
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      // todo: write this a little bit better
       if (result === true) {
         this.removeUser();
       }
@@ -66,6 +67,7 @@ export class UserSettingsComponent implements OnInit{
     const dialogRef = this.dialog.open(ChangePasswordDialogComponent, {});
 
     dialogRef.afterClosed().subscribe(result => {
+      // todo: write this a little bit better
       if (result === true) {
         this._snackBar.open("Succesfully changed password", "OK");
       }

@@ -30,6 +30,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -50,12 +51,10 @@ public class AuthService implements IAuthService {
 
     @Override
     @Transactional
-    public UserProfileResponse register(UserCreateRequest request) {
+    public UserProfileResponse register(UserCreateRequest request, MultipartFile profileImage) {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new EmailAlreadyExistsException(request.getEmail());
         }
-
-        Image image = imageService.getImageDetails(request.getProfileImageId());
 
         User user = new User();
         user.setEmail(request.getEmail());
@@ -64,7 +63,13 @@ public class AuthService implements IAuthService {
         user.setLastName(request.getLastName());
         user.setAddress(request.getAddress());
         user.setPhoneNumber(request.getPhoneNumber());
-        user.setProfileImage(image);
+
+
+        if(profileImage != null && !profileImage.isEmpty()) {
+            Image image = imageService.uploadImage(profileImage, "users");
+            user.setProfileImage(image);
+        }
+
         user = userRepository.save(user);
 
         String token = UUID.randomUUID().toString();

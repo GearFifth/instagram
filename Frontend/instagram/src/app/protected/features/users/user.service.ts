@@ -1,3 +1,5 @@
+// todo: use all url routes to constants
+
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable, of, tap, throwError} from "rxjs";

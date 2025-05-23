@@ -16,6 +16,7 @@ import {ChangePasswordRequest} from "../models/change-password-request.model";
 })
 export class AuthService {
   roleSubject = new BehaviorSubject<UserRole>(UserRole.UNAUTHORIZED);
+  private readonly apiUrl = 'auth';
 
   constructor(
     private http: HttpClient,
@@ -36,11 +37,28 @@ export class AuthService {
   })
 
   register(registerRequest: RegisterRequest): Observable<any> {
-    return this.http.post(`auth/register`, registerRequest);
+    const formData = new FormData();
+
+    const userBlob = new Blob([JSON.stringify({
+      email: registerRequest.email,
+      password: registerRequest.password,
+      firstName: registerRequest.firstName,
+      lastName: registerRequest.lastName,
+      address: registerRequest.address,
+      phoneNumber: registerRequest.phoneNumber
+    })], { type: 'application/json' });
+
+    formData.append('user', userBlob);
+
+    if (registerRequest.profileImage) {
+      formData.append('profileImage', registerRequest.profileImage);
+    }
+
+    return this.http.post(`${this.apiUrl}/register`, formData);
   }
 
   login(loginRequest: LoginRequest): Observable<void> {
-    return this.http.post<AuthResponse>(`auth/login`, loginRequest, {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, loginRequest, {
       headers: this.header,
     }).pipe(
       tap((response: AuthResponse) => {
@@ -66,7 +84,7 @@ export class AuthService {
   }
 
   logout(): Observable<void> {
-    return this.http.post<void>(`auth/logout`, {}).pipe(
+    return this.http.post<void>(`${this.apiUrl}/logout`, {}).pipe(
       tap(() => {
         if (isPlatformBrowser(this.platformId)) {
           localStorage.removeItem('user');
@@ -82,7 +100,7 @@ export class AuthService {
   }
 
   changePassword(request: ChangePasswordRequest) : Observable<void> {
-    return this.http.put<void>(`auth/change-password`, request)
+    return this.http.put<void>(`${this.apiUrl}/change-password`, request)
   }
 
 
@@ -138,6 +156,6 @@ export class AuthService {
   }
 
   verifyEmail(token: string): Observable<void> {
-    return this.http.get<void>(`auth/verify-email?token=${token}`);
+    return this.http.get<void>(`${this.apiUrl}/verify-email?token=${token}`);
   }
 }

@@ -65,6 +65,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    // todo: collect all subscription into list, and foreach unsubscribe
     this.loadingSubscription?.unsubscribe();
     this.postsSubscription?.unsubscribe();
   }
@@ -113,6 +114,8 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         },
         error: (err) => {
           console.error('Error loading profile image:', err);
+          // todo: you are having this path predefined, and then you are overriding with same one
+          // find better approach for this
           this.profileImageUrl = '/default-profile-image.png';
         }
       });
@@ -149,7 +152,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
       next: () => {
         this.loadUser();
         this.loadIsFollowing(this.loggedUser.id, this.user.id);
-        console.log("Successfully unfollowed user");
+        console.log("Successfully unfollowed user"); // todo: remove this or switch to notification
       }
     })
   }

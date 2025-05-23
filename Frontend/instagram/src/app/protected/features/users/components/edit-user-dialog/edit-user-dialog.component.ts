@@ -48,6 +48,8 @@ export class EditUserDialogComponent implements OnInit{
   loadProfileImage() {
     if (this.user.profileImage) {
       this.imageService.getImage(this.user.profileImage.id).subscribe({
+        // todo: this logic is used before, if I remember correctly
+        // create method that we will be reused
         next: (blob: Blob) => {
           const reader = new FileReader();
           reader.onload = () => {

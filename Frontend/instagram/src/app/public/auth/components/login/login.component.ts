@@ -24,6 +24,7 @@ export class LoginComponent {
   }
 
   onSubmit() {
+    // todo: handle else case as well
     if (this.loginForm.valid) {
       const loginRequest: LoginRequest = {
         email: this.loginForm.value.email || "",

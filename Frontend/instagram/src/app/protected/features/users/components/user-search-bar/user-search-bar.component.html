@@ -13,6 +13,7 @@
     </button>
   </mat-form-field>
 
+<!--  todo: use this loader into separate component and reuse it wherever we need-->
   <div *ngIf="isLoading" class="loading">Loading...</div>
 
   <div id="results" *ngIf="searchTerm.length > 0" (mousedown)="isClickingResult = true">

@@ -22,6 +22,7 @@ export class AdminNavbarComponent {
     this.authService.logout().subscribe();
   }
 
+  // todo: think what you are going to do with this empty methods. :D
   openSettingsPage() {
     // this.router.navigate(['/settings', this.loggedUser.email]);
   }
