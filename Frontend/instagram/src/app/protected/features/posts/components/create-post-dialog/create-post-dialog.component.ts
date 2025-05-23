@@ -1,7 +1,7 @@
 import {Component, ElementRef, Inject, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {PostService} from "../../post.service";
-import {CreatePostRequest} from "../../models/create-post-request.model";
+import {CreatePostRequest} from "../../../../../core/models/create-post-request.model";
 import {ImageService} from "../../../../../core/services/image.service";
 import {ImageDetails} from "../../../../../shared/models/image-details.model";
 import {Post} from "../../models/post.model";

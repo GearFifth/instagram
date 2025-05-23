@@ -20,21 +20,6 @@
   max-height: 90vh;
 }
 
-/*.image-section{*/
-/*  display: flex;*/
-/*  flex-direction: column;*/
-/*  align-items: center;*/
-/*  justify-content: center;*/
-/*  margin-bottom: 1em;*/
-/*}*/
-
-/*.profile-picture{*/
-/*  width: 50px;*/
-/*  height: 50px;*/
-/*  border-radius: 50%;*/
-/*  object-fit: cover;*/
-/*}*/
-
 /*Profile-picture*/
 .profile-picture-wrapper {
   position: relative;
@@ -100,4 +85,9 @@
   border: 2px dashed #ccc;
   color: #999;
   font-size: 14px;
+}
+
+#yes-button{
+  color: white;
+  background-color: #5a0fad;
 }

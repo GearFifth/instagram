@@ -54,11 +54,13 @@ public class RecommendationService implements IRecommendationService {
 
         for (Follow follow : loggedUser.getFollowing()) {
             User followed = follow.getTo();
+            if (followed == null || followed.isDeleted()) continue;
 
             for (Follow innerFollow : followed.getFollowing()) {
                 User potential = innerFollow.getTo();
-                UUID potentialId = potential.getId();
+                if (potential == null || potential.isDeleted()) continue;
 
+                UUID potentialId = potential.getId();
                 if (!followingIds.contains(potentialId) && !potentialId.equals(loggedUser.getId())) {
                     recommendations.add(potential);
                 }

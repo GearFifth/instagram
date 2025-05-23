@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {CreatePostRequest} from "./models/create-post-request.model";
+import {CreatePostRequest} from "../../../core/models/create-post-request.model";
 import {Post} from "./models/post.model";
 import {Reaction} from "./models/reaction.model";
 
