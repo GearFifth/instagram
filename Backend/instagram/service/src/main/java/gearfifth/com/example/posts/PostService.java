@@ -94,12 +94,10 @@ public class PostService implements IPostService{
     @Override
     public Collection<PostResponse> getPostsForUserFeed(UUID userId, int pageNumber, int itemsPerPage) {
         Pageable pageable = PageRequest.of(pageNumber, itemsPerPage, Sort.by(Sort.Direction.DESC, "creationDate"));
-
+        User user = userService.findUserOrThrow(userId);
         Collection<User> followedUsers = followService.findUsersFollowedBy(userId);
 
-        if (followedUsers.isEmpty()) {
-            return Collections.emptyList();
-        }
+        followedUsers.add(user);
 
         return postRepository.findByAuthorIn(followedUsers, pageable)
                 .stream()

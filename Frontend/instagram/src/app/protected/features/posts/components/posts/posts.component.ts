@@ -1,4 +1,4 @@
-import {Component, ElementRef, inject, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, inject, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { AuthService } from '../../../../../core/services/auth.service';
 import {MatDialog} from "@angular/material/dialog";
 import {CreatePostDialogComponent} from "../create-post-dialog/create-post-dialog.component";
@@ -13,7 +13,7 @@ import {InfiniteScrollService} from "../../../../../core/services/infinite-scrol
   styleUrl: './posts.component.css',
   providers: [InfiniteScrollService<Post>]
 })
-export class PostsComponent implements OnInit, OnDestroy {
+export class PostsComponent implements OnInit, OnDestroy{
   readonly dialog = inject(MatDialog);
   posts: Post[] = [];
   @ViewChild('contentDiv') contentDiv!: ElementRef;
@@ -22,6 +22,9 @@ export class PostsComponent implements OnInit, OnDestroy {
   private loadingSubscription?: Subscription;
   private postsSubscription?: Subscription;
   itemsPerPage = 2;
+
+  @ViewChild('wrapperDiv') wrapperDiv!: ElementRef;
+  shouldCenter = false;
 
   constructor(
     private authService: AuthService,
@@ -37,13 +40,23 @@ export class PostsComponent implements OnInit, OnDestroy {
     }
     this.loggedUserId = loggedUserId;
     this.infiniteScroll.loadInitial((page, size) => this.postService.getPaginatedPostsForUserFeed(this.loggedUserId, page, size), this.itemsPerPage);
-    this.postsSubscription = this.infiniteScroll.items$.subscribe(posts => this.posts = posts);
+    this.postsSubscription = this.infiniteScroll.items$.subscribe(posts => {
+      this.posts = posts
+      setTimeout(() => this.checkIfShouldCenter());
+    });
     this.loadingSubscription = this.infiniteScroll.isLoading$.subscribe(isLoading => this.isLoading = isLoading);
   }
 
   ngOnDestroy() {
     this.loadingSubscription?.unsubscribe();
     this.postsSubscription?.unsubscribe();
+  }
+
+  checkIfShouldCenter(): void {
+    const wrapperHeight = this.wrapperDiv.nativeElement.scrollHeight;
+    const contentHeight = this.contentDiv.nativeElement.clientHeight;
+
+    this.shouldCenter = contentHeight < wrapperHeight;
   }
 
   onScroll = () => {
@@ -61,7 +74,7 @@ export class PostsComponent implements OnInit, OnDestroy {
       data: {
         loggedUserId: this.authService.getId()
       },
-      width: '90vw',
+      width: '50vw',
       maxWidth: '90vw',
       maxHeight: '90vh'
     });

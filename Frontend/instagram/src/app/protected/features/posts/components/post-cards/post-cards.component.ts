@@ -8,4 +8,5 @@ import {Post} from "../../models/post.model";
 })
 export class PostCardsComponent {
   @Input() posts: Post[] = [];
+  @Input() isLoading: boolean = false;
 }

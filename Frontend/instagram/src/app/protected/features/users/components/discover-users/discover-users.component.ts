@@ -1,4 +1,4 @@
-import {Component, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Subscription} from "rxjs";
 import {AuthService} from "../../../../../core/services/auth.service";
 import {InfiniteScrollService} from "../../../../../core/services/infinite-scroll.service";
@@ -19,11 +19,16 @@ export class DiscoverUsersComponent implements OnInit, OnDestroy {
   private usersSubscription?: Subscription;
   itemsPerPage = 5;
 
+  @ViewChild('wrapperDiv') wrapperDiv!: ElementRef;
+  @ViewChild('contentDiv') contentDiv!: ElementRef;
+  shouldCenter = false;
+
   constructor(
     private authService: AuthService,
     private recommendationService: RecommendationService,
     public infiniteScroll: InfiniteScrollService<User>) {
   }
+
 
   ngOnInit() {
     const loggedUserId = this.authService.getId();
@@ -33,13 +38,23 @@ export class DiscoverUsersComponent implements OnInit, OnDestroy {
     }
     this.loggedUserId = loggedUserId;
     this.infiniteScroll.loadInitial((page, size) => this.recommendationService.getPaginatedRecommendedUsers(page, size), this.itemsPerPage);
-    this.usersSubscription = this.infiniteScroll.items$.subscribe(users => this.users = users);
+    this.usersSubscription = this.infiniteScroll.items$.subscribe(users => {
+      this.users = users
+      setTimeout(() => this.checkIfShouldCenter());
+    });
     this.loadingSubscription = this.infiniteScroll.isLoading$.subscribe(isLoading => this.isLoading = isLoading);
   }
 
   ngOnDestroy() {
     this.loadingSubscription?.unsubscribe();
     this.usersSubscription?.unsubscribe();
+  }
+
+  checkIfShouldCenter(): void {
+    const wrapperHeight = this.wrapperDiv.nativeElement.scrollHeight;
+    const contentHeight = this.contentDiv.nativeElement.clientHeight;
+
+    this.shouldCenter = contentHeight < wrapperHeight;
   }
 
   onScroll = () => {

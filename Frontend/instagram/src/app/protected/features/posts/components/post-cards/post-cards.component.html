@@ -5,5 +5,5 @@
         }
     </div>
 } @else {
-    <h2 class="middle-center">No available posts.</h2>
+    <h2 *ngIf="!isLoading" class="middle-center">No posts available.</h2>
 }
