@@ -9,4 +9,5 @@ import {User} from "../../../models/user.model";
 })
 export class UserRecommendationCardsComponent {
   @Input() users: User[] = [];
+  @Input() isLoading: boolean = false;
 }

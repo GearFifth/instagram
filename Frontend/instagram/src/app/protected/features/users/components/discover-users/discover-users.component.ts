@@ -11,7 +11,7 @@ import {User} from "../../models/user.model";
   styleUrl: './discover-users.component.css',
   providers: [InfiniteScrollService<User>]
 })
-export class DiscoverUsersComponent implements OnInit, OnDestroy, AfterViewInit {
+export class DiscoverUsersComponent implements OnInit, OnDestroy {
   users: User[] = [];
   isLoading: boolean = false;
   loggedUserId: string = '';
@@ -20,7 +20,7 @@ export class DiscoverUsersComponent implements OnInit, OnDestroy, AfterViewInit 
   itemsPerPage = 5;
 
   @ViewChild('wrapperDiv') wrapperDiv!: ElementRef;
-  @ViewChild('windowBox') windowBox!: ElementRef;
+  @ViewChild('contentDiv') contentDiv!: ElementRef;
   shouldCenter = false;
 
   constructor(
@@ -29,9 +29,6 @@ export class DiscoverUsersComponent implements OnInit, OnDestroy, AfterViewInit 
     public infiniteScroll: InfiniteScrollService<User>) {
   }
 
-  ngAfterViewInit(): void {
-    setTimeout(() => this.checkIfShouldCenter());
-  }
 
   ngOnInit() {
     const loggedUserId = this.authService.getId();
@@ -41,7 +38,10 @@ export class DiscoverUsersComponent implements OnInit, OnDestroy, AfterViewInit 
     }
     this.loggedUserId = loggedUserId;
     this.infiniteScroll.loadInitial((page, size) => this.recommendationService.getPaginatedRecommendedUsers(page, size), this.itemsPerPage);
-    this.usersSubscription = this.infiniteScroll.items$.subscribe(users => this.users = users);
+    this.usersSubscription = this.infiniteScroll.items$.subscribe(users => {
+      this.users = users
+      setTimeout(() => this.checkIfShouldCenter());
+    });
     this.loadingSubscription = this.infiniteScroll.isLoading$.subscribe(isLoading => this.isLoading = isLoading);
   }
 
@@ -52,9 +52,9 @@ export class DiscoverUsersComponent implements OnInit, OnDestroy, AfterViewInit 
 
   checkIfShouldCenter(): void {
     const wrapperHeight = this.wrapperDiv.nativeElement.scrollHeight;
-    const containerHeight = this.windowBox.nativeElement.clientHeight;
+    const contentHeight = this.contentDiv.nativeElement.clientHeight;
 
-    this.shouldCenter = wrapperHeight <= containerHeight;
+    this.shouldCenter = contentHeight < wrapperHeight;
   }
 
   onScroll = () => {

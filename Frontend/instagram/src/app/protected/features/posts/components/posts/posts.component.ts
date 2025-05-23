@@ -13,7 +13,7 @@ import {InfiniteScrollService} from "../../../../../core/services/infinite-scrol
   styleUrl: './posts.component.css',
   providers: [InfiniteScrollService<Post>]
 })
-export class PostsComponent implements OnInit, OnDestroy, AfterViewInit{
+export class PostsComponent implements OnInit, OnDestroy{
   readonly dialog = inject(MatDialog);
   posts: Post[] = [];
   @ViewChild('contentDiv') contentDiv!: ElementRef;
@@ -24,17 +24,12 @@ export class PostsComponent implements OnInit, OnDestroy, AfterViewInit{
   itemsPerPage = 2;
 
   @ViewChild('wrapperDiv') wrapperDiv!: ElementRef;
-  @ViewChild('windowBox') windowBox!: ElementRef;
   shouldCenter = false;
 
   constructor(
     private authService: AuthService,
     private postService: PostService,
     public infiniteScroll: InfiniteScrollService<Post>) {
-  }
-
-  ngAfterViewInit(): void {
-    setTimeout(() => this.checkIfShouldCenter());
   }
 
   ngOnInit() {
@@ -45,7 +40,10 @@ export class PostsComponent implements OnInit, OnDestroy, AfterViewInit{
     }
     this.loggedUserId = loggedUserId;
     this.infiniteScroll.loadInitial((page, size) => this.postService.getPaginatedPostsForUserFeed(this.loggedUserId, page, size), this.itemsPerPage);
-    this.postsSubscription = this.infiniteScroll.items$.subscribe(posts => this.posts = posts);
+    this.postsSubscription = this.infiniteScroll.items$.subscribe(posts => {
+      this.posts = posts
+      setTimeout(() => this.checkIfShouldCenter());
+    });
     this.loadingSubscription = this.infiniteScroll.isLoading$.subscribe(isLoading => this.isLoading = isLoading);
   }
 
@@ -56,9 +54,9 @@ export class PostsComponent implements OnInit, OnDestroy, AfterViewInit{
 
   checkIfShouldCenter(): void {
     const wrapperHeight = this.wrapperDiv.nativeElement.scrollHeight;
-    const containerHeight = this.windowBox.nativeElement.clientHeight;
+    const contentHeight = this.contentDiv.nativeElement.clientHeight;
 
-    this.shouldCenter = wrapperHeight <= containerHeight;
+    this.shouldCenter = contentHeight < wrapperHeight;
   }
 
   onScroll = () => {

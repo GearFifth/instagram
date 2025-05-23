@@ -29,8 +29,6 @@ export class PostCardComponent implements OnInit {
 
   loggedUserId: string | undefined;
 
-  // @Output() postDeleted = new EventEmitter<Post>();
-
   constructor(
     private sanitizer: DomSanitizer,
     private imageService: ImageService,
