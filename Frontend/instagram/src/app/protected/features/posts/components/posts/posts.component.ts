@@ -76,7 +76,7 @@ export class PostsComponent implements OnInit, OnDestroy, AfterViewInit{
       data: {
         loggedUserId: this.authService.getId()
       },
-      width: '90vw',
+      width: '50vw',
       maxWidth: '90vw',
       maxHeight: '90vh'
     });
