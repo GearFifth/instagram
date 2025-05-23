@@ -1,4 +1,4 @@
-import {Component, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Subscription} from "rxjs";
 import {AuthService} from "../../../../../core/services/auth.service";
 import {InfiniteScrollService} from "../../../../../core/services/infinite-scroll.service";
@@ -11,7 +11,7 @@ import {User} from "../../models/user.model";
   styleUrl: './discover-users.component.css',
   providers: [InfiniteScrollService<User>]
 })
-export class DiscoverUsersComponent implements OnInit, OnDestroy {
+export class DiscoverUsersComponent implements OnInit, OnDestroy, AfterViewInit {
   users: User[] = [];
   isLoading: boolean = false;
   loggedUserId: string = '';
@@ -19,10 +19,18 @@ export class DiscoverUsersComponent implements OnInit, OnDestroy {
   private usersSubscription?: Subscription;
   itemsPerPage = 5;
 
+  @ViewChild('wrapperDiv') wrapperDiv!: ElementRef;
+  @ViewChild('windowBox') windowBox!: ElementRef;
+  shouldCenter = false;
+
   constructor(
     private authService: AuthService,
     private recommendationService: RecommendationService,
     public infiniteScroll: InfiniteScrollService<User>) {
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => this.checkIfShouldCenter());
   }
 
   ngOnInit() {
@@ -40,6 +48,13 @@ export class DiscoverUsersComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.loadingSubscription?.unsubscribe();
     this.usersSubscription?.unsubscribe();
+  }
+
+  checkIfShouldCenter(): void {
+    const wrapperHeight = this.wrapperDiv.nativeElement.scrollHeight;
+    const containerHeight = this.windowBox.nativeElement.clientHeight;
+
+    this.shouldCenter = wrapperHeight <= containerHeight;
   }
 
   onScroll = () => {

@@ -32,6 +32,7 @@ public class RecommendationService implements IRecommendationService {
         User loggedUser = userService.findUserOrThrow(loggedUserId);
 
         Set<UUID> followingIds = getFollowingIds(loggedUser);
+        if(followingIds.isEmpty()) return Collections.emptyList();
 
         List<User> recommendations = collectRecommendations(loggedUser, followingIds).stream().toList();
 
@@ -44,8 +45,11 @@ public class RecommendationService implements IRecommendationService {
 
 
     private Set<UUID> getFollowingIds(User user) {
+        if(user.getFollowing().isEmpty()) return Collections.emptySet();
         return user.getFollowing().stream()
-                .map(f -> f.getTo().getId())
+                .map(Follow::getTo)
+                .filter(Objects::nonNull)
+                .map(User::getId)
                 .collect(Collectors.toSet());
     }
 

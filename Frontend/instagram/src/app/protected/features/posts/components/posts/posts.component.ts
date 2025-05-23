@@ -1,4 +1,4 @@
-import {Component, ElementRef, inject, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, inject, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { AuthService } from '../../../../../core/services/auth.service';
 import {MatDialog} from "@angular/material/dialog";
 import {CreatePostDialogComponent} from "../create-post-dialog/create-post-dialog.component";
@@ -13,7 +13,7 @@ import {InfiniteScrollService} from "../../../../../core/services/infinite-scrol
   styleUrl: './posts.component.css',
   providers: [InfiniteScrollService<Post>]
 })
-export class PostsComponent implements OnInit, OnDestroy {
+export class PostsComponent implements OnInit, OnDestroy, AfterViewInit{
   readonly dialog = inject(MatDialog);
   posts: Post[] = [];
   @ViewChild('contentDiv') contentDiv!: ElementRef;
@@ -23,10 +23,18 @@ export class PostsComponent implements OnInit, OnDestroy {
   private postsSubscription?: Subscription;
   itemsPerPage = 2;
 
+  @ViewChild('wrapperDiv') wrapperDiv!: ElementRef;
+  @ViewChild('windowBox') windowBox!: ElementRef;
+  shouldCenter = false;
+
   constructor(
     private authService: AuthService,
     private postService: PostService,
     public infiniteScroll: InfiniteScrollService<Post>) {
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => this.checkIfShouldCenter());
   }
 
   ngOnInit() {
@@ -44,6 +52,13 @@ export class PostsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.loadingSubscription?.unsubscribe();
     this.postsSubscription?.unsubscribe();
+  }
+
+  checkIfShouldCenter(): void {
+    const wrapperHeight = this.wrapperDiv.nativeElement.scrollHeight;
+    const containerHeight = this.windowBox.nativeElement.clientHeight;
+
+    this.shouldCenter = wrapperHeight <= containerHeight;
   }
 
   onScroll = () => {

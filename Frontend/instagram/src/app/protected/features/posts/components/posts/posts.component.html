@@ -3,9 +3,10 @@
      [infiniteScrollDistance]="2"
      [infiniteScrollThrottle]="500"
      (scrolled)="onScroll()"
-     [scrollWindow]="false">
-  <div class="wrapper">
-      <div *ngIf="isLoading">Loading...</div>
+     [scrollWindow]="false"
+     #windowBox>
+  <div class="wrapper" #wrapperDiv [class.justify-center]="shouldCenter">
+      <div class="loading" *ngIf="isLoading">Loading...</div>
       <button mat-icon-button class="create-post-button" (click)="openCreatePostDialog()">
         <mat-icon>add</mat-icon>
       </button>

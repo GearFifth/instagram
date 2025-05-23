@@ -3,9 +3,10 @@
      [infiniteScrollDistance]="2"
      [infiniteScrollThrottle]="500"
      (scrolled)="onScroll()"
-     [scrollWindow]="false">
-  <div class="wrapper">
-    <div *ngIf="isLoading">Loading...</div>
+     [scrollWindow]="false"
+     #windowBox>
+  <div class="wrapper" #wrapperDiv [class.justify-center]="shouldCenter">
+    <div class="loading" *ngIf="isLoading">Loading...</div>
 
     <div
       class="user-recommendation-cards-list"
