@@ -1,0 +1,7 @@
+<mat-dialog-content >
+  <p>{{data.message}}</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-flat-button (click)="onCancel()">No</button>
+  <button mat-raised-button id="yes-button" (click)="onConfirm()">Yes</button>
+</mat-dialog-actions>

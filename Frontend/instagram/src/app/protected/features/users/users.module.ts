@@ -12,6 +12,7 @@ import { DiscoverUsersComponent } from './components/discover-users/discover-use
 import { UserRecommendationCardComponent } from './components/discover-users/user-recommendation-card/user-recommendation-card.component';
 import { UserRecommendationCardsComponent } from './components/discover-users/user-recommendation-cards/user-recommendation-cards.component';
 import { EditUserDialogComponent } from './components/edit-user-dialog/edit-user-dialog.component';
+import { UserSettingsComponent } from './components/user-settings/user-settings.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { EditUserDialogComponent } from './components/edit-user-dialog/edit-user
     DiscoverUsersComponent,
     UserRecommendationCardComponent,
     UserRecommendationCardsComponent,
-    EditUserDialogComponent
+    EditUserDialogComponent,
+    UserSettingsComponent
   ],
   exports: [
     UserSearchBarComponent

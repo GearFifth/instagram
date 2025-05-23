@@ -8,13 +8,17 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.util.*;
 
 @Entity
 @Data
 @Table(name = "posts")
-public class Post {
+@SQLDelete(sql = "UPDATE posts SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
+public class Post{
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -38,6 +42,11 @@ public class Post {
     @ManyToOne()
     @JoinColumn(name = "author_id", nullable = false)
     private User author;
+
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted = false;
+
+    private Date deletedAt;
 
     public void addComment(Comment comment) {
         comments.add(comment);

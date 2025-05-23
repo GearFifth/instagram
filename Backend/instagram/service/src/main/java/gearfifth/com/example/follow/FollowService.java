@@ -6,11 +6,13 @@ import gearfifth.com.example.models.users.Follow;
 import gearfifth.com.example.models.users.User;
 import gearfifth.com.example.repositories.users.IFollowRepository;
 import gearfifth.com.example.users.IUserService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -60,5 +62,16 @@ public class FollowService implements IFollowService {
     @Override
     public boolean isFollowing(FollowRequest request) {
         return followRepository.existsByFromIdAndToId(request.getFromUserId(), request.getToUserId());
+    }
+
+    @Transactional
+    @Override
+    public void remove(UUID followId) {
+        Follow follow = followRepository.findById(followId)
+                .orElseThrow(() -> new EntityNotFoundException("Follow not found with id " + followId));
+
+        follow.setDeleted(true);
+        follow.setDeletedAt(new Date());
+        followRepository.save(follow);
     }
 }

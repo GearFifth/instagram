@@ -56,6 +56,14 @@ export class AuthService {
     );
   }
 
+  cleanLocalStorage(){
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('user');
+      this.roleSubject.next(UserRole.UNAUTHORIZED);
+      this.router.navigate([ROUTE_PATHS.AUTH_LOGIN]);
+    }
+  }
+
   logout(): Observable<void> {
     return this.http.post<void>(`auth/logout`, {}).pipe(
       tap(() => {
@@ -71,6 +79,7 @@ export class AuthService {
       })
     );
   }
+
 
   private setRoleFromJwt(jwt: string): void {
     const helper = new JwtHelperService();

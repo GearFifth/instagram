@@ -74,7 +74,7 @@
 
 ::ng-deep .cdk-overlay-container .account-menu {
   margin-top: 1rem;
-  width: 15em;
+  min-width: 15em;
   background: #ffffff;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(227, 227, 227, 0.9);
@@ -87,6 +87,7 @@
   flex-direction: column;
   align-items: center;
   gap: 0.5em;
+  padding: 0 0.5em;
   justify-content: center;
 }
 
