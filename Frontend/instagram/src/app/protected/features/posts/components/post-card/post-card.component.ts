@@ -1,4 +1,4 @@
-import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {Post} from "../../models/post.model";
 import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
 import {UserService} from "../../../users/user.service";
@@ -22,8 +22,6 @@ export class PostCardComponent{
 
   defaultProfileImagePath: string = '/assets/default-profile-image.png';
   defaultPostImagePath: string = '/assets/default-post-image.png';
-  profileImageUrl: SafeUrl | string = this.defaultProfileImagePath;
-  postImageUrl: SafeUrl | string = this.defaultPostImagePath;
 
   areCommentsShowing: boolean = false;
   comments: CommentData[] = [];
@@ -31,7 +29,6 @@ export class PostCardComponent{
   loggedUserId: string | undefined;
 
   constructor(
-    private sanitizer: DomSanitizer,
     private imageService: ImageService,
     private authService: AuthService,
     private router: Router) {

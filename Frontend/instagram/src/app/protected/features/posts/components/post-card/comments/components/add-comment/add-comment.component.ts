@@ -8,6 +8,9 @@ import {User} from "../../../../../../users/models/user.model";
 import {Post} from "../../../../../models/post.model";
 import {CommentData} from "../../models/comment.model";
 import {ImageService} from "../../../../../../../../core/services/image.service";
+import {environment} from "../../../../../../../../../env/env";
+import {ROUTE_PATHS} from "../../../../../../../../core/constants/routes";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-add-comment',
@@ -21,7 +24,6 @@ export class AddCommentComponent implements OnInit, AfterViewInit {
   @Output() commentAdded = new EventEmitter<CommentData>();
 
   defaultProfileImagePath: string = '/assets/default-profile-image.png';
-  profileImageUrl: SafeUrl | string = this.defaultProfileImagePath;
 
   loggedUser: User = {} as User;
   public htmlTextArea!: HTMLElement;
@@ -30,12 +32,11 @@ export class AddCommentComponent implements OnInit, AfterViewInit {
               private sanitizer: DomSanitizer,
               private userService: UserService,
               private authService: AuthService,
-              private imageService: ImageService) {
+              private router: Router) {
   }
 
   ngOnInit() {
     this.loadLoggedUser();
-    this.loadProfileImage();
   }
 
   ngAfterViewInit() {
@@ -68,7 +69,6 @@ export class AddCommentComponent implements OnInit, AfterViewInit {
     this.userService.getById(userId).subscribe({
       next: (response: User) => {
         this.loggedUser = response;
-        this.loadProfileImage();
       },
       error: (err) => {
         console.error("Error loading loggedUser:", err);
@@ -76,25 +76,14 @@ export class AddCommentComponent implements OnInit, AfterViewInit {
     })
   }
 
-  loadProfileImage() {
-    if (this.loggedUser.profileImage) {
-      this.imageService.getImage(this.loggedUser.profileImage.id).subscribe({
-        next: (blob: Blob) => {
-          const objectURL = URL.createObjectURL(blob);
-          this.profileImageUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL);
-        },
-        error: (err) => {
-          console.error('Error loading profile image:', err);
-          this.profileImageUrl = '/default-profile-image.png';
-        }
-      });
-    } else {
-      this.profileImageUrl = '/default-profile-image.png';
-    }
-  }
-
 
   goToProfilePage() {
-    // this.router.navigate(['/profile', this.loggedUser.email]);
+    this.router.navigate([ROUTE_PATHS.USER_PROFILE, this.loggedUser.id] );
   }
+
+  setDefaultProfileImage(event: Event) {
+    (event.target as HTMLImageElement).src = this.defaultProfileImagePath;
+  }
+
+  protected readonly environment = environment;
 }

@@ -8,6 +8,7 @@ import {CommentService} from "../../comment.service";
 import {ImageService} from "../../../../../../../../core/services/image.service";
 import {ROUTE_PATHS} from "../../../../../../../../core/constants/routes";
 import {Router} from "@angular/router";
+import {environment} from "../../../../../../../../../env/env";
 
 @Component({
   selector: 'app-comment-card',
@@ -20,7 +21,6 @@ export class CommentCardComponent implements OnInit{
   @Input() level!: number;
 
   defaultProfileImagePath: string = '/assets/default-profile-image.png';
-  profileImageUrl: SafeUrl | string = this.defaultProfileImagePath;
   commentContent: SafeHtml | string = '';
 
   isReplyOpened: boolean = false;
@@ -38,24 +38,6 @@ export class CommentCardComponent implements OnInit{
 
   ngOnInit() {
     this.commentContent = this.sanitizer.bypassSecurityTrustHtml(this.comment.content);
-    this.loadProfileImage();
-  }
-
-  loadProfileImage() {
-    if (this.comment.author.profileImage) {
-      this.imageService.getImage(this.comment.author.profileImage.id).subscribe({
-        next: (blob: Blob) => {
-          const objectURL = URL.createObjectURL(blob);
-          this.profileImageUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL);
-        },
-        error: (err) => {
-          console.error('Error loading profile image:', err);
-          this.profileImageUrl = '/default-profile-image.png';
-        }
-      });
-    } else {
-      this.profileImageUrl = '/default-profile-image.png';
-    }
   }
 
   getCommentCreation(dateString: string): string {
@@ -115,4 +97,10 @@ export class CommentCardComponent implements OnInit{
       }
     })
   }
+
+  setDefaultProfileImage(event: Event) {
+    (event.target as HTMLImageElement).src = this.defaultProfileImagePath;
+  }
+
+  protected readonly environment = environment;
 }
