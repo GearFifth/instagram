@@ -8,6 +8,7 @@ import {ImageService} from "../../../../../core/services/image.service";
 import {UpdateUserRequest} from "../../models/update-user-request.model";
 import {environment} from "../../../../../../env/env";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {ImageCroppedEvent} from "ngx-image-cropper";
 
 @Component({
   selector: 'app-edit-user-dialog',
@@ -19,8 +20,9 @@ export class EditUserDialogComponent implements OnInit{
   user!: User;
   userForm: FormGroup;
   defaultProfileImagePath: string = '/assets/default-profile-image.png';
-  profileImageUrl: string | ArrayBuffer = this.defaultProfileImagePath;
-  profileImageFile: File | null = null;
+  profileImageUrl: string | null = this.defaultProfileImagePath;
+  profileImageFile: Blob | null = null;
+
   isLoading: boolean = false;
 
   constructor(
@@ -45,15 +47,9 @@ export class EditUserDialogComponent implements OnInit{
     }
   }
 
-
-  onImageSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files[0]) {
-      this.profileImageFile = input.files[0];
-      const reader = new FileReader();
-      reader.onload = e => this.profileImageUrl = reader.result as string;
-      reader.readAsDataURL(input.files[0]);
-    }
+  onImageSelected(event: ImageCroppedEvent): void {
+    this.profileImageFile = event.blob ?? null;
+    this.profileImageUrl = event.objectUrl ?? null;
   }
 
   removeImage(): void {

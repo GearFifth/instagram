@@ -2,9 +2,8 @@
   <p class="title">Create post</p>
 
   <div class="image-upload-container">
-    <img *ngIf="imagePreview" [src]="imagePreview" alt="Uploaded Image" class="image-preview">
-    <button mat-stroked-button color="primary" (click)="triggerFileInput()">Upload Image</button>
-    <input type="file" #fileInput hidden (change)="onImageSelected($event)">
+    <img [src]="imagePreview" alt="Uploaded Image" class="image-preview">
+    <app-image-uploader (imageCroppedEvent)="onImageSelected($event)"></app-image-uploader>
   </div>
 
   <mat-form-field appearance="outline" class="description-field">

@@ -14,6 +14,7 @@ import { UserRecommendationCardsComponent } from './components/discover-users/us
 import { EditUserDialogComponent } from './components/edit-user-dialog/edit-user-dialog.component';
 import { UserSettingsComponent } from './components/user-settings/user-settings.component';
 import { ChangePasswordDialogComponent } from './components/change-password-dialog/change-password-dialog.component';
+import {ImageCropperComponent} from "ngx-image-cropper";
 
 @NgModule({
   declarations: [
@@ -30,15 +31,15 @@ import { ChangePasswordDialogComponent } from './components/change-password-dial
   exports: [
     UserSearchBarComponent
   ],
-    imports: [
-        CommonModule,
-        SharedModule,
-        UsersRoutingModule,
-        InfiniteScrollDirective,
-        FormsModule,
-        PostsModule,
-        ReactiveFormsModule
-    ]
+  imports: [
+    CommonModule,
+    SharedModule,
+    UsersRoutingModule,
+    InfiniteScrollDirective,
+    FormsModule,
+    PostsModule,
+    ReactiveFormsModule
+  ]
 
 })
 export class UsersModule { }

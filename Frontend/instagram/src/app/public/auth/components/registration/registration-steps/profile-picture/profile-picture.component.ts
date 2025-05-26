@@ -1,4 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {ImageCroppedEvent} from "ngx-image-cropper";
 
 @Component({
   selector: 'app-profile-picture',
@@ -7,23 +8,14 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 })
 export class ProfilePictureComponent {
   @Input() profilePictureUrl: string | null = null;
-  @Input() profilePictureFile: File | null = null;
+  @Input() profilePictureFile: Blob | null = null;
 
   @Output() profilePictureUrlChange = new EventEmitter<string | null>();
-  @Output() profilePictureFileChange = new EventEmitter<File | null>();
+  @Output() profilePictureFileChange = new EventEmitter<Blob | null>();
 
-  onImageSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (!input.files?.length) return;
-
-    const file = input.files[0];
-    this.profilePictureFileChange.emit(file);
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.profilePictureUrlChange.emit(reader.result as string);
-    };
-    reader.readAsDataURL(file);
+  onImageSelected(event: ImageCroppedEvent) {
+    this.profilePictureUrlChange.emit(event.objectUrl);
+    this.profilePictureFileChange.emit(event.blob);
   }
 
   removeImage() {
