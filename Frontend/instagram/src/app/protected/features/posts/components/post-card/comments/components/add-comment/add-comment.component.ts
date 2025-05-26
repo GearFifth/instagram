@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {DomSanitizer, SafeUrl} from "@angular/platform-browser";
 import {CommentService} from "../../comment.service";
 import {UserService} from "../../../../../../users/user.service";
@@ -11,6 +11,7 @@ import {ImageService} from "../../../../../../../../core/services/image.service"
 import {environment} from "../../../../../../../../../env/env";
 import {ROUTE_PATHS} from "../../../../../../../../core/constants/routes";
 import {Router} from "@angular/router";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-add-comment',
@@ -18,6 +19,7 @@ import {Router} from "@angular/router";
   styleUrl: './add-comment.component.css'
 })
 export class AddCommentComponent implements OnInit, AfterViewInit {
+  private _snackBar = inject(MatSnackBar);
   @Input() parentId: string | undefined = undefined;
   @Input() post!: Post;
   content: string = '';
@@ -55,10 +57,10 @@ export class AddCommentComponent implements OnInit, AfterViewInit {
       next: (response: CommentData) => {
         this.commentAdded.emit(response);
         this.htmlTextArea.innerHTML = '';
-        console.log("Comment created successfully:", response);
+        this._snackBar.open("Comment created successfully", "OK");
       },
       error: (err) => {
-        console.error("Error loading loggedUser:", err);
+        this._snackBar.open("Failed to create a comment", "OK");
       }
     });
   }
@@ -69,9 +71,6 @@ export class AddCommentComponent implements OnInit, AfterViewInit {
     this.userService.getById(userId).subscribe({
       next: (response: User) => {
         this.loggedUser = response;
-      },
-      error: (err) => {
-        console.error("Error loading loggedUser:", err);
       }
     })
   }

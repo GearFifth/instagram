@@ -29,9 +29,6 @@ export class UserSettingsComponent implements OnInit{
     this.userService.getLoggedUser().subscribe({
       next: (user: User) => {
         this.user = user;
-      },
-      error: (error) => {
-        console.log(error);
       }
     });
   }

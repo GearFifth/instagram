@@ -21,7 +21,6 @@ export class UserCardComponent {
   }
 
   goToProfilePage() {
-    console.log("goToProfilePage");
     this.router.navigate([ROUTE_PATHS.USER_PROFILE, this.user.id]);
     this.onUserCardClicked.emit();
   }

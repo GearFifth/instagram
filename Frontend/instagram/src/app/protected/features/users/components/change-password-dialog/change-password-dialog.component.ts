@@ -51,11 +51,9 @@ export class ChangePasswordDialogComponent {
     this.authService.changePassword(request).subscribe({
       next: () => {
         this.dialogRef.close(true);
-        console.log("Change successful");
         this.isLoading = false;
       },
-      error: (err) => {
-        console.error('Change failed:', err);
+      error: () => {
         this.isLoading = false;
       },
     });
