@@ -1,14 +1,16 @@
 <div id="navbar">
   <img class="logo" src="/assets/instagram-logo.png" alt=" ">
   <div id="nav">
-    <div class="nav-option" routerLink="/{{ROUTE_PATHS.POSTS_ROOT}}" routerLinkActive="selected" (click)="goToPostsPage()">
+    <div class="nav-option" routerLink="{{ROUTE_PATHS.POSTS}}" routerLinkActive="selected" (click)="goToPostsPage()">
       Posts
     </div>
+    <div class="nav-option" routerLink="{{ROUTE_PATHS.DISCOVER_PEOPLE}}" routerLinkActive="selected" (click)="goToDiscoverPeoplePage()">
+      Discover people
+    </div>
   </div>
-  <!--  <span class="title">Instagram</span>-->
   <div class="push"></div>
   <div id="right-section">
-
+    <app-user-search-bar></app-user-search-bar>
     <button mat-icon-button id="account-icon-box" [matMenuTriggerFor]="menu">
       <mat-icon class="account-icon">account_circle</mat-icon>
     </button>
@@ -18,10 +20,10 @@
         <span class="email-info">{{loggedUser.email}}</span>
       </div>
       <hr class="menu-line">
-      <span class="menu-option" (click)="goToProfilePage()"><mat-icon class="menu-icon">person</mat-icon>Profile</span>
-      <span class="menu-option" (click)="openSettingsPage()"><mat-icon class="menu-icon">settings</mat-icon>Settings</span>
+      <a class="menu-option" (click)="goToProfilePage()"><mat-icon class="menu-icon">person</mat-icon>Profile</a>
+      <a class="menu-option" (click)="openSettingsPage()"><mat-icon class="menu-icon">settings</mat-icon>Settings</a>
       <hr class="menu-line">
-      <span class="menu-option" (click)="logout()"><mat-icon class="menu-icon">logout</mat-icon>Logout</span>
+      <a class="menu-option" (click)="logout()"><mat-icon class="menu-icon">logout</mat-icon>Logout</a>
     </mat-menu>
   </div>
 </div>

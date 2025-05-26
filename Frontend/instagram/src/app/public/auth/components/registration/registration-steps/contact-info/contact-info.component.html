@@ -1,0 +1,25 @@
+<form [formGroup]="form">
+  <mat-form-field appearance="outline">
+    <mat-label>Address</mat-label>
+    <input matInput placeholder="Street, City, Country" formControlName="address" type="text" required>
+    <mat-error *ngIf="form.get('address')?.hasError('required') && form.get('address')?.touched">
+      Address is required
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Phone number</mat-label>
+    <input matInput placeholder="+123456789" formControlName="phone" required>
+    <mat-error *ngIf="form.get('phone')?.hasError('required') && form.get('phone')?.touched">
+      Phone is required
+    </mat-error>
+    <mat-error *ngIf="form.get('phone')?.hasError('pattern')">
+      Please enter a valid phone number (e.g., +123456789).
+    </mat-error>
+  </mat-form-field>
+
+  <div>
+    <button mat-raised-button color="primary" [disabled]="form.invalid" (click)="next()">Next</button>
+    <button mat-button (click)="back()">Back</button>
+  </div>
+</form>

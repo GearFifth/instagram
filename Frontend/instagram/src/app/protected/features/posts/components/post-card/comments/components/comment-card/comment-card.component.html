@@ -1,6 +1,10 @@
 @if (comment){
   <div class="comment-card">
-    <img class="profile-picture" [src]="profileImageUrl"  alt="Profile Picture" (click)="goToProfilePage()">
+    <img
+      class="profile-picture"
+      [src]="environment.server + comment.author.profileImage.path"
+      alt="Profile Picture"
+      (click)="goToProfilePage()">
     <div class="right-section">
       <div class="top-section">
         <span (click)="goToProfilePage()" class="clickable">{{comment.author.firstName}} {{comment.author.lastName}}</span>

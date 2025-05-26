@@ -15,8 +15,7 @@ export class DiscoverUsersComponent implements OnInit, OnDestroy {
   users: User[] = [];
   isLoading: boolean = false;
   loggedUserId: string = '';
-  private loadingSubscription?: Subscription;
-  private usersSubscription?: Subscription;
+  private subscriptions: Subscription[] = [];
   itemsPerPage = 5;
 
   @ViewChild('wrapperDiv') wrapperDiv!: ElementRef;
@@ -38,16 +37,19 @@ export class DiscoverUsersComponent implements OnInit, OnDestroy {
     }
     this.loggedUserId = loggedUserId;
     this.infiniteScroll.loadInitial((page, size) => this.recommendationService.getPaginatedRecommendedUsers(page, size), this.itemsPerPage);
-    this.usersSubscription = this.infiniteScroll.items$.subscribe(users => {
-      this.users = users
-      setTimeout(() => this.checkIfShouldCenter());
-    });
-    this.loadingSubscription = this.infiniteScroll.isLoading$.subscribe(isLoading => this.isLoading = isLoading);
+
+    this.subscriptions.push(
+      this.infiniteScroll.items$.subscribe(users => {
+        this.users = users
+        setTimeout(() => this.checkIfShouldCenter());
+      }),
+      this.infiniteScroll.isLoading$.subscribe(isLoading => this.isLoading = isLoading)
+    );
+
   }
 
   ngOnDestroy() {
-    this.loadingSubscription?.unsubscribe();
-    this.usersSubscription?.unsubscribe();
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   checkIfShouldCenter(): void {

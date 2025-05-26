@@ -19,12 +19,8 @@ export class PostsComponent implements OnInit, OnDestroy{
   @ViewChild('contentDiv') contentDiv!: ElementRef;
   isLoading: boolean = false;
   loggedUserId: string = '';
-  private loadingSubscription?: Subscription;
-  private postsSubscription?: Subscription;
+  private subscriptions: Subscription[] = [];
   itemsPerPage = 2;
-
-  @ViewChild('wrapperDiv') wrapperDiv!: ElementRef;
-  shouldCenter = false;
 
   constructor(
     private authService: AuthService,
@@ -40,23 +36,17 @@ export class PostsComponent implements OnInit, OnDestroy{
     }
     this.loggedUserId = loggedUserId;
     this.infiniteScroll.loadInitial((page, size) => this.postService.getPaginatedPostsForUserFeed(this.loggedUserId, page, size), this.itemsPerPage);
-    this.postsSubscription = this.infiniteScroll.items$.subscribe(posts => {
-      this.posts = posts
-      setTimeout(() => this.checkIfShouldCenter());
-    });
-    this.loadingSubscription = this.infiniteScroll.isLoading$.subscribe(isLoading => this.isLoading = isLoading);
+
+    this.subscriptions.push(
+      this.infiniteScroll.items$.subscribe(posts => {
+        this.posts = posts
+      }),
+       this.infiniteScroll.isLoading$.subscribe(isLoading => this.isLoading = isLoading)
+    );
   }
 
   ngOnDestroy() {
-    this.loadingSubscription?.unsubscribe();
-    this.postsSubscription?.unsubscribe();
-  }
-
-  checkIfShouldCenter(): void {
-    const wrapperHeight = this.wrapperDiv.nativeElement.scrollHeight;
-    const contentHeight = this.contentDiv.nativeElement.clientHeight;
-
-    this.shouldCenter = contentHeight < wrapperHeight;
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   onScroll = () => {

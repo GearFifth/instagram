@@ -39,7 +39,7 @@ public class WebSecurityConfig {
         return http.csrf(AbstractHttpConfigurer::disable).
                 cors(Customizer.withDefaults())
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/v1/auth/register", "/api/v1/auth/login", "/api/v1/users/check-email", "/api/v1/auth/verify-email", "/api/v1/images/upload").permitAll()
+                        .requestMatchers("/api/v1/auth/register", "/api/v1/auth/login", "/api/v1/users/check-email", "/api/v1/auth/verify-email", "/images/**").permitAll()
                         .anyRequest().authenticated()).
                 httpBasic(Customizer.withDefaults()).
                 sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

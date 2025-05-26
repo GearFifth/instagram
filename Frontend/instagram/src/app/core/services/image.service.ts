@@ -7,17 +7,19 @@ import {ImageDetails} from "../../shared/models/image-details.model";
   providedIn: 'root'
 })
 export class ImageService {
+  private readonly apiUrl = 'images';
+
   constructor(private http: HttpClient) {}
 
   uploadImage(file: File, relativePath?: string): Observable<ImageDetails> {
     const formData = new FormData();
     formData.append('file', file);
     if(relativePath) formData.append('relativePath', relativePath);
-    return this.http.post<ImageDetails>("images/upload", formData);
+    return this.http.post<ImageDetails>(`${this.apiUrl}/upload`, formData);
   }
 
   getImage(id: string): Observable<Blob> {
-    return this.http.get(`images/${id}`, {
+    return this.http.get(`${this.apiUrl}/${id}`, {
       responseType: 'blob'
     });
   }

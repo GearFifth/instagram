@@ -14,5 +14,5 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button (click)="onCancelClick()">Cancel</button>
-  <button mat-raised-button id="yes-button" (click)="onCreateClick()">Create</button>
+  <button mat-raised-button id="yes-button" (click)="onCreateClick()" [disabled]="!selectedImage">Create</button>
 </mat-dialog-actions>

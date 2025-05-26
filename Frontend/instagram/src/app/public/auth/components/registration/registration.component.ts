@@ -1,12 +1,13 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Component, inject, OnInit} from '@angular/core';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {MatStepper} from "@angular/material/stepper";
 import {confirmPasswordValidator} from "../../../../shared/validators/confirm-password.validator";
 import {AuthService} from "../../../../core/services/auth.service";
 import {RegisterRequest} from "../../../../core/models/register-request.model";
 import {UserService} from "../../../../protected/features/users/user.service";
-import {ImageService} from "../../../../core/services/image.service";
-import {ImageDetails} from "../../../../shared/models/image-details.model";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {ROUTE_PATHS} from "../../../../core/constants/routes";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-registration',
@@ -14,22 +15,21 @@ import {ImageDetails} from "../../../../shared/models/image-details.model";
   styleUrl: './registration.component.css'
 })
 export class RegistrationComponent implements OnInit{
-  hidePassword: boolean = true;
-  hideConfirmPassword: boolean = true;
+  private _snackBar = inject(MatSnackBar);
   isEditable: boolean = true;
 
   registerPersonalForm!: FormGroup;
   registerContactForm!: FormGroup;
   registerPasswordForm!: FormGroup;
 
-  profilePictureUrl: string | ArrayBuffer | null = null;
   profilePictureFile: File | null = null;
+  profilePictureUrl: string | null = null;
 
   constructor(
     private authService: AuthService,
     private formBuilder: FormBuilder,
     private userService: UserService,
-    private imageService: ImageService) {}
+    private router: Router) {}
 
   ngOnInit() {
     this.registerPersonalForm = this.formBuilder.group({
@@ -58,55 +58,38 @@ export class RegistrationComponent implements OnInit{
     if (this.registerPersonalForm.invalid || this.registerContactForm.invalid || this.registerPasswordForm.invalid) {
       return;
     }
-    console.log(this.registerPersonalForm)
-    console.log(this.registerContactForm)
-    console.log(this.registerPasswordForm)
 
-    // this.isEditable = false;
+    const request: RegisterRequest = {
+      email: this.registerPersonalForm.value.email,
+      password: this.registerPasswordForm.value.password,
+      firstName: this.registerPersonalForm.value.firstName,
+      lastName: this.registerPersonalForm.value.lastName,
+      address: this.registerContactForm.value.address,
+      phoneNumber: this.registerContactForm.value.phone,
+      profileImage: this.profilePictureFile
+    };
 
-    if (this.profilePictureFile) {
-      this.imageService.uploadImage(this.profilePictureFile, "users").subscribe({
-        next: (image: ImageDetails) => {
-
-          const request: RegisterRequest = {
-            email: this.registerPersonalForm.value.email,
-            password: this.registerPasswordForm.value.password,
-            firstName: this.registerPersonalForm.value.firstName,
-            lastName: this.registerPersonalForm.value.lastName,
-            address: this.registerContactForm.value.address,
-            phoneNumber: this.registerContactForm.value.phone,
-            profileImageId: image.id
-          };
-
-          this.authService.register(request).subscribe({
-            next: () => {
-              console.log("Registration successful");
-            },
-            error: (err) => {
-              console.error('Registration failed:', err);
-            },
-          });
-        },
-        error: (err) => {
-          console.error('Error uploading image', err);
-        },
-      });
-    }
+    this.authService.register(request).subscribe({
+      next: () => {
+        this._snackBar.open("Registration successful", "OK")
+      },
+      error: () => {
+        this._snackBar.open("Registration failed", "OK")
+      },
+    });
   }
 
   checkEmailUniqueness(stepper: MatStepper) {
-    const email = this.registerPersonalForm.get('email')?.value;
+    const emailControl : AbstractControl | null = this.registerPersonalForm.get('email')
+    const email = emailControl?.value;
     if (email) {
       this.userService.checkEmailUniqueness(email).subscribe({
         next: (isUnique) => {
           if (!isUnique) {
-            this.registerContactForm.get('email')?.setErrors({ nonUnique: true });
+            emailControl?.setErrors({ nonUnique: true });
           }
           stepper.next();
-        },
-        error: (err) => {
-          console.error('Error checking email uniqueness:', err);
-        },
+        }
       });
     }
   }
@@ -116,20 +99,8 @@ export class RegistrationComponent implements OnInit{
     stepper.previous();
   }
 
-  onImageSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files[0]) {
-      this.profilePictureFile = input.files[0];
-      console.log(this.profilePictureFile);
-      const reader = new FileReader();
-      reader.onload = e => this.profilePictureUrl = reader.result;
-      reader.readAsDataURL(input.files[0]);
-    }
-  }
-
-  removeImage(): void {
-    this.profilePictureUrl = null;
-    this.profilePictureFile = null;
+  goToLogin(){
+    this.router.navigate([ROUTE_PATHS.AUTH_LOGIN]);
   }
 
 }

@@ -1,6 +1,7 @@
 package gearfifth.com.example.controllers;
 
 import gearfifth.com.example.dtos.auth.*;
+import gearfifth.com.example.dtos.images.ImageDetailsResponse;
 import gearfifth.com.example.dtos.users.responses.UserProfileResponse;
 import gearfifth.com.example.auth.IAuthService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -8,8 +9,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RestController
@@ -17,10 +20,12 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     private final IAuthService service;
 
+    @PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<UserProfileResponse> register(
+            @Valid @RequestPart("user") UserCreateRequest request,
+            @RequestPart(value = "profileImage", required = false) MultipartFile profileImage) {
 
-    @PostMapping("/register")
-    public ResponseEntity<UserProfileResponse> register(@Valid @RequestBody UserCreateRequest request) {
-        return new ResponseEntity<>(service.register(request), HttpStatus.CREATED);
+        return new ResponseEntity<>(service.register(request, profileImage), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")

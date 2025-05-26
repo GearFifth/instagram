@@ -1,7 +1,7 @@
 @if (post && post.author){
   <div class="post-card">
     <div class="top-section">
-      <img class="profile-image" [src]="profileImageUrl"  alt="Profile image" (click)="goToProfilePage()">
+      <img class="profile-image" [src]="environment.server + post.author.profileImage.path" alt="Profile image" (click)="goToProfilePage()" (error)="setDefaultProfileImage($event)">
       <div class="info-section">
         <span class="clickable" (click)="goToProfilePage()">{{post.author.firstName}} {{post.author.lastName}}</span>
         <span class="date-info">{{getPostCreation(post.creationDate)}}</span>
@@ -19,7 +19,7 @@
     </div>
 
     <div>
-      <img class="post-image" [src]="postImageUrl"  alt="Post image">
+      <img class="post-image" [src]="environment.server + post.image?.path"  alt="Post image" (error)="setDefaultPostImage($event)">
     </div>
 
     <p>{{post.description}}</p>

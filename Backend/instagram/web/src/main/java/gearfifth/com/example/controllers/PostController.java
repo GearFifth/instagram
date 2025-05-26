@@ -3,12 +3,17 @@ package gearfifth.com.example.controllers;
 import gearfifth.com.example.dtos.posts.CreatePostRequest;
 import gearfifth.com.example.dtos.posts.PostResponse;
 import gearfifth.com.example.dtos.posts.UpdatePostRequest;
+import gearfifth.com.example.dtos.users.requests.UserUpdateRequest;
+import gearfifth.com.example.dtos.users.responses.UserProfileResponse;
 import gearfifth.com.example.models.posts.Reaction;
 import gearfifth.com.example.posts.IPostService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -29,9 +34,13 @@ public class PostController {
         return new ResponseEntity<>(service.get(postId), HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<PostResponse> create(@RequestBody CreatePostRequest request) {
-        return new ResponseEntity<>(service.create(request), HttpStatus.CREATED);
+
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<PostResponse> create(
+            @Valid @RequestPart("post") CreatePostRequest request,
+            @RequestPart(value = "image", required = false) MultipartFile image) {
+
+        return new ResponseEntity<>(service.create(request, image), HttpStatus.CREATED);
     }
 
     @PutMapping

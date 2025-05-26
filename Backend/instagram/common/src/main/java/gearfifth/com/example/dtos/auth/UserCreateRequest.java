@@ -31,7 +31,4 @@ public class UserCreateRequest {
             message = "Invalid phone number format. It must be 7 to 15 digits long and can optionally start with a '+' sign."
     )
     private String phoneNumber;
-
-    @NotNull
-    private UUID profileImageId;
 }

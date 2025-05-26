@@ -17,7 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 public interface IPostService {
     Collection<PostResponse> getAll();
     PostResponse get(UUID postId);
-    PostResponse create(CreatePostRequest request);
+    PostResponse create(CreatePostRequest request, MultipartFile image);
     PostResponse update(UpdatePostRequest request);
     void remove(UUID postId);
     void addReaction(UUID postId, Reaction reaction);

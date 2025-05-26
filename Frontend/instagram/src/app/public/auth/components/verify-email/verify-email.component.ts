@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {AuthService} from "../../../../core/services/auth.service";
 import {ROUTE_PATHS} from "../../../../core/constants/routes";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-verify-email',
@@ -10,6 +11,8 @@ import {ROUTE_PATHS} from "../../../../core/constants/routes";
   styleUrl: './verify-email.component.css'
 })
 export class VerifyEmailComponent implements OnInit{
+  private _snackBar = inject(MatSnackBar);
+
   constructor(private route: ActivatedRoute, private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
@@ -18,7 +21,7 @@ export class VerifyEmailComponent implements OnInit{
 
     this.authService.verifyEmail(token).subscribe({
       next: () => {
-        console.log('User activated successfully');
+        this._snackBar.open("User activated successfully", "OK")
         setTimeout(() => {
           this.router.navigate([ROUTE_PATHS.AUTH_LOGIN]);
         }, 5000);

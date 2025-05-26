@@ -1,0 +1,35 @@
+<form [formGroup]="form">
+  <mat-form-field appearance="outline">
+    <mat-label>Email</mat-label>
+    <input matInput formControlName="email" required>
+    <mat-error *ngIf="form.get('email')?.hasError('required') && form.get('email')?.touched">
+      Email is required
+    </mat-error>
+    <mat-error *ngIf="form.get('email')?.hasError('email') && form.get('email')?.touched">
+      Please enter a valid email
+    </mat-error>
+    <mat-error *ngIf="form.get('email')?.errors?.['nonUnique']">
+      Email already exists
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>First Name</mat-label>
+    <input matInput formControlName="firstName" type="text" required>
+    <mat-error *ngIf="form.get('firstName')?.hasError('required') && form.get('firstName')?.touched">
+      First name is required
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Last Name</mat-label>
+    <input matInput formControlName="lastName" type="text" required>
+    <mat-error *ngIf="form.get('lastName')?.hasError('required') && form.get('lastName')?.touched">
+      Last name is required
+    </mat-error>
+  </mat-form-field>
+
+  <div>
+    <button mat-raised-button color="primary" (click)="emitCheckEmail()" [disabled]="form.invalid">Next</button>
+  </div>
+</form>

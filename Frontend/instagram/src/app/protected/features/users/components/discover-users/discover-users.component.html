@@ -5,7 +5,7 @@
      (scrolled)="onScroll()"
      [scrollWindow]="false">
   <div class="wrapper" #wrapperDiv [class.justify-center]="shouldCenter">
-    <div class="loading" *ngIf="isLoading">Loading...</div>
+    <app-loader *ngIf="isLoading"></app-loader>
 
     <div
       class="user-recommendation-cards-list"

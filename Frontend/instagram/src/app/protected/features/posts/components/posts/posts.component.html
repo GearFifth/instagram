@@ -5,17 +5,17 @@
      (scrolled)="onScroll()"
      [scrollWindow]="false"
      >
-  <div class="wrapper" #wrapperDiv [class.justify-center]="shouldCenter">
-      <div class="loading" *ngIf="isLoading">Loading...</div>
-      <button mat-icon-button class="create-post-button" (click)="openCreatePostDialog()">
-        <mat-icon>add</mat-icon>
-      </button>
+  <div class="wrapper">
+    <app-loader *ngIf="isLoading"></app-loader>
+    <button mat-icon-button class="create-post-button" (click)="openCreatePostDialog()">
+      <mat-icon>add</mat-icon>
+    </button>
 
-      <div
-        class="post-cards-list"
-        id="content" #contentDiv>
+    <div
+      class="post-cards-list"
+      id="content" #contentDiv>
 
-        <app-post-cards [posts]="posts" [isLoading]="isLoading"></app-post-cards>
-      </div>
+      <app-post-cards [posts]="posts" [isLoading]="isLoading"></app-post-cards>
+    </div>
   </div>
 </div>

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {CommentService} from "../../comment.service";
 import {CommentData} from "../../models/comment.model";
 import {Post} from "../../../../../models/post.model";
@@ -9,7 +9,7 @@ import {User} from "../../../../../../users/models/user.model";
   templateUrl: './comments.component.html',
   styleUrl: './comments.component.css'
 })
-export class CommentsComponent {
+export class CommentsComponent implements OnInit{
   @Input() post!: Post;
   @Input() loggedUser!: User;
   comments: CommentData[] = [] as CommentData[];

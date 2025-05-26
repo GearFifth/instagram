@@ -34,15 +34,29 @@ export class ReactionsComponent implements OnInit {
     });
   }
 
+  // getReactionIcon(reactionType: ReactionType): string {
+  //   const icons = {
+  //     [ReactionType.Like]: 'thumb_up',
+  //     [ReactionType.Dislike]: 'thumb_down',
+  //     [ReactionType.Love]: 'favorite',
+  //     [ReactionType.Laugh]: 'sentiment_very_satisfied',
+  //     [ReactionType.Wow]: 'emoji_objects',
+  //     [ReactionType.Angry]: 'sentiment_dissatisfied',
+  //     [ReactionType.Sad]: 'sentiment_very_dissatisfied',
+  //   };
+  //
+  //   return icons[reactionType];
+  // }
+
   getReactionIcon(reactionType: ReactionType): string {
     const icons = {
-      [ReactionType.Like]: 'thumb_up',
-      [ReactionType.Dislike]: 'thumb_down',
-      [ReactionType.Love]: 'favorite',
-      [ReactionType.Laugh]: 'sentiment_very_satisfied',
-      [ReactionType.Wow]: 'emoji_objects',
-      [ReactionType.Angry]: 'sentiment_dissatisfied',
-      [ReactionType.Sad]: 'sentiment_very_dissatisfied',
+      [ReactionType.Like]: '👍',
+      [ReactionType.Dislike]: '👎',
+      [ReactionType.Love]: '❤️',
+      [ReactionType.Laugh]: '😂',
+      [ReactionType.Wow]: '😮',
+      [ReactionType.Angry]: '😠',
+      [ReactionType.Sad]: '😢',
     };
 
     return icons[reactionType];
@@ -55,11 +69,7 @@ export class ReactionsComponent implements OnInit {
       type: reactionType
     };
 
-    if (this.currentUserReaction === reactionType) {
-      this.removeReaction(reaction);
-    } else {
-      this.addReaction(reaction);
-    }
+    this.currentUserReaction === reactionType ? this.removeReaction(reaction) : this.addReaction(reaction);
   }
 
   addReaction(reaction: Reaction) {

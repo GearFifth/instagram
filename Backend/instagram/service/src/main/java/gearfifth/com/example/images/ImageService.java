@@ -24,12 +24,11 @@ import java.util.UUID;
 public class ImageService implements IImageService {
     private final IImageRepository imageRepository;
     private final IFileService fileService;
-    private final ModelMapper mapper;
     private final String UPLOAD_DIR = "images";
 
     @Override
     @Transactional
-    public ImageDetailsResponse uploadImage(MultipartFile file, String relativePath) {
+    public Image uploadImage(MultipartFile file, String relativePath) {
         String originalFileName = file.getOriginalFilename();
         String type = originalFileName.substring(originalFileName.lastIndexOf('.') + 1);
         UUID generatedId = UUID.randomUUID();
@@ -42,7 +41,7 @@ public class ImageService implements IImageService {
         image.setPath(path);
         image.setOriginalName(originalFileName);
 
-        return mapper.map(imageRepository.save(image), ImageDetailsResponse.class);
+        return imageRepository.save(image);
     }
 
     @Override

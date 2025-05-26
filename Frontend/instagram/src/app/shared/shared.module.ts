@@ -1,15 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {MaterialModule} from "./material/material.module";
-import {NotificationComponent} from "./components/notification/notification.component";
 import {RouterLink, RouterLinkActive} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
+import { LoaderComponent } from './components/loader/loader.component';
 
 @NgModule({
   declarations: [
-    NotificationComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    NotFoundComponent,
+    LoaderComponent
   ],
   imports: [
     CommonModule,
@@ -20,7 +22,7 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
   ],
   exports: [
     MaterialModule,
-    NotificationComponent
+    LoaderComponent,
   ]
 })
 export class SharedModule { }

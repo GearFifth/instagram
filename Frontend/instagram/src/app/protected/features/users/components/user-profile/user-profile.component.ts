@@ -13,6 +13,8 @@ import {Subscription} from "rxjs";
 import {InfiniteScrollService} from "../../../../../core/services/infinite-scroll.service";
 import {PostService} from "../../../posts/post.service";
 import {EditUserDialogComponent} from "../edit-user-dialog/edit-user-dialog.component";
+import {environment} from "../../../../../../env/env";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-user-profile',
@@ -21,11 +23,11 @@ import {EditUserDialogComponent} from "../edit-user-dialog/edit-user-dialog.comp
   providers: [InfiniteScrollService<Post>]
 })
 export class UserProfileComponent implements OnInit, OnDestroy {
+  private _snackBar = inject(MatSnackBar);
   user!: User;
   loggedUser!: User;
   userId!: string;
   defaultProfileImagePath: string = '/assets/default-profile-image.png';
-  profileImageUrl: SafeUrl | string = this.defaultProfileImagePath;
   profileBackgroundImageUrl: string = "/assets/profile-background-v3.jpg";
   isFollowing: boolean = false;
 
@@ -35,8 +37,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   posts: Post[] = [];
   @ViewChild('contentDiv') contentDiv!: ElementRef;
   isLoading: boolean = false;
-  private loadingSubscription?: Subscription;
-  private postsSubscription?: Subscription;
+  private subscriptions: Subscription[] = [];
   itemsPerPage = 2;
 
   constructor(
@@ -58,24 +59,23 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         this.getLoggedUser();
 
         this.infiniteScroll.loadInitial((page, size) => this.postService.getPaginatedPostsForUserProfile(this.userId, page, size), this.itemsPerPage);
-        this.postsSubscription = this.infiniteScroll.items$.subscribe(posts => this.posts = posts);
-        this.loadingSubscription = this.infiniteScroll.isLoading$.subscribe(isLoading => this.isLoading = isLoading);
+        this.subscriptions.push(
+          this.infiniteScroll.items$.subscribe(posts => this.posts = posts),
+          this.infiniteScroll.isLoading$.subscribe(isLoading => this.isLoading = isLoading)
+        );
       }
     });
   }
 
   ngOnDestroy() {
-    this.loadingSubscription?.unsubscribe();
-    this.postsSubscription?.unsubscribe();
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
-
 
   loadUser(){
     if(this.userId)
     this.userService.getById(this.userId).subscribe({
       next: (user: User) => {
         this.user = user;
-        this.loadProfileImage();
       }
     });
   }
@@ -85,9 +85,6 @@ export class UserProfileComponent implements OnInit, OnDestroy {
       next: (user: User) => {
         this.loggedUser = user;
         this.loadIsFollowing(this.loggedUser.id, this.userId!);
-      },
-      error: (error) => {
-        console.log(error);
       }
     });
   }
@@ -104,23 +101,6 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     })
   }
 
-  loadProfileImage() {
-    if (this.user.profileImage) {
-      this.imageService.getImage(this.user.profileImage.id).subscribe({
-        next: (blob: Blob) => {
-          const objectURL = URL.createObjectURL(blob);
-          this.profileImageUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL);
-        },
-        error: (err) => {
-          console.error('Error loading profile image:', err);
-          this.profileImageUrl = '/default-profile-image.png';
-        }
-      });
-    } else {
-      this.profileImageUrl = '/default-profile-image.png';
-    }
-  }
-
   onFollowClicked() {
     const followRequest: FollowRequest = {
       fromUserId: this.loggedUser.id,
@@ -131,10 +111,9 @@ export class UserProfileComponent implements OnInit, OnDestroy {
       next: () => {
         this.loadUser();
         this.loadIsFollowing(this.loggedUser.id, this.user.id);
-        console.log("Successfully followed user");
       },
-      error: (err) => {
-        console.log("Error following a user: ", err.message);
+      error: () => {
+        this._snackBar.open("Error following user", "OK")
       }
     })
   }
@@ -149,12 +128,13 @@ export class UserProfileComponent implements OnInit, OnDestroy {
       next: () => {
         this.loadUser();
         this.loadIsFollowing(this.loggedUser.id, this.user.id);
-        console.log("Successfully unfollowed user");
+      },
+      error: () => {
+        this._snackBar.open("Error unfollowing user", "OK")
       }
     })
   }
 
-  //Posts
   onScroll = () => {
     this.infiniteScroll.loadMore((page, size) => this.postService.getPaginatedPostsForUserProfile(this.userId, page, size));
   }
@@ -173,7 +153,15 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if(result){
         this.user = result;
+        this.infiniteScroll.reset();
+        this.infiniteScroll.loadInitial((page, size) => this.postService.getPaginatedPostsForUserProfile(this.userId, page, size), this.itemsPerPage);
       }
     });
   }
+
+  setDefaultProfileImage(event: Event) {
+    (event.target as HTMLImageElement).src = this.defaultProfileImagePath;
+  }
+
+  protected readonly environment = environment;
 }

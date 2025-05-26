@@ -11,8 +11,7 @@ export class LoginGuard implements CanActivate {
 
   canActivate(): boolean {
     if (this.authService.isLoggedIn()) {
-      // this.router.navigate([ROUTE_PATHS.POSTS_ROOT]);
-      this.router.navigate(["/posts"]);
+      this.router.navigate([ROUTE_PATHS.POSTS]);
       return false;
     }
     return true;

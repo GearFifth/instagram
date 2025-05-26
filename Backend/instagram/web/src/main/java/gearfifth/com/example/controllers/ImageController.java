@@ -3,6 +3,7 @@ package gearfifth.com.example.controllers;
 
 import gearfifth.com.example.dtos.images.ImageDetailsResponse;
 import gearfifth.com.example.images.IImageService;
+import gearfifth.com.example.models.shared.Image;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class ImageController {
     private final IImageService service;
 
     @PostMapping("/upload")
-    public ResponseEntity<ImageDetailsResponse> uploadImage(
+    public ResponseEntity<Image> uploadImage(
             @RequestParam("file") MultipartFile file,
             @RequestParam(value = "relativePath", required = false) String relativePath) {
 
