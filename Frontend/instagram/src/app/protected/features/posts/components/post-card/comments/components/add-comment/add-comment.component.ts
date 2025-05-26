@@ -57,7 +57,6 @@ export class AddCommentComponent implements OnInit, AfterViewInit {
       next: (response: CommentData) => {
         this.commentAdded.emit(response);
         this.htmlTextArea.innerHTML = '';
-        this._snackBar.open("Comment created successfully", "OK");
       },
       error: (err) => {
         this._snackBar.open("Failed to create a comment", "OK");

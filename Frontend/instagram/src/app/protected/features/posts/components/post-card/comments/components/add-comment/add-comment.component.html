@@ -7,11 +7,15 @@
       alt="Profile Picture"
       (error)="setDefaultProfileImage($event)">
 
-    <div
-      id="comment-textarea"
-      contenteditable="true">
+    <div class="comment-wrapper">
+      <div class="comment-label">
+        <span *ngIf="parentId">Replying:</span>
+        <span *ngIf="!parentId">Commenting:</span>
+      </div>
 
+      <div id="comment-textarea" contenteditable="true" class="comment-content"></div>
     </div>
+
     <button mat-icon-button class="send-button" matTooltip="send" (click)="onSendClick()">
       <mat-icon>send</mat-icon>
     </button>

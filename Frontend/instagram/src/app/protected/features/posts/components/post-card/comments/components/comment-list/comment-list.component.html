@@ -1,5 +1,9 @@
 <div class="comment-cards-box" [style.padding-left.px]="level>0 ? 30 : 0" >
-  @for (comment of comments; track comment){
-    <app-comment-card [comment]="comment" [post]="post" [level]="level+1"></app-comment-card>
+  @if (comments.length > 0){
+    @for (comment of comments; track comment){
+      <app-comment-card [comment]="comment" [post]="post" [level]="level+1"></app-comment-card>
+    }
+  } @else {
+    <h2 class="middle-center">No comments.</h2>
   }
 </div>

@@ -34,6 +34,19 @@
   color: white;
 }
 
+.comment-label {
+  font-weight: 400;
+  color: #6a6a6a;
+  margin-bottom: 4px;
+}
+
+.comment-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
 #mention-dropdown {
   display: flex;
   flex-direction: column;
@@ -59,7 +72,6 @@
   -moz-appearance: textfield-multiline;
   -webkit-appearance: textarea;
   border: 1px solid gray;
-  font: medium -moz-fixed;
   height: 5em;
   border-radius: 5px;
   overflow: auto;
