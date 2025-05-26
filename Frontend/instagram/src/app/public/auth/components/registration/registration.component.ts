@@ -1,5 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {MatStepper} from "@angular/material/stepper";
 import {confirmPasswordValidator} from "../../../../shared/validators/confirm-password.validator";
 import {AuthService} from "../../../../core/services/auth.service";
@@ -83,20 +83,16 @@ export class RegistrationComponent implements OnInit{
   }
 
   checkEmailUniqueness(stepper: MatStepper) {
-    // todo: move this.registerPersonalForm.get('email')? into variable and use it in
-    // email and in setErrors
-    const email = this.registerPersonalForm.get('email')?.value;
+    const emailControl : AbstractControl | null = this.registerPersonalForm.get('email')
+    const email = emailControl?.value;
     if (email) {
       this.userService.checkEmailUniqueness(email).subscribe({
         next: (isUnique) => {
           if (!isUnique) {
-            this.registerContactForm.get('email')?.setErrors({ nonUnique: true });
+            emailControl?.setErrors({ nonUnique: true });
           }
           stepper.next();
-        },
-        error: (err) => {
-          console.error('Error checking email uniqueness:', err);
-        },
+        }
       });
     }
   }

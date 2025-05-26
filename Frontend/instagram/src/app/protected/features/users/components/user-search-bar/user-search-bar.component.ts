@@ -40,14 +40,15 @@ export class UserSearchBarComponent implements OnInit {
     }
 
     this.isLoading = true;
-    // todo: this.isLoading = false; move in complete
+
     this.userService.searchUsers(term).subscribe({
       next: (users) => {
         this.filteredUsers = users;
-        this.isLoading = false;
       },
       error: () => {
         this.filteredUsers = [];
+      },
+      complete: () => {
         this.isLoading = false;
       }
     });

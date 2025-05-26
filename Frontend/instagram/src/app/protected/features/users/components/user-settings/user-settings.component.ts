@@ -43,9 +43,8 @@ export class UserSettingsComponent implements OnInit{
       }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      // todo: write this a little bit better
-      if (result === true) {
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result) {
         this.removeUser();
       }
     });
@@ -58,7 +57,7 @@ export class UserSettingsComponent implements OnInit{
         this._snackBar.open("Succesfully removed user", "OK");
       },
       error: () => {
-        console.log("Error occured");
+        this._snackBar.open("Error while removing a user", "OK");
       }
     })
   }
@@ -66,9 +65,8 @@ export class UserSettingsComponent implements OnInit{
   onChangePasswordClicked(){
     const dialogRef = this.dialog.open(ChangePasswordDialogComponent, {});
 
-    dialogRef.afterClosed().subscribe(result => {
-      // todo: write this a little bit better
-      if (result === true) {
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result) {
         this._snackBar.open("Succesfully changed password", "OK");
       }
     });

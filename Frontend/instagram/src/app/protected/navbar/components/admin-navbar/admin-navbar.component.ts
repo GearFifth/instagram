@@ -10,29 +10,30 @@ import {ROUTE_PATHS} from "../../../../core/constants/routes";
   styleUrl: './admin-navbar.component.css'
 })
 export class AdminNavbarComponent {
-  readonly ROUTE_PATHS = ROUTE_PATHS;
+  protected readonly ROUTE_PATHS = ROUTE_PATHS;
   @Input() loggedUser!: User;
 
   constructor(
     private authService: AuthService,
     private router: Router) {}
 
-
   logout() {
     this.authService.logout().subscribe();
   }
 
-  // todo: think what you are going to do with this empty methods. :D
   openSettingsPage() {
-    // this.router.navigate(['/settings', this.loggedUser.email]);
+    this.router.navigate([ROUTE_PATHS.USER_SETTINGS]);
   }
 
   goToProfilePage() {
-    // this.router.navigate(['/profile', this.loggedUser.email]);
+    this.router.navigate([ROUTE_PATHS.USER_PROFILE, this.loggedUser.id]);
   }
 
   goToPostsPage() {
     this.router.navigate([ROUTE_PATHS.POSTS]);
   }
 
+  goToDiscoverPeoplePage() {
+    this.router.navigate([ROUTE_PATHS.DISCOVER_PEOPLE]);
+  }
 }
