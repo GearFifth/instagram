@@ -10,27 +10,29 @@ import {Reaction} from "./models/reaction.model";
 })
 export class PostService {
 
+  private readonly apiUrl = 'posts';
+
   constructor(private http: HttpClient) {}
 
   getAll(): Observable<Post[]> {
-    return this.http.get<Post[]>(`posts`);
+    return this.http.get<Post[]>(`${this.apiUrl}`);
   }
 
   createPost(request: CreatePostRequest): Observable<Post> {
-    return this.http.post<Post>("posts", request);
+    return this.http.post<Post>(`${this.apiUrl}`, request);
   }
 
   getById(id: string): Observable<Post> {
-    return this.http.get<Post>(`posts/${id}`);
+    return this.http.get<Post>(`${this.apiUrl}/${id}`);
   }
 
 
   addReaction(postId: string, reaction: Reaction): Observable<void> {
-    return this.http.post<void>(`posts/${postId}/reactions`, reaction);
+    return this.http.post<void>(`${this.apiUrl}/${postId}/reactions`, reaction);
   }
 
   removeReaction(postId: string, reaction: Reaction): Observable<void> {
-    return this.http.delete<void>(`posts/${postId}/reactions`, { body: reaction });
+    return this.http.delete<void>(`${this.apiUrl}/${postId}/reactions`, { body: reaction });
   }
 
 
@@ -39,7 +41,7 @@ export class PostService {
       .set('pageNumber', page.toString())
       .set('itemsPerPage', itemsPerPage.toString());
 
-    return this.http.get<Post[]>(`posts/feed/user/${userId}`, { params });
+    return this.http.get<Post[]>(`${this.apiUrl}/feed/user/${userId}`, { params });
   }
 
   getPaginatedPostsForUserProfile(userId: string, page: number = 1, itemsPerPage: number = 10): Observable<Post[]> {
@@ -47,6 +49,6 @@ export class PostService {
       .set('pageNumber', page.toString())
       .set('itemsPerPage', itemsPerPage.toString());
 
-    return this.http.get<Post[]>(`posts/user/${userId}`, { params });
+    return this.http.get<Post[]>(`${this.apiUrl}/user/${userId}`, { params });
   }
 }
