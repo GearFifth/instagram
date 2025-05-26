@@ -14,7 +14,7 @@
   </mat-form-field>
 
 <!--  todo: use this loader into separate component and reuse it wherever we need-->
-  <div *ngIf="isLoading" class="loading">Loading...</div>
+  <app-loader *ngIf="isLoading"></app-loader>
 
   <div id="results" *ngIf="searchTerm.length > 0" (mousedown)="isClickingResult = true">
     <app-user-card *ngFor="let user of filteredUsers" [user]="user" (onUserCardClicked)="clearSearch()"></app-user-card>
