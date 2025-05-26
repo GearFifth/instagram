@@ -3,14 +3,6 @@
     <div class="form-wrapper">
       <h1>Login</h1>
 
-      <div class="notification" *ngIf="errorMessage.length > 0">
-        <app-notification
-          [type]="NotificationType.ERROR"
-          [message]="errorMessage"
-          (close)="onHandleError()"
-        ></app-notification>
-      </div>
-
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <mat-form-field appearance="outline">
           <mat-label>Email</mat-label>
@@ -39,8 +31,7 @@
 
         <div class="switch-auth">
           <span>Don't have an account?</span>
-<!--         todo: use consts-->
-          <a [routerLink]="['/auth/register']">Sign Up</a>
+          <a (click)="goToRegister()">Sign Up</a>
         </div>
       </form>
     </div>

@@ -6,6 +6,8 @@ import {AuthService} from "../../../../core/services/auth.service";
 import {RegisterRequest} from "../../../../core/models/register-request.model";
 import {UserService} from "../../../../protected/features/users/user.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {ROUTE_PATHS} from "../../../../core/constants/routes";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-registration',
@@ -29,7 +31,8 @@ export class RegistrationComponent implements OnInit{
   constructor(
     private authService: AuthService,
     private formBuilder: FormBuilder,
-    private userService: UserService,) {}
+    private userService: UserService,
+    private router: Router) {}
 
   ngOnInit() {
     this.registerPersonalForm = this.formBuilder.group({
@@ -121,6 +124,10 @@ export class RegistrationComponent implements OnInit{
     }
     this.profilePictureFile = null;
     this.profilePictureUrl = null;
+  }
+
+  goToLogin(){
+    this.router.navigate([ROUTE_PATHS.AUTH_LOGIN]);
   }
 
 }

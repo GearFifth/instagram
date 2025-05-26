@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {Component, inject} from '@angular/core';
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {AuthService} from "../../../../core/services/auth.service";
 import {LoginRequest} from "../../../../core/models/login-request.model";
-import {NotificationType} from "../../../../shared/components/notification/notification.component";
 import {ROUTE_PATHS} from "../../../../core/constants/routes";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-login',
@@ -12,9 +12,9 @@ import {ROUTE_PATHS} from "../../../../core/constants/routes";
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
+  private _snackBar = inject(MatSnackBar);
   loginForm: FormGroup;
   hide: boolean = true;
-  errorMessage: string = "";
 
   constructor(private router: Router, private authService: AuthService) {
     this.loginForm = new FormGroup({
@@ -24,27 +24,21 @@ export class LoginComponent {
   }
 
   onSubmit() {
-    // todo: handle else case as well
-    if (this.loginForm.valid) {
-      const loginRequest: LoginRequest = {
-        email: this.loginForm.value.email || "",
-        password: this.loginForm.value.password || ""
-      }
-      this.authService.login(loginRequest).subscribe({
-        next: () => {
-          this.router.navigate(["/" + ROUTE_PATHS.POSTS_ROOT]);
-        },
-        error: (err) => {
-          // console.log("Error: ", err);
-          this.errorMessage = "Invalid username or password";
-          // this.errorMessage = err;
-        }
-      });
+    const loginRequest: LoginRequest = {
+      email: this.loginForm.value.email,
+      password: this.loginForm.value.password
     }
-  }
-  onHandleError() {
-    this.errorMessage = "";
+    this.authService.login(loginRequest).subscribe({
+      next: () => {
+        this.router.navigate([ROUTE_PATHS.POSTS]);
+      },
+      error: (err) => {
+        this._snackBar.open("Invalid username or password", "OK")
+      }
+    });
   }
 
-  protected readonly NotificationType = NotificationType;
+  goToRegister(){
+    this.router.navigate([ROUTE_PATHS.AUTH_REGISTER]);
+  }
 }
