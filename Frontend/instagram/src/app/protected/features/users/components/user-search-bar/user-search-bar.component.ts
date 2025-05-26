@@ -34,12 +34,10 @@ export class UserSearchBarComponent implements OnInit {
   }
 
   private searchUsers(term: string) {
-    if (!term || term.length < 2) {
+    if (!term) {
       this.filteredUsers = [];
       return;
     }
-
-    this.isLoading = true;
 
     this.userService.searchUsers(term).subscribe({
       next: (users) => {
@@ -47,9 +45,6 @@ export class UserSearchBarComponent implements OnInit {
       },
       error: () => {
         this.filteredUsers = [];
-      },
-      complete: () => {
-        this.isLoading = false;
       }
     });
   }
