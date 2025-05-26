@@ -19,8 +19,7 @@ export class PostsComponent implements OnInit, OnDestroy{
   @ViewChild('contentDiv') contentDiv!: ElementRef;
   isLoading: boolean = false;
   loggedUserId: string = '';
-  private loadingSubscription?: Subscription;
-  private postsSubscription?: Subscription;
+  private subscriptions: Subscription[] = [];
   itemsPerPage = 2;
 
   @ViewChild('wrapperDiv') wrapperDiv!: ElementRef;
@@ -40,16 +39,18 @@ export class PostsComponent implements OnInit, OnDestroy{
     }
     this.loggedUserId = loggedUserId;
     this.infiniteScroll.loadInitial((page, size) => this.postService.getPaginatedPostsForUserFeed(this.loggedUserId, page, size), this.itemsPerPage);
-    this.postsSubscription = this.infiniteScroll.items$.subscribe(posts => {
-      this.posts = posts
-      setTimeout(() => this.checkIfShouldCenter());
-    });
-    this.loadingSubscription = this.infiniteScroll.isLoading$.subscribe(isLoading => this.isLoading = isLoading);
+
+    this.subscriptions.push(
+      this.infiniteScroll.items$.subscribe(posts => {
+        this.posts = posts
+        setTimeout(() => this.checkIfShouldCenter());
+      }),
+       this.infiniteScroll.isLoading$.subscribe(isLoading => this.isLoading = isLoading)
+    );
   }
 
   ngOnDestroy() {
-    this.loadingSubscription?.unsubscribe();
-    this.postsSubscription?.unsubscribe();
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   checkIfShouldCenter(): void {

@@ -37,8 +37,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   posts: Post[] = [];
   @ViewChild('contentDiv') contentDiv!: ElementRef;
   isLoading: boolean = false;
-  private loadingSubscription?: Subscription;
-  private postsSubscription?: Subscription;
+  private subscriptions: Subscription[] = [];
   itemsPerPage = 2;
 
   constructor(
@@ -60,16 +59,16 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         this.getLoggedUser();
 
         this.infiniteScroll.loadInitial((page, size) => this.postService.getPaginatedPostsForUserProfile(this.userId, page, size), this.itemsPerPage);
-        this.postsSubscription = this.infiniteScroll.items$.subscribe(posts => this.posts = posts);
-        this.loadingSubscription = this.infiniteScroll.isLoading$.subscribe(isLoading => this.isLoading = isLoading);
+        this.subscriptions.push(
+          this.infiniteScroll.items$.subscribe(posts => this.posts = posts),
+          this.infiniteScroll.isLoading$.subscribe(isLoading => this.isLoading = isLoading)
+        );
       }
     });
   }
 
   ngOnDestroy() {
-    // todo: collect all subscription into list, and foreach unsubscribe
-    this.loadingSubscription?.unsubscribe();
-    this.postsSubscription?.unsubscribe();
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   loadUser(){
