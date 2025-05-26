@@ -6,6 +6,7 @@ import {ImageService} from "../../../../../core/services/image.service";
 import {ImageDetails} from "../../../../../shared/models/image-details.model";
 import {Post} from "../../models/post.model";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {ImageCroppedEvent} from "ngx-image-cropper";
 
 @Component({
   selector: 'app-create-post-dialog',
@@ -16,8 +17,9 @@ export class CreatePostDialogComponent {
   private _snackBar = inject(MatSnackBar);
   loggedUserId: string;
   description: string = '';
-  imagePreview: string | null = null;
-  selectedImage: File | null = null;
+  defaultPostImagePath: string = '/assets/default-post-image.png';
+  imagePreview: string | null = this.defaultPostImagePath;
+  selectedImage: Blob | null = null;
 
   @ViewChild('fileInput') fileInput!: ElementRef;
 
@@ -29,20 +31,9 @@ export class CreatePostDialogComponent {
     this.loggedUserId = data.loggedUserId;
   }
 
-  triggerFileInput() {
-    this.fileInput.nativeElement.click();
-  }
-
-  onImageSelected(event: Event) {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (file) {
-      this.selectedImage = file;
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.imagePreview = reader.result as string;
-      };
-      reader.readAsDataURL(file);
-    }
+  onImageSelected(event: ImageCroppedEvent) {
+    this.selectedImage = event.blob ?? null;
+    this.imagePreview = event.objectUrl ?? null;
   }
 
   onCreateClick() {
@@ -51,6 +42,8 @@ export class CreatePostDialogComponent {
       authorId: this.loggedUserId,
       image: this.selectedImage
     };
+
+    console.log("CreateRequest", createRequest);
 
     this.postService.createPost(createRequest).subscribe({
       next: (post: Post) => {
