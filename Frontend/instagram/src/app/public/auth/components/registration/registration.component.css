@@ -80,6 +80,11 @@ p{
   color: #282828;
 }
 
+a{
+  text-decoration: none;
+  color: #2F93F6;
+}
+
 h3{
   color: #282828;
 }
@@ -160,5 +165,9 @@ h3{
   border: 2px dashed #ccc;
   color: #999;
   font-size: 14px;
+}
+
+.clickable{
+  cursor: pointer;
 }
 

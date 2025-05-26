@@ -68,3 +68,7 @@ mat-form-field{
 .notification{
   margin-bottom: 1.5em;
 }
+
+.clickable{
+  cursor: pointer;
+}

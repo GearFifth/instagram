@@ -55,12 +55,7 @@ export class ReactionsComponent implements OnInit {
       type: reactionType
     };
 
-    // todo: refactor this
-    if (this.currentUserReaction === reactionType) {
-      this.removeReaction(reaction);
-    } else {
-      this.addReaction(reaction);
-    }
+    this.currentUserReaction === reactionType ? this.removeReaction(reaction) : this.addReaction(reaction);
   }
 
   addReaction(reaction: Reaction) {
