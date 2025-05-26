@@ -102,26 +102,6 @@ export class RegistrationComponent implements OnInit{
     stepper.previous();
   }
 
-  onImageSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files[0]) {
-      if (this.profilePictureUrl) {
-        URL.revokeObjectURL(this.profilePictureUrl);
-      }
-
-      this.profilePictureFile = input.files[0];
-      this.profilePictureUrl = URL.createObjectURL(this.profilePictureFile);
-    }
-  }
-
-  removeImage(): void {
-    if (this.profilePictureUrl) {
-      URL.revokeObjectURL(this.profilePictureUrl);
-    }
-    this.profilePictureFile = null;
-    this.profilePictureUrl = null;
-  }
-
   goToLogin(){
     this.router.navigate([ROUTE_PATHS.AUTH_LOGIN]);
   }

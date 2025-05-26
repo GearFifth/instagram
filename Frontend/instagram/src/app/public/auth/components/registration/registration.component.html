@@ -8,26 +8,19 @@
       </div>
 
       <mat-stepper [linear]="true" orientation="horizontal" #stepper>
+
         <mat-step>
           <ng-template matStepLabel>Profile picture</ng-template>
-          <div class="profile-picture-wrapper">
-            <div class="profile-picture-preview-wrapper" *ngIf="profilePictureUrl; else defaultImage">
-              <img class="profile-picture-preview" [src]="profilePictureUrl" alt="Profile Picture" />
-              <div class="remove-button">
-                <mat-icon (click)="removeImage()">close</mat-icon>
-              </div>
-            </div>
-
-            <ng-template #defaultImage>
-              <div class="profile-picture-placeholder"></div>
-            </ng-template>
-            <input type="file" accept="image/*" (change)="onImageSelected($event)" hidden #fileInput>
-            <button mat-raised-button (click)="fileInput.click()">Choose Image</button>
-          </div>
+          <app-profile-picture
+            [profilePictureUrl]="profilePictureUrl"
+            [profilePictureFile]="profilePictureFile"
+            (profilePictureFileChange)="profilePictureFile = $event"
+            (profilePictureUrlChange)="profilePictureUrl = $event">
+          </app-profile-picture>
           <div>
             <button mat-button matStepperNext [disabled]="!profilePictureFile">Next</button>
           </div>
-        </mat-step>>
+        </mat-step>
 
         <mat-step [stepControl]="registerPersonalForm" errorMessage="Personal information is required." [editable]="isEditable">
           <form [formGroup]="registerPersonalForm">
