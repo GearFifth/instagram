@@ -1,0 +1,19 @@
+<div class="image-upload-section">
+  <input type="file" accept="image/*" (change)="fileChangeEvent($event)" hidden #fileInput>
+  <button mat-raised-button (click)="fileInput.click()">Choose Image</button>
+
+  <image-cropper
+    *ngIf="showCropper"
+    [imageChangedEvent]="imageChangedEvent"
+    [maintainAspectRatio]="true"
+    [aspectRatio]="1 / 1"
+    format="png"
+    (imageCropped)="imageCropped($event)"
+    (imageLoaded)="imageLoaded()"
+    (cropperReady)="cropperReady()"
+    (loadImageFailed)="loadImageFailed()"
+  ></image-cropper>
+
+  <button mat-raised-button *ngIf="showCropper" (click)="onFinishClick()">Finish cropping</button>
+</div>
+

@@ -13,8 +13,8 @@
       <ng-template #defaultImage>
         <div class="profile-picture-placeholder"></div>
       </ng-template>
-      <input type="file" accept="image/*" (change)="onImageSelected($event)" hidden #fileInput>
-      <button mat-raised-button (click)="fileInput.click()">Choose Image</button>
+
+      <app-image-uploader (imageCroppedEvent)="onImageSelected($event)"></app-image-uploader>
     </div>
 
     <form [formGroup]="userForm" class="user-form">
