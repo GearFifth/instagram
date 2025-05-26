@@ -22,9 +22,6 @@ export class PostsComponent implements OnInit, OnDestroy{
   private subscriptions: Subscription[] = [];
   itemsPerPage = 2;
 
-  @ViewChild('wrapperDiv') wrapperDiv!: ElementRef;
-  shouldCenter = false;
-
   constructor(
     private authService: AuthService,
     private postService: PostService,
@@ -43,7 +40,6 @@ export class PostsComponent implements OnInit, OnDestroy{
     this.subscriptions.push(
       this.infiniteScroll.items$.subscribe(posts => {
         this.posts = posts
-        setTimeout(() => this.checkIfShouldCenter());
       }),
        this.infiniteScroll.isLoading$.subscribe(isLoading => this.isLoading = isLoading)
     );
@@ -51,13 +47,6 @@ export class PostsComponent implements OnInit, OnDestroy{
 
   ngOnDestroy() {
     this.subscriptions.forEach(sub => sub.unsubscribe());
-  }
-
-  checkIfShouldCenter(): void {
-    const wrapperHeight = this.wrapperDiv.nativeElement.scrollHeight;
-    const contentHeight = this.contentDiv.nativeElement.clientHeight;
-
-    this.shouldCenter = contentHeight < wrapperHeight;
   }
 
   onScroll = () => {
