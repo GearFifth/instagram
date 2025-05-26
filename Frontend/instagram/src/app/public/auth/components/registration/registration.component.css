@@ -89,18 +89,6 @@ h3{
   color: #282828;
 }
 
-.check{
-  color: limegreen;
-}
-
-.success{
-  margin-top: 1em;
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-}
-
-
 .clickable{
   cursor: pointer;
 }

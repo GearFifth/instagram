@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-personal-info',
@@ -6,5 +7,10 @@ import { Component } from '@angular/core';
   styleUrl: './personal-info.component.css'
 })
 export class PersonalInfoComponent {
+  @Input() form!: FormGroup;
+  @Output() checkEmailUniqueness = new EventEmitter<void>();
 
+  emitCheckEmail() {
+    this.checkEmailUniqueness.emit();
+  }
 }
