@@ -48,7 +48,8 @@
 
         <mat-step>
           <ng-template matStepLabel>Verification</ng-template>
-          <app-verification></app-verification>
+          <app-loader *ngIf="isLoading"></app-loader>
+          <app-verification *ngIf="!isLoading"></app-verification>
         </mat-step>
       </mat-stepper>
       <div>

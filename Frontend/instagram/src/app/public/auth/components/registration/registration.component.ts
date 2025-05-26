@@ -17,12 +17,13 @@ import {Router} from "@angular/router";
 export class RegistrationComponent implements OnInit{
   private _snackBar = inject(MatSnackBar);
   isEditable: boolean = true;
+  isLoading: boolean = false;
 
   registerPersonalForm!: FormGroup;
   registerContactForm!: FormGroup;
   registerPasswordForm!: FormGroup;
 
-  profilePictureFile: File | null = null;
+  profilePictureFile: Blob | null = null;
   profilePictureUrl: string | null = null;
 
   constructor(
@@ -59,6 +60,8 @@ export class RegistrationComponent implements OnInit{
       return;
     }
 
+    this.isLoading = true;
+
     const request: RegisterRequest = {
       email: this.registerPersonalForm.value.email,
       password: this.registerPasswordForm.value.password,
@@ -71,9 +74,11 @@ export class RegistrationComponent implements OnInit{
 
     this.authService.register(request).subscribe({
       next: () => {
+        this.isLoading = false;
         this._snackBar.open("Registration successful", "OK")
       },
       error: () => {
+        this.isLoading = false;
         this._snackBar.open("Registration failed", "OK")
       },
     });
