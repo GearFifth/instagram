@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -47,15 +48,19 @@ public class PostService implements IPostService{
     }
 
     @Override
-        public PostResponse create(CreatePostRequest request) {
+    @Transactional
+    public PostResponse create(CreatePostRequest request, MultipartFile postImage) {
         User author = userService.findUserOrThrow(request.getAuthorId());
-        Image image = imageService.getImageDetails(request.getImageId());
 
         Post newPost = new Post();
         newPost.setDescription(request.getDescription());
         newPost.setAuthor(author);
         newPost.setCreationDate(new Date());
-        newPost.setImage(image);
+
+        if(postImage != null && !postImage.isEmpty()) {
+            Image image = imageService.uploadImage(postImage, "posts");
+            newPost.setImage(image);
+        }
 
         return mapper.map(postRepository.save(newPost), PostResponse.class);
     }

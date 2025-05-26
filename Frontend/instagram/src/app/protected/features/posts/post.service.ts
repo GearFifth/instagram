@@ -4,6 +4,7 @@ import {Observable} from "rxjs";
 import {CreatePostRequest} from "../../../core/models/create-post-request.model";
 import {Post} from "./models/post.model";
 import {Reaction} from "./models/reaction.model";
+import {RegisterRequest} from "../../../core/models/register-request.model";
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,20 @@ export class PostService {
   }
 
   createPost(request: CreatePostRequest): Observable<Post> {
-    return this.http.post<Post>(`${this.apiUrl}`, request);
+    const formData = new FormData();
+
+    const postBlob = new Blob([JSON.stringify({
+      description: request.description,
+      authorId: request.authorId,
+    })], { type: 'application/json' });
+
+    formData.append('post', postBlob);
+
+    if (request.image) {
+      formData.append('image', request.image);
+    }
+
+    return this.http.post<Post>(`${this.apiUrl}`, formData);
   }
 
   getById(id: string): Observable<Post> {

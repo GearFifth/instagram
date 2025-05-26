@@ -1,10 +1,11 @@
-import {Component, ElementRef, Inject, ViewChild} from '@angular/core';
+import {Component, ElementRef, inject, Inject, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {PostService} from "../../post.service";
 import {CreatePostRequest} from "../../../../../core/models/create-post-request.model";
 import {ImageService} from "../../../../../core/services/image.service";
 import {ImageDetails} from "../../../../../shared/models/image-details.model";
 import {Post} from "../../models/post.model";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-create-post-dialog',
@@ -12,6 +13,7 @@ import {Post} from "../../models/post.model";
   styleUrl: './create-post-dialog.component.css'
 })
 export class CreatePostDialogComponent {
+  private _snackBar = inject(MatSnackBar);
   loggedUserId: string;
   description: string = '';
   imagePreview: string | null = null;
@@ -23,7 +25,6 @@ export class CreatePostDialogComponent {
     private dialogRef: MatDialogRef<CreatePostDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private postService: PostService,
-    private imageService: ImageService
   ) {
     this.loggedUserId = data.loggedUserId;
   }
@@ -44,30 +45,22 @@ export class CreatePostDialogComponent {
     }
   }
 
-  async onCreateClick() {
-    try {
-      if (this.selectedImage) {
-        this.imageService.uploadImage(this.selectedImage, "posts").subscribe({
-          next: (imageDetails: ImageDetails) => {
+  onCreateClick() {
+    const createRequest: CreatePostRequest = {
+      description: this.description,
+      authorId: this.loggedUserId,
+      image: this.selectedImage
+    };
 
-            const createRequest: CreatePostRequest = {
-              description: this.description,
-              authorId: this.loggedUserId,
-              imageId: imageDetails.id
-            };
-
-            this.postService.createPost(createRequest).subscribe({
-              next: (post: Post) => {
-                console.log("successfully created: ", post);
-                this.dialogRef.close(post);
-              }
-            });
-          }
-        });
+    this.postService.createPost(createRequest).subscribe({
+      next: (post: Post) => {
+        this._snackBar.open("Successfully created post", "OK");
+        this.dialogRef.close(post);
+      },
+      error: () => {
+        this._snackBar.open("Error while creating a post", "OK");
       }
-    } catch (error) {
-      console.error("Error creating post:", error);
-    }
+    });
   }
 
   onCancelClick() {

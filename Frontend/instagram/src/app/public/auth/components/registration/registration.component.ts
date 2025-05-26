@@ -16,9 +16,6 @@ import {Router} from "@angular/router";
 })
 export class RegistrationComponent implements OnInit{
   private _snackBar = inject(MatSnackBar);
-
-  hidePassword: boolean = true;
-  hideConfirmPassword: boolean = true;
   isEditable: boolean = true;
 
   registerPersonalForm!: FormGroup;
