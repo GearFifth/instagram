@@ -79,10 +79,6 @@ export class RegistrationComponent implements OnInit{
     });
   }
 
-  getProfilePictureUrl(){
-    return this.profilePictureFile ? URL.createObjectURL(this.profilePictureFile) : null;
-  }
-
   checkEmailUniqueness(stepper: MatStepper) {
     // todo: move this.registerPersonalForm.get('email')? into variable and use it in
     // email and in setErrors

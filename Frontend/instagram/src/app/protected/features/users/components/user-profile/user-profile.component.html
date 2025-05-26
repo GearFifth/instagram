@@ -9,9 +9,10 @@
     <div class="profile-container">
       <div class="top-section">
         <img class="profile-background" [src]="profileBackgroundImageUrl" alt=" ">
-        <div class="profile-picture">
-          <img [src]="profileImageUrl" alt=" ">
-        </div>
+        <img class="profile-picture"
+             [src]="environment.server + user.profileImage.path"
+             alt="Profile Picture"
+             (error)="setDefaultProfileImage($event)">
         <div class="main-info-box">
           <div class="user-info">
             <div class="user-name-section">

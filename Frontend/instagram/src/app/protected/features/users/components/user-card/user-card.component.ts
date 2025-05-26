@@ -4,37 +4,20 @@ import {ImageService} from "../../../../../core/services/image.service";
 import {ROUTE_PATHS} from "../../../../../core/constants/routes";
 import {User} from "../../models/user.model";
 import {Router} from "@angular/router";
+import {environment} from "../../../../../../env/env";
 
 @Component({
   selector: 'app-user-card',
   templateUrl: './user-card.component.html',
   styleUrl: './user-card.component.css'
 })
-export class UserCardComponent implements OnInit{
+export class UserCardComponent {
   @Input() user: User = {} as User;
   defaultProfileImagePath: string = '/assets/default-profile-image.png';
-  profileImageUrl: SafeUrl | string = this.defaultProfileImagePath;
 
   @Output() onUserCardClicked = new EventEmitter();
 
   constructor(private imageService: ImageService, private sanitizer: DomSanitizer, private router: Router) {
-  }
-
-  ngOnInit() {
-    this.loadProfileImage();
-  }
-
-  loadProfileImage() {
-    this.imageService.getImage(this.user.profileImage.id).subscribe({
-      next: (blob: Blob) => {
-        const objectURL = URL.createObjectURL(blob);
-        this.profileImageUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL);
-      },
-      error: (err) => {
-        console.error('Error loading profile image:', err);
-        this.profileImageUrl = '/default-profile-image.png';
-      }
-    });
   }
 
   goToProfilePage() {
@@ -42,4 +25,10 @@ export class UserCardComponent implements OnInit{
     this.router.navigate([ROUTE_PATHS.USER_PROFILE, this.user.id]);
     this.onUserCardClicked.emit();
   }
+
+  setDefaultProfileImage(event: Event) {
+    (event.target as HTMLImageElement).src = this.defaultProfileImagePath;
+  }
+
+  protected readonly environment = environment;
 }

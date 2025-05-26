@@ -1,14 +1,17 @@
 package gearfifth.com.example.controllers;
 
+import gearfifth.com.example.dtos.auth.UserCreateRequest;
 import gearfifth.com.example.dtos.users.responses.UserProfileResponse;
 import gearfifth.com.example.dtos.users.requests.UserUpdateRequest;
 import gearfifth.com.example.users.IUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -30,10 +33,15 @@ public class UserController {
         return new ResponseEntity<>(service.get(userId), HttpStatus.OK);
     }
 
-    @PutMapping
-    public ResponseEntity<UserProfileResponse> update(@Valid @RequestBody UserUpdateRequest user) {
-        return new ResponseEntity<>(service.update(user), HttpStatus.OK);
+
+    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<UserProfileResponse> update(
+            @Valid @RequestPart("user") UserUpdateRequest request,
+            @RequestPart(value = "profileImage", required = false) MultipartFile profileImage) {
+
+        return new ResponseEntity<>(service.update(request, profileImage), HttpStatus.OK);
     }
+
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> remove(@PathVariable UUID userId) {

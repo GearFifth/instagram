@@ -2,11 +2,6 @@
   <div class="content" *ngIf="userForm">
     <p class="title">Edit User</p>
 
-<!--    <div class="image-section">-->
-<!--      <img [src]="profileImageUrl" alt="Profile Image" class="profile-picture" />-->
-<!--      <input type="file" (change)="onFileChange($event)" />-->
-<!--    </div>-->
-
     <div class="profile-picture-wrapper">
       <div class="profile-picture-preview-wrapper" *ngIf="profileImageUrl; else defaultImage">
         <img class="profile-picture-preview" [src]="profileImageUrl" alt="Profile Picture" />

@@ -13,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collection;
 import java.util.Date;
@@ -44,17 +45,21 @@ public class UserService implements IUserService {
 
     @Transactional
     @Override
-    public UserProfileResponse update(UserUpdateRequest request) {
+    public UserProfileResponse update(UserUpdateRequest request, MultipartFile profileImage) {
         User existingUser = findUserOrThrow(request.getId());
-        Image image = imageService.getImageDetails(request.getProfileImageId());
-
-        imageService.removeImage(existingUser.getProfileImage().getId());
 
         existingUser.setFirstName(request.getFirstName());
         existingUser.setLastName(request.getLastName());
         existingUser.setAddress(request.getAddress());
         existingUser.setPhoneNumber(request.getPhoneNumber());
-        existingUser.setProfileImage(image);
+
+        if(profileImage != null && !profileImage.isEmpty()) {
+            if (existingUser.getProfileImage() != null) {
+                imageService.removeImage(existingUser.getProfileImage().getId());
+            }
+            Image image = imageService.uploadImage(profileImage, "users");
+            existingUser.setProfileImage(image);
+        }
 
         User updatedUser = userRepository.save(existingUser);
         return mapper.map(updatedUser, UserProfileResponse.class);

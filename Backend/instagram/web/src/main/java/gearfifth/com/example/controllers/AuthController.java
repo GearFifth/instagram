@@ -20,12 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class AuthController {
     private final IAuthService service;
 
-
-//    @PostMapping("/register")
-//    public ResponseEntity<UserProfileResponse> register(@Valid @RequestBody UserCreateRequest request) {
-//        return new ResponseEntity<>(service.register(request), HttpStatus.CREATED);
-//    }
-
     @PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<UserProfileResponse> register(
             @Valid @RequestPart("user") UserCreateRequest request,

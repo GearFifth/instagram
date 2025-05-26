@@ -5,11 +5,13 @@ import {NotificationComponent} from "./components/notification/notification.comp
 import {RouterLink, RouterLinkActive} from "@angular/router";
 import {FormsModule} from "@angular/forms";
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 @NgModule({
   declarations: [
     NotificationComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    NotFoundComponent
   ],
   imports: [
     CommonModule,
@@ -20,7 +22,7 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
   ],
   exports: [
     MaterialModule,
-    NotificationComponent
+    NotificationComponent,
   ]
 })
 export class SharedModule { }
