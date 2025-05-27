@@ -40,11 +40,6 @@ public class ChatService implements IChatService {
 
         MessageResponse response = mapper.map(messageRepository.save(msg), MessageResponse.class);
 
-//        messagingTemplate.convertAndSendToUser(
-//                receiver.getEmail(),
-//                "/queue/messages",
-//                response
-//        );
         messagingTemplate.convertAndSend(
                 "/messages",
                 response

@@ -37,4 +37,8 @@ export class UserNavbarComponent {
   goToDiscoverPeoplePage() {
     this.router.navigate([ROUTE_PATHS.DISCOVER_PEOPLE]);
   }
+
+  goToChatPage(){
+    this.router.navigate([ROUTE_PATHS.CHAT]);
+  }
 }
