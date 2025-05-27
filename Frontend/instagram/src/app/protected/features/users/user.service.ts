@@ -57,4 +57,9 @@ export class UserService {
   remove(userId: string) : Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${userId}`);
   }
+
+  getFollowedUsers(id: string): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/${id}/followed`);
+  }
+
 }

@@ -1,0 +1,22 @@
+<div class="chat-container">
+  <div class="chat-sidebar">
+    <h3>Chats</h3>
+    <h4 *ngIf="users.length === 0">No followed users.</h4>
+    <ul class="chat-user-list">
+      <li *ngFor="let user of users">
+        <a [routerLink]="[user.id]" routerLinkActive="active">
+          <div class="user-entry">
+            <div class="avatar">
+              {{ user.firstName.charAt(0) }}{{ user.lastName.charAt(0) }}
+            </div>
+            <span>{{ user.firstName }} {{ user.lastName }}</span>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="chat-window">
+    <router-outlet></router-outlet>
+  </div>
+</div>

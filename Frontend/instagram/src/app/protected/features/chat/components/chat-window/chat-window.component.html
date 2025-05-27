@@ -1,0 +1,26 @@
+@if (loggedUserId && userId) {
+  <div class="chat-window">
+    <div class="messages">
+      <div *ngFor="let message of messages" [ngClass]="{'sent': message.sender.id === loggedUserId, 'received': message.sender.id !== loggedUserId}">
+        <div class="message-bubble">
+          <div class="message-header">
+            <span class="sender">{{ message.sender.firstName }} {{ message.sender.lastName }}</span>
+          </div>
+          <div class="message-content">
+            {{ message.content }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="message-input">
+      <input
+        type="text"
+        [(ngModel)]="newMessage"
+        placeholder="Type a message..."
+        (keydown.enter)="sendMessage()"
+      />
+      <button (click)="sendMessage()" [disabled]="!newMessage.trim()">Send</button>
+    </div>
+  </div>
+}

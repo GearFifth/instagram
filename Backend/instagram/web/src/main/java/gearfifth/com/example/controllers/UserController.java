@@ -1,6 +1,7 @@
 package gearfifth.com.example.controllers;
 
 import gearfifth.com.example.dtos.auth.UserCreateRequest;
+import gearfifth.com.example.dtos.followers.FollowRequest;
 import gearfifth.com.example.dtos.users.responses.UserProfileResponse;
 import gearfifth.com.example.dtos.users.requests.UserUpdateRequest;
 import gearfifth.com.example.users.IUserService;
@@ -57,5 +58,10 @@ public class UserController {
     @GetMapping("/search")
     public ResponseEntity<Collection<UserProfileResponse>> searchUsers(@RequestParam String query) {
         return ResponseEntity.ok(service.searchUsers(query));
+    }
+
+    @GetMapping("/{userId}/followed")
+    public ResponseEntity<Collection<UserProfileResponse>> getFollowed(@PathVariable UUID userId) {
+        return ResponseEntity.ok(service.getFollowed(userId));
     }
 }

@@ -95,4 +95,12 @@ public class UserService implements IUserService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public Collection<UserProfileResponse> getFollowed(UUID userId) {
+        User user = findUserOrThrow(userId);
+        return user.getFollowing().stream()
+                .map(following -> mapper.map(following.getTo(), UserProfileResponse.class))
+                .collect(Collectors.toList());
+    }
+
 }

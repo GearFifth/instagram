@@ -17,4 +17,6 @@ public interface IUserService {
 
     User findUserOrThrow(UUID userId);
     Collection<UserProfileResponse> searchUsers(String query);
+
+    Collection<UserProfileResponse> getFollowed(UUID userId);
 }
