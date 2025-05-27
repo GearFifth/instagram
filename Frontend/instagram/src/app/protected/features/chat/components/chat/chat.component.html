@@ -1,0 +1,13 @@
+<div class="chat-container">
+  <div class="chat-sidebar">
+    <ul>
+      <li *ngFor="let user of users">
+        <a [routerLink]="[user.id]">{{ user.name }}</a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="chat-window">
+    <router-outlet></router-outlet>
+  </div>
+</div>

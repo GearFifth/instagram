@@ -18,6 +18,9 @@ const routes: Routes = [
         loadChildren: () => import('./features/users/users.module').then(m => m.UsersModule)
       },
       {
+        path: 'chat',
+        loadChildren: () => import('./features/chat/chat.module').then(m => m.ChatModule) },
+      {
         path: '',
         redirectTo: 'posts',
         pathMatch: 'full'
