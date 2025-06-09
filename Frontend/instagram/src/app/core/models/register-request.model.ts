@@ -5,5 +5,5 @@ export interface RegisterRequest {
   lastName: string;
   address: string;
   phoneNumber: string;
-  profileImage: Blob | null;
+  profileImage: File | null;
 }

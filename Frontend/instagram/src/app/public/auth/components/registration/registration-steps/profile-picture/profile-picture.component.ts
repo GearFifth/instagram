@@ -8,14 +8,14 @@ import {ImageCroppedEvent} from "ngx-image-cropper";
 })
 export class ProfilePictureComponent {
   @Input() profilePictureUrl: string | null = null;
-  @Input() profilePictureFile: Blob | null = null;
+  @Input() profilePictureFile: File | null = null;
 
   @Output() profilePictureUrlChange = new EventEmitter<string | null>();
-  @Output() profilePictureFileChange = new EventEmitter<Blob | null>();
+  @Output() profilePictureFileChange = new EventEmitter<File | null>();
 
-  onImageSelected(event: ImageCroppedEvent) {
-    this.profilePictureUrlChange.emit(event.objectUrl);
-    this.profilePictureFileChange.emit(event.blob);
+  onImageSelected(file: File) {
+    this.profilePictureUrlChange.emit(URL.createObjectURL(file));
+    this.profilePictureFileChange.emit(file);
   }
 
   removeImage() {

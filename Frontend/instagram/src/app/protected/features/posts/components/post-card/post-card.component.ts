@@ -37,6 +37,7 @@ export class PostCardComponent{
 
   toggleComments(){
     this.areCommentsShowing = !this.areCommentsShowing;
+    console.log(this.post.author.profileImage.path);
   }
 
   getPostCreation(dateString: string): string {

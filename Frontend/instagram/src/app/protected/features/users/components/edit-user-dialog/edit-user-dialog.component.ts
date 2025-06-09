@@ -21,7 +21,7 @@ export class EditUserDialogComponent implements OnInit{
   userForm: FormGroup;
   defaultProfileImagePath: string = '/assets/default-profile-image.png';
   profileImageUrl: string | null = this.defaultProfileImagePath;
-  profileImageFile: Blob | null = null;
+  profileImageFile: File | null = null;
 
   isLoading: boolean = false;
 
@@ -47,10 +47,14 @@ export class EditUserDialogComponent implements OnInit{
     }
   }
 
-  onImageSelected(event: ImageCroppedEvent): void {
-    this.profileImageFile = event.blob ?? null;
-    this.profileImageUrl = event.objectUrl ?? null;
+  onImageSelected(file: File) {
+    if (this.profileImageUrl) {
+      URL.revokeObjectURL(this.profileImageUrl);
+    }
+    this.profileImageFile = file ?? null;
+    this.profileImageUrl = file ? URL.createObjectURL(file) : null;
   }
+
 
   removeImage(): void {
     this.profileImageUrl = this.defaultProfileImagePath;

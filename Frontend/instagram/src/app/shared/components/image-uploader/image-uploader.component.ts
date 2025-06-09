@@ -9,16 +9,33 @@ import {ImageCroppedEvent} from "ngx-image-cropper";
 export class ImageUploaderComponent {
   imageChangedEvent: any = '';
   showCropper = false;
+  imageFile! : File | null;
 
-  @Output() imageCroppedEvent = new EventEmitter<ImageCroppedEvent>();
+  @Output() imageCroppedEvent = new EventEmitter<File>();
 
-  fileChangeEvent(event: any): void {
-    this.imageChangedEvent = event;
-    this.showCropper = true;
+  fileChangeEvent(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+
+      this.imageFile = file;
+      this.imageChangedEvent = event;
+      this.showCropper = true;
+    }
   }
 
   imageCropped(event: ImageCroppedEvent) {
-    this.imageCroppedEvent.emit(event);
+    if (event.blob) {
+      const fileName = this.imageFile?.name ?? 'cropped-image.png';
+
+      const croppedFile = new File([event.blob], fileName, {
+        type: event.blob.type,
+      });
+
+      this.imageFile = croppedFile;
+      this.imageCroppedEvent.emit(croppedFile);
+    }
   }
 
   imageLoaded() {
