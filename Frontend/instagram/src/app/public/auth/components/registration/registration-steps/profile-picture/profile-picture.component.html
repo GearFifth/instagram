@@ -1,0 +1,13 @@
+<div class="profile-picture-wrapper">
+  <div class="profile-picture-preview-wrapper" *ngIf="profilePictureUrl; else defaultImage">
+    <img class="profile-picture-preview" [src]="profilePictureUrl" alt="Profile Picture" />
+    <div class="remove-button">
+      <mat-icon (click)="removeImage()">close</mat-icon>
+    </div>
+  </div>
+
+  <ng-template #defaultImage>
+    <div class="profile-picture-placeholder"></div>
+  </ng-template>
+  <app-image-uploader (imageCroppedEvent)="onImageSelected($event)"></app-image-uploader>
+</div>

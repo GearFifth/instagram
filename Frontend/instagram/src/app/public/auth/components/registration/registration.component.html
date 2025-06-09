@@ -1,0 +1,60 @@
+<div class="background-img">
+  <div class="wrapper">
+    <div class="form-wrapper">
+      <div>
+        <h1 class="title">Registration</h1>
+      </div>
+
+      <mat-stepper [linear]="true" orientation="horizontal" #stepper>
+
+        <mat-step>
+          <ng-template matStepLabel>Profile picture</ng-template>
+          <app-profile-picture
+            [profilePictureUrl]="profilePictureUrl"
+            [profilePictureFile]="profilePictureFile"
+            (profilePictureFileChange)="profilePictureFile = $event"
+            (profilePictureUrlChange)="profilePictureUrl = $event">
+          </app-profile-picture>
+          <div>
+            <button mat-button matStepperNext [disabled]="!profilePictureFile">Next</button>
+          </div>
+        </mat-step>
+
+        <mat-step [stepControl]="registerPersonalForm" errorMessage="Personal information is required." [editable]="isEditable">
+          <ng-template matStepLabel>Name</ng-template>
+          <app-personal-info
+            [form]="registerPersonalForm"
+            (checkEmailUniqueness)="checkEmailUniqueness(stepper)">
+          </app-personal-info>
+        </mat-step>
+
+        <mat-step [stepControl]="registerContactForm" errorMessage="Contact information is required." [editable]="isEditable">
+          <ng-template matStepLabel>Contact</ng-template>
+          <app-contact-info
+            [form]="registerContactForm"
+            [stepper]="stepper"
+            [checkEmailUniqueness]="checkEmailUniqueness.bind(this)"
+            [stepBack]="stepBack.bind(this)">
+          </app-contact-info>
+        </mat-step>
+
+        <mat-step [stepControl]="registerPasswordForm" errorMessage="Passwords must match." [editable]="isEditable">
+          <ng-template matStepLabel>Password</ng-template>
+          <app-password
+            [registerPasswordForm]="registerPasswordForm"
+            [register]="register.bind(this)">
+          </app-password>
+        </mat-step>
+
+        <mat-step>
+          <ng-template matStepLabel>Verification</ng-template>
+          <app-loader *ngIf="isLoading"></app-loader>
+          <app-verification *ngIf="!isLoading"></app-verification>
+        </mat-step>
+      </mat-stepper>
+      <div>
+        <p>Already have an account? <a class="clickable" (click)="goToLogin()">Login</a></p>
+      </div>
+    </div>
+  </div>
+</div>

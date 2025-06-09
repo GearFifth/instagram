@@ -1,0 +1,20 @@
+<div class="user-recommendation-card">
+  <img class="profile-picture"
+       [src]="environment.server + user.profileImage.path"
+       alt="Profile Picture"
+       (click)="goToProfilePage()"
+       (error)="setDefaultProfileImage($event)">
+  <div class="right-section">
+    <div class="title-section">
+      <a class="user-title" (click)="goToProfilePage()">{{user.firstName}} {{user.lastName}}</a>
+      <div class="stretch"></div>
+    </div>
+    <span class="email-info">{{user.email}}</span>
+    <div class="stretch"></div>
+    <div class="user-follow-section">
+      <span><b>{{user.followers.length}}</b> followers</span>
+      <span><b>{{user.following.length}}</b> following</span>
+      <span><b>{{user.posts.length}}</b> posts</span>
+    </div>
+  </div>
+</div>

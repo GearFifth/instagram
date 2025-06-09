@@ -1,0 +1,74 @@
+
+.wrapper{
+  width: 90%;
+  margin: 0 auto;
+  padding-top: 2em;
+}
+
+.background-img{
+  background-image: url('/assets/white-background.png');
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+}
+
+a{
+  text-decoration: none;
+  color: #2F93F6;
+}
+
+mat-icon{
+  color: #282828;
+}
+
+mat-form-field{
+  width: 100%;
+}
+
+.form-wrapper{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2em;
+
+  gap: 8px;
+  background: #FFFFFF;
+  box-shadow: 0 4px 10px rgba(138, 142, 148, 0.05);
+  width: 30vw;
+  max-width: 30em;
+  min-width: 25em;
+  margin: 20vh auto;
+
+  border-radius: 20px;
+}
+
+.switch-auth{
+  margin-top: 1em;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5em;
+  align-items: center;
+  font-size: 14px;
+}
+
+.login-btn-wrapper{
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+}
+
+.login-btn{
+  /*color: #FFFFFF;*/
+  width: 100%;
+  margin-bottom: 1em;
+  margin-top: 0.5em;
+}
+
+.notification{
+  margin-bottom: 1.5em;
+}
+
+.clickable{
+  cursor: pointer;
+}

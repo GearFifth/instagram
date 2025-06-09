@@ -1,0 +1,9 @@
+@if (users && users.length > 0){
+  <div class="user-recommendation-cards-list">
+    @for (user of users; track user){
+      <app-user-recommendation-card [user]="user"></app-user-recommendation-card>
+    }
+  </div>
+} @else {
+  <h2 *ngIf="!isLoading" class="middle-center">No recommendations available.</h2>
+}

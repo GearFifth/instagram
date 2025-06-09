@@ -1,0 +1,97 @@
+.wrapper{
+  width: 90%;
+  margin: 0 auto;
+  padding-top: 2em;
+}
+
+.background-img{
+  background-image: url('/assets/white-background.png');
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+}
+
+.form-wrapper{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  padding: 0 1em;
+  gap: 8px;
+  background: #FFFFFF;
+  box-shadow: 0 4px 10px rgba(138, 142, 148, 0.05);
+  width: max-content;
+
+  max-height: 90vh;
+}
+
+.title{
+  margin-top: 1em;
+  color: #282828;
+}
+
+mat-stepper{
+  border-radius: 20px;
+  padding-top: 1em;
+}
+
+form{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 2em;
+  padding-bottom: 2em;
+
+  gap: 0.5em;
+
+  width: 80%;
+  margin: 0 auto;
+}
+
+mat-form-field{
+  width: 100%;
+  margin: 0 auto;
+}
+
+mat-slide-toggle{
+  width: 80%;
+  margin: 0 auto;
+}
+
+button{
+  float: right;
+  margin-left: 0.5em;
+}
+
+#error{
+  color: #BA1A1A;
+}
+
+mat-icon {
+  color: #282828;
+}
+
+p{
+  color: #282828;
+}
+
+a{
+  text-decoration: none;
+  color: #2F93F6;
+}
+
+h3{
+  color: #282828;
+}
+
+.clickable{
+  cursor: pointer;
+}
+

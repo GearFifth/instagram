@@ -1,0 +1,12 @@
+<div class="user-card" (click)="goToProfilePage()">
+  <img
+    class="profile-picture"
+    [src]="environment.server + user.profileImage.path"
+    alt="Profile Picture"
+    (click)="goToProfilePage()"
+    (error)="setDefaultProfileImage($event)">
+  <div class="right-section">
+    <span >{{user.firstName}} {{user.lastName}}</span>
+    <span class="email-info">{{user.email}}</span>
+  </div>
+</div>

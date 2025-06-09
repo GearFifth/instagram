@@ -1,0 +1,64 @@
+<mat-dialog-content>
+  <div class="content" *ngIf="userForm">
+    <p class="title">Edit User</p>
+
+    <div class="profile-picture-wrapper">
+      <div class="profile-picture-preview-wrapper" *ngIf="profileImageUrl; else defaultImage">
+        <img class="profile-picture-preview" [src]="profileImageUrl" alt="Profile Picture" />
+        <div class="remove-button">
+          <mat-icon (click)="removeImage()">close</mat-icon>
+        </div>
+      </div>
+
+      <ng-template #defaultImage>
+        <div class="profile-picture-placeholder"></div>
+      </ng-template>
+
+      <app-image-uploader (imageCroppedEvent)="onImageSelected($event)"></app-image-uploader>
+    </div>
+
+    <form [formGroup]="userForm" class="user-form">
+
+      <mat-form-field appearance="outline">
+        <mat-label>First Name</mat-label>
+        <input matInput formControlName="firstName" type="text" required>
+        <mat-error *ngIf="userForm.get('firstName')?.hasError('required') && userForm.get('firstName')?.touched">
+          First name is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Last Name</mat-label>
+        <input matInput formControlName="lastName" type="text" required>
+        <mat-error *ngIf="userForm.get('lastName')?.hasError('required') && userForm.get('lastName')?.touched">
+          Last name is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Address</mat-label>
+        <input matInput placeholder="Street, City, Country" formControlName="address" type="text" required>
+        <mat-error *ngIf="userForm.get('address')?.hasError('required') && userForm.get('address')?.touched">
+          Address is required
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Phone number</mat-label>
+        <input matInput placeholder="+123456789" formControlName="phoneNumber" required>
+        <mat-error *ngIf="userForm.get('phone')?.hasError('required') && userForm.get('phone')?.touched">
+          Phone is required
+        </mat-error>
+        <mat-error *ngIf="userForm.get('phone')?.hasError('pattern')">
+          Please enter a valid phone number (e.g., +123456789).
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </div>
+
+  <app-loader *ngIf="isLoading"></app-loader>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-flat-button id="yes-button" (click)="onEditClick()">Edit</button>
+</mat-dialog-actions>

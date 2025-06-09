@@ -1,0 +1,82 @@
+.chat-window {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1rem;
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sent,
+.received {
+  display: flex;
+  max-width: 80%;
+}
+
+.sent {
+  align-self: flex-end;
+  justify-content: flex-end;
+}
+
+.received {
+  align-self: flex-start;
+  justify-content: flex-start;
+}
+
+.message-bubble {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  background-color: #f1f1f1;
+  word-wrap: break-word;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.sent .message-bubble {
+  background-color: #daf0ff;
+}
+
+.received .message-bubble {
+  background-color: #f8f8f8;
+}
+
+.message-header .sender {
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin-bottom: 0.2rem;
+  display: block;
+}
+
+.message-input {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.message-input input {
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.message-input button {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.message-input button:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}

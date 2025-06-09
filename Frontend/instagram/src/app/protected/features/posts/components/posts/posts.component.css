@@ -1,0 +1,38 @@
+.window-box{
+  background-color: #fafafa;
+  width: 100%;
+  height: calc(100vh - 5.5em);
+  overflow-y: auto;
+}
+
+.wrapper{
+  background-color: #fafafa;
+  display: flex;
+  flex-direction: column;
+  flex:1;
+  height: 100%;
+  align-items: center;
+  /*justify-content: center;*/
+}
+
+
+.create-post-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background-color: #7C1CD9;
+  color: #fff;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s, box-shadow 0.3s;
+  z-index: 100;
+}
+
+.create-post-button:hover {
+  background-color: #7510b4;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}

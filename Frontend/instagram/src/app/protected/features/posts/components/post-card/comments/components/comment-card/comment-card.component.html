@@ -1,0 +1,22 @@
+@if (comment){
+  <div class="comment-card">
+    <img
+      class="profile-picture"
+      [src]="environment.server + comment.author.profileImage.path"
+      alt="Profile Picture"
+      (click)="goToProfilePage()">
+    <div class="right-section">
+      <div class="top-section">
+        <span (click)="goToProfilePage()" class="clickable">{{comment.author.firstName}} {{comment.author.lastName}}</span>
+        <span class="date-info">{{getCommentCreation(comment.creationDate)}}</span>
+      </div>
+      <div class="comment-content" [innerHTML]="commentContent"></div>
+      <div class="bottom-section">
+        <button mat-flat-button *ngIf="comment.replies.length > 0" (click)="onShowRepliesClicked()">{{areRepliesShowing ? "Hide replies" : "Show replies"}}</button>
+        <button mat-flat-button (click)="onReplyClicked()">Reply {{isReplyOpened ? "(hide)" : ""}}</button>
+      </div>
+    </div>
+  </div>
+  <app-add-comment *ngIf="isReplyOpened" (commentAdded)="onCommentAdded($event)" [post]="post" [parentId]="comment.id" ></app-add-comment>
+  <app-comment-list *ngIf="areRepliesShowing" [comments]="replies" [post]="post" [level]="level+1"></app-comment-list>
+}

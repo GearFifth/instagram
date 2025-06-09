@@ -1,0 +1,48 @@
+form{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 2em;
+  padding-bottom: 2em;
+
+  gap: 0.5em;
+
+  width: 80%;
+  margin: 0 auto;
+}
+
+mat-form-field{
+  width: 100%;
+  margin: 0 auto;
+}
+
+mat-slide-toggle{
+  width: 80%;
+  margin: 0 auto;
+}
+
+button{
+  float: right;
+  margin-left: 0.5em;
+}
+
+#error{
+  color: #BA1A1A;
+}
+
+mat-icon {
+  color: #282828;
+}
+
+p{
+  color: #282828;
+}
+
+a{
+  text-decoration: none;
+  color: #2F93F6;
+}
+
+h3{
+  color: #282828;
+}
