@@ -19,7 +19,7 @@ export class CreatePostDialogComponent {
   description: string = '';
   defaultPostImagePath: string = '/assets/default-post-image.png';
   imagePreview: string | null = this.defaultPostImagePath;
-  selectedImage: Blob | null = null;
+  selectedImage: File | null = null;
 
   @ViewChild('fileInput') fileInput!: ElementRef;
 
@@ -31,9 +31,12 @@ export class CreatePostDialogComponent {
     this.loggedUserId = data.loggedUserId;
   }
 
-  onImageSelected(event: ImageCroppedEvent) {
-    this.selectedImage = event.blob ?? null;
-    this.imagePreview = event.objectUrl ?? null;
+  onImageSelected(file: File) {
+    if (this.imagePreview) {
+      URL.revokeObjectURL(this.imagePreview);
+    }
+    this.selectedImage = file ?? null;
+    this.imagePreview = file ? URL.createObjectURL(file) : null;
   }
 
   onCreateClick() {

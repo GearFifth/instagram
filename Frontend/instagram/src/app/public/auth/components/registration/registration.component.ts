@@ -23,7 +23,7 @@ export class RegistrationComponent implements OnInit{
   registerContactForm!: FormGroup;
   registerPasswordForm!: FormGroup;
 
-  profilePictureFile: Blob | null = null;
+  profilePictureFile: File | null = null;
   profilePictureUrl: string | null = null;
 
   constructor(

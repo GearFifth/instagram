@@ -33,6 +33,8 @@ export class PostService {
       formData.append('image', request.image);
     }
 
+    console.log(formData);
+
     return this.http.post<Post>(`${this.apiUrl}`, formData);
   }
 

@@ -5,5 +5,5 @@ export interface UpdateUserRequest {
   lastName: string;
   address: string;
   phoneNumber: string;
-  profileImage: Blob | null;
+  profileImage: File | null;
 }
